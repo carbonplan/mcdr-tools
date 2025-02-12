@@ -5,7 +5,7 @@ export default function Custom404() {
   const router = useRouter()
 
   useEffect(() => {
-    router.replace('/research/oae-efficiency')
+    router.replace('/research/dor')
   })
 
   return null
