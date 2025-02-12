@@ -13,6 +13,7 @@ import RegionInfo from './region-info'
 import About from './about'
 import DisplaySection from './display-section'
 import ChartSection from './chart-section'
+import StorageSection from './storage-section'
 import useRegionUrlSync from '../utils/useRegionUrlSync'
 
 const sx = {
@@ -82,6 +83,7 @@ const Main = () => {
                 <RegionInfo sx={sx} />
                 <DisplaySection sx={sx} />
                 <ChartSection sx={sx} />
+                <StorageSection sx={sx} />
                 <About sx={sx} />
               </>
             </Sidebar>
@@ -117,6 +119,7 @@ const Main = () => {
               <RegionInfo sx={sx} />
               <DisplaySection sx={sx} />
               <ChartSection sx={sx} />
+              <StorageSection sx={sx} />
               <About sx={sx} />
             </MobileSettings>
             <Footer />
