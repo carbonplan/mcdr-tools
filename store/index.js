@@ -11,7 +11,7 @@ export const variables = {
         variable: 'OAE_efficiency',
         colorLimits: [0, 1],
         colormap: 'cool',
-        label: 'Efficiency ratio',
+        label: 'Net efficiency',
         unit: 'mole CO₂ / mole alkalinity',
         graphUnit: '',
       },

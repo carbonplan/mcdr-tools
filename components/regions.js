@@ -21,6 +21,7 @@ const Regions = () => {
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
+  const storageEfficiency = useStore((s) => s.storageEfficiency)
 
   const colormap = useThemedColormap(currentVariable.colormap)
   const colorLimits = currentVariable.colorLimits
@@ -31,7 +32,7 @@ const Regions = () => {
 
   //reused colors
   const transparent = 'rgba(0, 0, 0, 0)'
-  const lineColor = theme.rawColors.hinted
+  const lineColor = theme.rawColors?.hinted
   const lineHighlightColor = [
     'case',
     ['boolean', ['feature-state', 'hover'], false],
@@ -61,8 +62,9 @@ const Regions = () => {
     // get currentValue from overviewLineData for each polygon and assign to new current value property
     const features = regionGeojson.features.map((feature) => {
       const polygonId = feature.properties.polygon_id
-      const currentValue =
+      const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
+      const currentValue = Math.max(0, rawValue + storageEfficiency - 1)
       return {
         ...feature,
         properties: {
@@ -89,6 +91,7 @@ const Regions = () => {
     overviewLineData,
     colormap,
     colorLimits,
+    storageEfficiency,
   ])
 
   const safeColorMap = useMemo(() => {

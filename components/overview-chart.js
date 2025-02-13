@@ -52,6 +52,8 @@ const OverviewChart = ({ sx }) => {
   })
 
   const startYear = 0
+  const storageEfficiency = useStore((state) => state.storageEfficiency)
+  const lostFraction = 1 - storageEfficiency
 
   const { theme } = useThemeUI()
 
@@ -114,15 +116,44 @@ const OverviewChart = ({ sx }) => {
   const selectedLines = useMemo(() => {
     const lineData = overviewLineData
     if (!lineData) return {}
-    if (!filterToRegionsInView || !regionsInView) return lineData
-    const selected = {}
-    regionsInView.forEach((regionId) => {
-      if (lineData[regionId]) {
-        selected[regionId] = lineData[regionId]
-      }
+
+    const applyEfficiencyAdjustment = (line) => ({
+      ...line,
+      data: line.data.map(([year, value]) => [
+        year,
+        Math.max(0, value + storageEfficiency - 1),
+      ]),
     })
-    return selected
-  }, [regionsInView, filterToRegionsInView, overviewLineData, selectedRegion])
+
+    const processLines = (lines) => {
+      if (variableFamily !== 'EFFICIENCY') return lines
+      return Object.fromEntries(
+        Object.entries(lines).map(([key, line]) => [
+          key,
+          applyEfficiencyAdjustment(line),
+        ])
+      )
+    }
+
+    if (!filterToRegionsInView || !regionsInView) {
+      return processLines(lineData)
+    }
+
+    const selected = Object.fromEntries(
+      regionsInView
+        .filter((regionId) => lineData[regionId])
+        .map((regionId) => [regionId, lineData[regionId]])
+    )
+
+    return processLines(selected)
+  }, [
+    regionsInView,
+    filterToRegionsInView,
+    overviewLineData,
+    selectedRegion,
+    variableFamily,
+    storageEfficiency,
+  ])
 
   const handleClick = useCallback(
     (e) => {
