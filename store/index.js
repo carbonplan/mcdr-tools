@@ -391,7 +391,7 @@ const useStore = create((set) => ({
   showRegionPicker: false,
   setShowRegionPicker: (showRegionPicker) => set({ showRegionPicker }),
 
-  storageEfficiency: 0.5,
+  storageEfficiency: 0.75,
   setStorageEfficiency: (storageEfficiency) => set({ storageEfficiency }),
 
   regionData: null,
