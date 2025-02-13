@@ -40,12 +40,17 @@ const Regions = () => {
     transparent,
   ]
 
-  const buildColorExpression = () => {
-    const dataField = 'currentValue'
+  const safeColorMap = useMemo(() => {
+    return colormap[0].length === 3
+      ? colormap.map((rgb) => `rgb(${rgb.join(',')})`)
+      : colormap
+  }, [colormap])
+
+  const colorExpression = useMemo(() => {
     const fillColorExpression = [
       'case',
-      ['has', dataField],
-      ['step', ['get', dataField], safeColorMap[0]],
+      ['!=', ['feature-state', 'currentValue'], null],
+      ['step', ['feature-state', 'currentValue'], safeColorMap[0]],
       transparent,
     ]
     const totalRange = colorLimits[1] - colorLimits[0]
@@ -55,50 +60,39 @@ const Regions = () => {
       fillColorExpression[2].push(threshold, safeColorMap[i])
     }
     return fillColorExpression
-  }
+  }, [safeColorMap, colorLimits, transparent])
 
-  useEffect(() => {
-    if (!regionGeojson) return
-    // get currentValue from overviewLineData for each polygon and assign to new current value property
-    const features = regionGeojson.features.map((feature) => {
+  const updateRegionFeatureStates = useCallback(() => {
+    if (!regionGeojson || !map?.getSource('regions')) return
+
+    regionGeojson.features.forEach((feature) => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
       const currentValue = Math.max(0, rawValue + storageEfficiency - 1)
-      return {
-        ...feature,
-        properties: {
-          ...feature.properties,
-          currentValue,
+
+      map.setFeatureState(
+        {
+          source: 'regions',
+          id: polygonId,
         },
-      }
-    })
-    if (map && map.getSource('regions')) {
-      const colorExpression = overviewLineData
-        ? buildColorExpression()
-        : transparent
-      map.getSource('regions').setData({ ...regionGeojson, features })
-      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
-      map.setPaintProperty(
-        'selected-region-fill',
-        'fill-color',
-        colorExpression
+        {
+          currentValue,
+        }
       )
-    }
+    })
   }, [
     regionGeojson,
-    overviewElapsedTime,
+    map,
     overviewLineData,
-    colormap,
-    colorLimits,
+    overviewElapsedTime,
     storageEfficiency,
   ])
 
-  const safeColorMap = useMemo(() => {
-    return colormap[0].length === 3
-      ? colormap.map((rgb) => `rgb(${rgb.join(',')})`)
-      : colormap
-  }, [colormap])
+  // Effect for updating feature states
+  useEffect(() => {
+    updateRegionFeatureStates()
+  }, [updateRegionFeatureStates])
 
   const handleMouseMove = (e) => {
     map.getCanvas().style.cursor = 'pointer'
@@ -147,7 +141,7 @@ const Regions = () => {
             type: 'fill',
             source: 'regions',
             paint: {
-              'fill-color': transparent,
+              'fill-color': colorExpression,
               'fill-outline-color': transparent,
             },
           })
@@ -182,7 +176,7 @@ const Regions = () => {
             type: 'fill',
             source: 'regions',
             paint: {
-              'fill-color': transparent,
+              'fill-color': colorExpression,
               'fill-outline-color': transparent,
               'fill-opacity': [
                 'case',
@@ -312,7 +306,13 @@ const Regions = () => {
     if (!map || !map.getSource('regions')) return
     map.removeFeatureState({
       source: 'regions',
+      key: 'selected',
     })
+    map.removeFeatureState({
+      source: 'regions',
+      key: 'overview',
+    })
+
     if (selectedRegion !== null) {
       map.setFeatureState(
         {
@@ -332,8 +332,9 @@ const Regions = () => {
       toggleLayerVisibilities(false)
     } else {
       toggleLayerVisibilities(true)
+      updateRegionFeatureStates()
     }
-  }, [selectedRegion, map, currentVariable, toggleLayerVisibilities])
+  }, [selectedRegion, map, currentVariable, updateRegionFeatureStates])
 
   useEffect(() => {
     if (!filterToRegionsInView) {
