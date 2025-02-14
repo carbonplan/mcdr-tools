@@ -89,11 +89,6 @@ const Regions = () => {
     storageEfficiency,
   ])
 
-  // Effect for updating feature states
-  useEffect(() => {
-    updateRegionFeatureStates()
-  }, [updateRegionFeatureStates])
-
   const handleMouseMove = (e) => {
     map.getCanvas().style.cursor = 'pointer'
     if (e.features.length > 0) {
