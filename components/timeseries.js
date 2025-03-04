@@ -17,6 +17,7 @@ import { Badge } from '@carbonplan/components'
 import useStore, { variables } from '../store'
 import { formatValue, useVariableColormap } from '../utils'
 import { getColorForValue } from '../utils/color'
+import { useThemedColormap } from '@carbonplan/colormaps'
 
 const renderPoint = (point) => {
   const { x, y, color } = point
@@ -52,6 +53,19 @@ const renderDataBadge = (point) => {
 }
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
+  const storageEfficiency = useStore((s) => s.storageEfficiency)
+  const lostPortion = 1 - storageEfficiency
+  const belowZeroCount = Math.floor(colormap.length * lostPortion) || 1
+  const negativeColormap = [
+    ...useThemedColormap('reds', {
+      count: belowZeroCount,
+    }),
+  ].reverse()
+  const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
+  const aboveZeroCount = colormap.length - belowZeroCount
+  const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
+  const adjustedColormap = [...belowZeroColormap, ...aboveZero]
+
   return (
     <defs>
       <linearGradient
@@ -62,8 +76,8 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
         y2='0%'
         gradientUnits='userSpaceOnUse'
       >
-        {colormap.map((rgb, index) => {
-          const offset = index / (colormap.length - 1)
+        {adjustedColormap.map((rgb, index) => {
+          const offset = index / (adjustedColormap.length - 1)
           return (
             <stop
               key={index}
