@@ -21,7 +21,7 @@ const Regions = () => {
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
-  const storageEfficiency = useStore((s) => s.storageEfficiency)
+  const storageLoss = useStore((s) => s.storageLoss)
 
   const colormap = useThemedColormap(currentVariable.colormap)
   const colorLimits = currentVariable.colorLimits
@@ -70,7 +70,7 @@ const Regions = () => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = Math.max(0, rawValue + storageEfficiency - 1)
+      const currentValue = Math.max(0, rawValue - storageLoss)
 
       map.setFeatureState(
         {
@@ -90,7 +90,7 @@ const Regions = () => {
     regionGeojson,
     currentVariable,
     overviewElapsedTime,
-    storageEfficiency,
+    storageLoss,
   ])
 
   const handleMouseMove = (e) => {

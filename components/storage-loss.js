@@ -13,23 +13,23 @@ const sx = {
   },
 }
 
-const StorageDurability = () => {
-  const storageEfficiency = useStore((state) => state.storageEfficiency)
-  const setStorageEfficiency = useStore((state) => state.setStorageEfficiency)
+const StorageLoss = () => {
+  const storageLoss = useStore((state) => state.storageLoss)
+  const setStorageLoss = useStore((state) => state.setStorageLoss)
 
   const handleChange = (e) => {
     const value = Math.min(1, Math.max(0, parseFloat(e.target.value)))
-    setStorageEfficiency(value)
+    setStorageLoss(value)
   }
 
   return (
     <Flex sx={{ gap: [3, 4, 4, 5], alignItems: 'center' }}>
-      <Box sx={sx.label}>Storage durability</Box>
+      <Box sx={sx.label}>Storage loss</Box>
       <Flex sx={{ flex: 1, gap: 3, alignItems: 'center' }}>
         <Box sx={{ flex: 1 }}>
           <Slider
             sx={{ color: 'primary' }}
-            value={storageEfficiency}
+            value={storageLoss}
             onChange={handleChange}
             min={0}
             max={1}
@@ -44,11 +44,11 @@ const StorageDurability = () => {
             textAlign: 'right',
           }}
         >
-          {(storageEfficiency * 100).toFixed(0)}%
+          {(storageLoss * 100).toFixed(0)}%
         </Box>
       </Flex>
     </Flex>
   )
 }
 
-export default StorageDurability
+export default StorageLoss

@@ -9,7 +9,7 @@ const formatNumber = (value, decimals = 2) => {
 }
 
 const StorageSection = ({ sx }) => {
-  const storageEfficiency = useStore((state) => state.storageEfficiency)
+  const storageLoss = useStore((state) => state.storageLoss)
   const overviewLineData = useStore((state) => state.overviewLineData)
   const selectedRegion = useStore((state) => state.selectedRegion)
   const hoveredRegion = useStore((state) => state.hoveredRegion)
@@ -18,23 +18,20 @@ const StorageSection = ({ sx }) => {
   const activeRegion = selectedRegion ?? hoveredRegion
   const hasRegionData = activeRegion !== null
 
-  const { currentEfficiency, storageLoss, netEfficiency } = useMemo(() => {
+  const { currentEfficiency, netEfficiency } = useMemo(() => {
     if (!hasRegionData) {
       return {
         currentEfficiency: 0,
-        storageLoss: 1 - storageEfficiency,
         netEfficiency: 0,
       }
     }
 
     const currentEfficiency =
       overviewLineData?.[activeRegion]?.data?.[overviewElapsedTime]?.[1] || 0
-    const storageLoss = 1 - storageEfficiency
-    const netEfficiency = currentEfficiency + storageEfficiency - 1
+    const netEfficiency = currentEfficiency - storageLoss
 
     return {
       currentEfficiency,
-      storageLoss,
       netEfficiency,
     }
   }, [
@@ -42,7 +39,7 @@ const StorageSection = ({ sx }) => {
     activeRegion,
     overviewLineData,
     overviewElapsedTime,
-    storageEfficiency,
+    storageLoss,
   ])
 
   return (

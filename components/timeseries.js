@@ -53,9 +53,8 @@ const renderDataBadge = (point) => {
 }
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
-  const storageEfficiency = useStore((s) => s.storageEfficiency)
-  const lostPortion = 1 - storageEfficiency
-  const belowZeroCount = Math.floor(colormap.length * lostPortion) || 1
+  const storageLoss = useStore((s) => s.storageLoss)
+  const belowZeroCount = Math.floor(colormap.length * storageLoss) || 1
   const negativeColormap = [
     ...useThemedColormap('reds', {
       count: belowZeroCount,
@@ -77,7 +76,9 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
         gradientUnits='userSpaceOnUse'
       >
         {adjustedColormap.map((hex, index) => {
-          const offset = (index / (adjustedColormap.length - 1)).toFixed(2)
+          const offset = Number(
+            (index / (adjustedColormap.length - 1)).toFixed(2)
+          )
           return (
             <stop
               key={index}
@@ -206,14 +207,13 @@ const TimeIndicator = ({ yLimits, isOverview = false }) => {
 }
 
 const AxisChart = ({ xLimits, yLimits }) => {
-  const storageEfficiency = useStore((s) => s.storageEfficiency)
-  const lostPortion = 1 - storageEfficiency
+  const storageLoss = useStore((s) => s.storageLoss)
 
   return (
     <>
       <Chart
         x={xLimits}
-        y={[0 - lostPortion, 0 - lostPortion + 1]}
+        y={[-storageLoss, 1 - storageLoss]}
         padding={{ top: 30 }}
         sx={{
           position: 'absolute',
@@ -244,14 +244,13 @@ const AxisChart = ({ xLimits, yLimits }) => {
 }
 
 const ZeroLine = ({ xLimits }) => {
-  const storageEfficiency = useStore((s) => s.storageEfficiency)
-  const lostPortion = 1 - storageEfficiency
-  if (lostPortion === 0) return null
+  const storageLoss = useStore((s) => s.storageLoss)
+  if (storageLoss === 0) return null
   return (
     <Line
       data={[
-        [xLimits[0], lostPortion],
-        [xLimits[1], lostPortion],
+        [xLimits[0], storageLoss],
+        [xLimits[1], storageLoss],
       ]}
       color='primary'
     />
