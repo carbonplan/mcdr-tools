@@ -16,7 +16,7 @@ const Header = ({ expanded, setExpanded }) => {
         description={
           'Interactive mapping tool for exploring the efficiency of ocean alkalinity enhancement (OAE).'
         }
-        title={'OAE Efficiency – CarbonPlan'}
+        title={'DOR Efficiency – CarbonPlan'}
       />
 
       <Container>

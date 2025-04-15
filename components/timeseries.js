@@ -59,13 +59,13 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const negativeColormap = [
     ...useThemedColormap('reds', {
       count: belowZeroCount,
+      format: 'hex',
     }),
   ].reverse()
   const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
   const aboveZeroCount = colormap.length - belowZeroCount
   const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
   const adjustedColormap = [...belowZeroColormap, ...aboveZero]
-
   return (
     <defs>
       <linearGradient
@@ -76,13 +76,13 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
         y2='0%'
         gradientUnits='userSpaceOnUse'
       >
-        {adjustedColormap.map((rgb, index) => {
-          const offset = index / (adjustedColormap.length - 1)
+        {adjustedColormap.map((hex, index) => {
+          const offset = (index / (adjustedColormap.length - 1)).toFixed(2)
           return (
             <stop
               key={index}
               offset={`${offset * 100}%`}
-              stopColor={`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`}
+              stopColor={hex}
               stopOpacity={opacity}
             />
           )
@@ -201,6 +201,59 @@ const TimeIndicator = ({ yLimits, isOverview = false }) => {
       ]}
       color='primary'
       style={{ strokeDasharray: '2 4' }}
+    />
+  )
+}
+
+const AxisChart = ({ xLimits, yLimits }) => {
+  const storageEfficiency = useStore((s) => s.storageEfficiency)
+  const lostPortion = 1 - storageEfficiency
+
+  return (
+    <>
+      <Chart
+        x={xLimits}
+        y={[0 - lostPortion, 0 - lostPortion + 1]}
+        padding={{ top: 30 }}
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <Grid vertical />
+        <Grid horizontal />
+        <Ticks left />
+        <Ticks left sx={{ borderColor: 'primary' }} values={[0]} />
+        <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
+        <TickLabels left />
+        <TickLabels left sx={{ color: 'primary', fontSize: 2 }} values={[0]} />
+        <TickLabels bottom values={[0, 5, 10, 15]} />
+        <Line
+          data={[
+            [xLimits[0], 0],
+            [xLimits[1], 0],
+          ]}
+          color='primary'
+        />
+      </Chart>
+    </>
+  )
+}
+
+const ZeroLine = ({ xLimits }) => {
+  const storageEfficiency = useStore((s) => s.storageEfficiency)
+  const lostPortion = 1 - storageEfficiency
+  if (lostPortion === 0) return null
+  return (
+    <Line
+      data={[
+        [xLimits[0], lostPortion],
+        [xLimits[1], lostPortion],
+      ]}
+      color='primary'
     />
   )
 }
@@ -325,24 +378,30 @@ const Timeseries = ({
     >
       {renderTimeAndData()}
       <Chart x={xLimits} y={yLimits} logy={logy} padding={{ top: 30 }}>
-        <Grid vertical />
-        <Grid horizontal values={logy && logLabels} />
-        <Ticks left values={logy && logLabels} />
-        <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
-        <TickLabels
-          left
-          values={logy && logLabels}
-          format={(d) => {
-            if (logy) {
-              return formatValue(d, { 0.001: '.0e' })
-            } else if (Math.abs(d) < 0.01) {
-              return <Box sx={{ mr: -2 }}>{d}</Box>
-            } else {
-              return d
-            }
-          }}
-        />
-        <TickLabels bottom values={[0, 5, 10, 15]} />
+        {isOverview ? (
+          <AxisChart xLimits={xLimits} yLimits={yLimits} />
+        ) : (
+          <>
+            <Grid vertical />
+            <Grid horizontal values={logy && logLabels} />
+            <Ticks left values={logy && logLabels} />
+            <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
+            <TickLabels
+              left
+              values={logy && logLabels}
+              format={(d) => {
+                if (logy) {
+                  return formatValue(d, { 0.001: '.0e' })
+                } else if (Math.abs(d) < 0.01) {
+                  return <Box sx={{ mr: -2 }}>{d}</Box>
+                } else {
+                  return d
+                }
+              }}
+            />
+            <TickLabels bottom values={[0, 5, 10, 15]} />
+          </>
+        )}
         <AxisLabel units={yLabels.units} left>
           {yLabels.title}
         </AxisLabel>
@@ -368,6 +427,7 @@ const Timeseries = ({
             handleClick={handleClick}
             gradient={colormap ? true : false}
           />
+          {isOverview && <ZeroLine xLimits={xLimits} />}
           {Object.keys(selectedLines).length && (
             <>
               {showActive && <ActiveLine selectedLines={selectedLines} />}

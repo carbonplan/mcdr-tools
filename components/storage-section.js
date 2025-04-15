@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { Box, Flex, Divider } from 'theme-ui'
-import { Badge } from '@carbonplan/components'
+import { Box, Flex } from 'theme-ui'
+import { Badge, Column, Row } from '@carbonplan/components'
 import useStore from '../store'
 
 const formatNumber = (value, decimals = 2) => {
@@ -22,7 +22,7 @@ const StorageSection = ({ sx }) => {
     if (!hasRegionData) {
       return {
         currentEfficiency: 0,
-        storageLoss: 0,
+        storageLoss: 1 - storageEfficiency,
         netEfficiency: 0,
       }
     }
@@ -46,51 +46,70 @@ const StorageSection = ({ sx }) => {
   ])
 
   return (
-    <Box sx={{ ...sx.label, color: 'primary', mt: [4, 4, 4, 5] }}>
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Flex sx={{ alignItems: 'center', gap: 2 }}>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              gap: 1,
-              alignItems: 'center',
-              minWidth: 60,
-            }}
+    <>
+      <Box sx={{ ...sx.heading }}>EFFICIENCY COMPONENTS</Box>
+      <Box sx={{ ...sx.label, color: 'primary', mt: [4, 4, 4, 5] }}>
+        <Row columns={[3]} sx={{ mt: 3 }}>
+          <Column
+            start={1}
+            width={[1, 1, 1, 1]}
+            sx={{ ...sx.label, color: 'primary' }}
           >
-            <Box>Total</Box>
-            <Box>
+            <Flex sx={{ justifyContent: 'space-between' }}>
+              <Box as='span'>NET</Box>
+              <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
+                =
+              </Box>
+            </Flex>
+          </Column>
+          <Column start={[2, 2, 2, 2]} width={[2]}>
+            <Flex
+              sx={{
+                flexWrap: 'wrap',
+                gap: 2,
+                alignItems: 'center',
+              }}
+            >
+              <Box as='span' sx={{ color: 'secondary' }}>
+                reuptake
+              </Box>
+              <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
+                -
+              </Box>
+              <Box as='span' sx={{ color: 'secondary' }}>
+                Storage Loss
+              </Box>
+            </Flex>
+          </Column>
+        </Row>
+        <Row columns={[3]} sx={{ mt: 3 }}>
+          <Column start={[1, 1, 1, 1]} width={[1, 1, 1, 1]}>
+            <Flex sx={{ justifyContent: 'space-between' }}>
               <Badge sx={{ color: 'primary' }}>
                 {hasRegionData ? formatNumber(netEfficiency) : '----'}
               </Badge>
-            </Box>
-          </Flex>
-          <Box sx={{ fontSize: 3 }}>=</Box>
-          <Flex sx={{ flexDirection: 'column', gap: 1, alignItems: 'center' }}>
-            <Box>
-              <Box as='span' sx={{ color: 'green' }}>
-                air-sea exchange
+              <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
+                =
               </Box>
-            </Box>
-            <Box>
-              <Badge sx={{ color: 'green' }}>
+            </Flex>
+          </Column>
+          <Column start={[2, 2, 2, 2]} width={[2]}>
+            <Flex sx={{ gap: 2 }}>
+              <Badge sx={{ color: 'secondary' }}>
                 {hasRegionData ? currentEfficiency.toFixed(2) : '----'}
               </Badge>
-            </Box>
-          </Flex>
-          <Box sx={{ fontSize: 3 }}>-</Box>
-          <Flex sx={{ flexDirection: 'column', gap: 1, alignItems: 'center' }}>
-            <Box>
-              <Box as='span' sx={{ color: 'red' }}>
-                Storage Loss
+              <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
+                {' '}
+                -{' '}
               </Box>
-            </Box>
-            <Box>
-              <Badge sx={{ color: 'red' }}>{storageLoss.toFixed(2)}</Badge>
-            </Box>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Box>
+              <Badge sx={{ color: 'secondary' }}>
+                {storageLoss.toFixed(2)}
+              </Badge>
+            </Flex>
+          </Column>
+        </Row>
+      </Box>
+    </>
   )
 }
 

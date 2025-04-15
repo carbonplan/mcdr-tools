@@ -38,14 +38,13 @@ const OverviewChart = ({ sx }) => {
   const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
 
   const colormap = useThemedColormap(currentVariable.colormap, {
-    count: 8,
+    count: 100,
+    format: 'hex',
     // low count prevents banding in gradient.
     // >8 breaks chrome in some cases.
   })
 
   const startYear = 0
-  const storageEfficiency = useStore((state) => state.storageEfficiency)
-  const lostFraction = 1 - storageEfficiency
 
   const { theme } = useThemeUI()
 
@@ -101,26 +100,8 @@ const OverviewChart = ({ sx }) => {
     const lineData = overviewLineData
     if (!lineData) return {}
 
-    const applyEfficiencyAdjustment = (line) => ({
-      ...line,
-      data: line.data.map(([year, value]) => [
-        year,
-        Math.max(0, value + storageEfficiency - 1),
-      ]),
-    })
-
-    const processLines = (lines) => {
-      if (variableFamily !== 'EFFICIENCY') return lines
-      return Object.fromEntries(
-        Object.entries(lines).map(([key, line]) => [
-          key,
-          applyEfficiencyAdjustment(line),
-        ])
-      )
-    }
-
     if (!filterToRegionsInView || !regionsInView) {
-      return processLines(lineData)
+      return lineData
     }
 
     const selected = Object.fromEntries(
@@ -128,16 +109,8 @@ const OverviewChart = ({ sx }) => {
         .filter((regionId) => lineData[regionId])
         .map((regionId) => [regionId, lineData[regionId]])
     )
-
-    return processLines(selected)
-  }, [
-    regionsInView,
-    filterToRegionsInView,
-    overviewLineData,
-    selectedRegion,
-    variableFamily,
-    storageEfficiency,
-  ])
+    return selected
+  }, [regionsInView, filterToRegionsInView, overviewLineData])
 
   const handleClick = useCallback(
     (e) => {

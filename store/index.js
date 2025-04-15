@@ -5,7 +5,7 @@ export const variables = {
     label: 'Efficiency',
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-share.s3.us-west-2.amazonaws.com/dor-efficiency/store1b.zarr',
+    url: 'https://carbonplan-dor-efficiency.s3.us-west-2.amazonaws.com/store1b.zarr',
     variables: [
       {
         variable: 'DOR_efficiency',
