@@ -40,7 +40,7 @@ const StorageLoss = () => {
           sx={{
             ...sx.label,
             color: 'primary',
-            width: '50px',
+            width: '45px',
             textAlign: 'right',
           }}
         >
