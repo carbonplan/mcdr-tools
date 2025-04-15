@@ -16,8 +16,7 @@ import { Badge } from '@carbonplan/components'
 
 import useStore, { variables } from '../store'
 import { formatValue, useVariableColormap } from '../utils'
-import { getColorForValue } from '../utils/color'
-import { useThemedColormap } from '@carbonplan/colormaps'
+import { getColorForValue, createCombinedColormap } from '../utils/color'
 
 const renderPoint = (point) => {
   const { x, y, color } = point
@@ -54,17 +53,8 @@ const renderDataBadge = (point) => {
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  const belowZeroCount = Math.floor(colormap.length * storageLoss) || 1
-  const negativeColormap = [
-    ...useThemedColormap('reds', {
-      count: belowZeroCount,
-      format: 'hex',
-    }),
-  ].reverse()
-  const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
-  const aboveZeroCount = colormap.length - belowZeroCount
-  const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
-  const adjustedColormap = [...belowZeroColormap, ...aboveZero]
+  const adjustedColormap = createCombinedColormap(colormap, storageLoss)
+
   return (
     <defs>
       <linearGradient
@@ -169,7 +159,9 @@ const OverviewBadge = ({ selectedLines }) => {
   const selectedRegion = useStore((s) => s.selectedRegion)
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const currentVariable = useStore((s) => s.currentVariable)
+  const storageLoss = useStore((s) => s.storageLoss)
   const colormap = useVariableColormap()
+  const combinedColormap = createCombinedColormap(colormap, storageLoss)
 
   const activeRegion = hoveredRegion ?? selectedRegion
   const activeLineData =
@@ -179,7 +171,10 @@ const OverviewBadge = ({ selectedLines }) => {
     return null
   }
   const data = activeLineData.data[overviewElapsedTime]
-  const color = getColorForValue(data[1], colormap, currentVariable)
+  const color = getColorForValue(data[1], combinedColormap, currentVariable, {
+    storageLoss,
+    combinedColormap,
+  })
   const x = data[0]
   const y = data[1]
   const point = { x, y, color, text: formatValue(y) }
