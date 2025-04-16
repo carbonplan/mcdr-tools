@@ -29,6 +29,9 @@ const DESCRIPTIONS = {
     region:
       'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
   },
+  DIC_INTEGRATED: {
+    region: 'TK',
+  },
   FG: {
     region:
       'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
