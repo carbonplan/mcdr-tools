@@ -4,6 +4,7 @@ import { useMapbox } from '@carbonplan/maps'
 import { useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { centerOfMass } from '@turf/turf'
+import { createCombinedColormap } from '../utils/color'
 
 const Regions = () => {
   const hoveredRegion = useStore((s) => s.hoveredRegion)
@@ -23,7 +24,11 @@ const Regions = () => {
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
   const storageLoss = useStore((s) => s.storageLoss)
 
-  const colormap = useThemedColormap(currentVariable.colormap)
+  const colormap = useThemedColormap(currentVariable.colormap, {
+    format: 'hex',
+  })
+  const combinedColormap = createCombinedColormap(colormap, storageLoss)
+
   const colorLimits = currentVariable.colorLimits
 
   const { map } = useMapbox()
@@ -41,27 +46,29 @@ const Regions = () => {
     transparent,
   ]
 
-  const safeColorMap = useMemo(() => {
-    return colormap[0].length === 3
-      ? colormap.map((rgb) => `rgb(${rgb.join(',')})`)
-      : colormap
-  }, [colormap])
-
   const colorExpression = useMemo(() => {
+    const adjustedLowerLimit =
+      colorLimits[0] - storageLoss < 0
+        ? colorLimits[0] - storageLoss
+        : colorLimits[0]
+    const adjustedUpperLimit = colorLimits[1]
+    const totalRange = adjustedUpperLimit - adjustedLowerLimit
+
     const fillColorExpression = [
       'case',
       ['!=', ['feature-state', 'currentValue'], null],
-      ['step', ['feature-state', 'currentValue'], safeColorMap[0]],
+      ['step', ['feature-state', 'currentValue'], combinedColormap[0]],
       transparent,
     ]
-    const totalRange = colorLimits[1] - colorLimits[0]
-    const stepIncrement = totalRange / (safeColorMap.length - 1)
-    for (let i = 1; i < safeColorMap.length; i++) {
-      const threshold = colorLimits[0] + stepIncrement * i
-      fillColorExpression[2].push(threshold, safeColorMap[i])
+
+    const stepIncrement = totalRange / (combinedColormap.length - 1)
+    for (let i = 1; i < combinedColormap.length; i++) {
+      const threshold = adjustedLowerLimit + stepIncrement * i
+      fillColorExpression[2].push(threshold, combinedColormap[i])
     }
+
     return fillColorExpression
-  }, [safeColorMap, colorLimits, transparent])
+  }, [combinedColormap, colorLimits, transparent, storageLoss])
 
   useEffect(() => {
     if (!regionGeojson || !map?.getSource('regions')) return
@@ -70,7 +77,7 @@ const Regions = () => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = Math.max(0, rawValue - storageLoss)
+      const currentValue = rawValue - storageLoss //flag
 
       map.setFeatureState(
         {
@@ -91,6 +98,7 @@ const Regions = () => {
     currentVariable,
     overviewElapsedTime,
     storageLoss,
+    // colorExpression,
   ])
 
   const handleMouseMove = (e) => {
