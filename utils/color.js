@@ -9,16 +9,10 @@ export const createCombinedColormap = (
   secondColormap,
   storageLoss
 ) => {
-  return useMemo(() => {
-    const belowZeroCount = Math.floor(colormap.length * storageLoss) || 1
-    const negativeColormap = [
-      ...secondColormap.slice(1, colormap.length * storageLoss),
-    ].reverse()
-    const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
-    const aboveZeroCount = colormap.length - belowZeroCount
-    const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
-    return [...belowZeroColormap, ...aboveZero]
-  }, [colormap, secondColormap, storageLoss])
+  const belowZeroCount = Math.max(1, Math.round(colormap.length * storageLoss))
+  const negativeColormap = secondColormap.slice(1, 1 + belowZeroCount).reverse()
+  const aboveZero = colormap.slice(1, 1 + (colormap.length - belowZeroCount))
+  return [...negativeColormap, ...aboveZero]
 }
 
 export const getColorForValue = (

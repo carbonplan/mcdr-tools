@@ -55,37 +55,33 @@ const Regions = () => {
   ]
 
   const colorExpression = useMemo(() => {
-    const adjustedLowerLimit =
-      colorLimits[0] - storageLoss < 0
-        ? colorLimits[0] - storageLoss
-        : colorLimits[0]
-    const adjustedUpperLimit = colorLimits[1]
-    const totalRange = adjustedUpperLimit - adjustedLowerLimit
-
-    const fillColorExpression = [
+    const adjustedLower = colorLimits[0] - storageLoss
+    const adjustedUpper = colorLimits[1] - storageLoss
+    const totalRange = adjustedUpper - adjustedLower
+    const fillColor = [
       'case',
       ['!=', ['feature-state', 'currentValue'], null],
       ['step', ['feature-state', 'currentValue'], combinedColormap[0]],
       transparent,
     ]
-
-    const stepIncrement = totalRange / (combinedColormap.length - 1)
+    const stepSize = totalRange / (combinedColormap.length - 1)
     for (let i = 1; i < combinedColormap.length; i++) {
-      const threshold = adjustedLowerLimit + stepIncrement * i
-      fillColorExpression[2].push(threshold, combinedColormap[i])
+      const t = adjustedLower + stepSize * i
+      fillColor[2].push(t, combinedColormap[i])
     }
-
-    return fillColorExpression
+    return fillColor
   }, [combinedColormap, colorLimits, transparent, storageLoss])
 
   useEffect(() => {
-    if (!regionGeojson || !map?.getSource('regions')) return
+    if (!regionGeojson || !map?.getSource('regions') || !overviewLineData) {
+      return
+    }
 
     regionGeojson.features.forEach((feature) => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = rawValue - storageLoss //flag
+      const currentValue = rawValue - storageLoss
 
       map.setFeatureState(
         {
@@ -97,8 +93,15 @@ const Regions = () => {
         }
       )
     })
-    map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
-    map.setPaintProperty('selected-region-fill', 'fill-color', colorExpression)
+    if (selectedRegion !== null) {
+      map.setPaintProperty(
+        'selected-region-fill',
+        'fill-color',
+        colorExpression
+      )
+    } else {
+      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
+    }
   }, [
     map,
     overviewLineData,
@@ -106,7 +109,6 @@ const Regions = () => {
     currentVariable,
     overviewElapsedTime,
     storageLoss,
-    // colorExpression,
   ])
 
   const handleMouseMove = (e) => {
