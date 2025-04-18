@@ -27,7 +27,15 @@ const Regions = () => {
   const colormap = useThemedColormap(currentVariable.colormap, {
     format: 'hex',
   })
-  const combinedColormap = createCombinedColormap(colormap, storageLoss)
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const combinedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    storageLoss
+  )
 
   const colorLimits = currentVariable.colorLimits
 

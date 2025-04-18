@@ -4,19 +4,21 @@ import { useMemo } from 'react'
 import useStore from '../store'
 import { generateLogTicks } from './log'
 
-export const createCombinedColormap = (colormap, storageLoss) => {
-  const belowZeroCount = Math.floor(colormap.length * storageLoss) || 1
-  const negativeColormap = [
-    ...useThemedColormap('reds', {
-      count: colormap.length,
-      format: 'hex',
-    }).slice(1, colormap.length * storageLoss),
-  ].reverse()
-
-  const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
-  const aboveZeroCount = colormap.length - belowZeroCount
-  const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
-  return [...belowZeroColormap, ...aboveZero]
+export const createCombinedColormap = (
+  colormap,
+  secondColormap,
+  storageLoss
+) => {
+  return useMemo(() => {
+    const belowZeroCount = Math.floor(colormap.length * storageLoss) || 1
+    const negativeColormap = [
+      ...secondColormap.slice(1, colormap.length * storageLoss),
+    ].reverse()
+    const belowZeroColormap = belowZeroCount > 1 ? negativeColormap : []
+    const aboveZeroCount = colormap.length - belowZeroCount
+    const aboveZero = colormap.slice(1, 1 + aboveZeroCount)
+    return [...belowZeroColormap, ...aboveZero]
+  }, [colormap, secondColormap, storageLoss])
 }
 
 export const getColorForValue = (
@@ -78,9 +80,12 @@ export const useVariableColormap = () => {
   const colormapBase =
     logScale && logLabels
       ? useThemedColormap(currentVariable.colormap, {
+          format: 'hex',
           count: logLabels.length,
         }).slice(1, logLabels.length)
-      : useThemedColormap(currentVariable.colormap)
+      : useThemedColormap(currentVariable.colormap, {
+          format: 'hex',
+        })
 
   const colormap = useMemo(() => {
     if (currentVariable.flipColormap) {

@@ -17,6 +17,7 @@ import { Badge } from '@carbonplan/components'
 import useStore, { variables } from '../store'
 import { formatValue, useVariableColormap } from '../utils'
 import { getColorForValue, createCombinedColormap } from '../utils/color'
+import { useThemedColormap } from '@carbonplan/colormaps'
 
 const renderPoint = (point) => {
   const { x, y, color } = point
@@ -53,8 +54,15 @@ const renderDataBadge = (point) => {
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  const adjustedColormap = createCombinedColormap(colormap, storageLoss)
-
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const adjustedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    storageLoss
+  )
   return (
     <defs>
       <linearGradient
@@ -161,7 +169,15 @@ const OverviewBadge = ({ selectedLines }) => {
   const currentVariable = useStore((s) => s.currentVariable)
   const storageLoss = useStore((s) => s.storageLoss)
   const colormap = useVariableColormap()
-  const combinedColormap = createCombinedColormap(colormap, storageLoss)
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const combinedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    storageLoss
+  )
 
   const activeRegion = hoveredRegion ?? selectedRegion
   const activeLineData =
