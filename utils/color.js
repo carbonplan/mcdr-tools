@@ -74,12 +74,9 @@ export const useVariableColormap = () => {
   const colormapBase =
     logScale && logLabels
       ? useThemedColormap(currentVariable.colormap, {
-          format: 'hex',
           count: logLabels.length,
         }).slice(1, logLabels.length)
-      : useThemedColormap(currentVariable.colormap, {
-          format: 'hex',
-        })
+      : useThemedColormap(currentVariable.colormap)
 
   const colormap = useMemo(() => {
     if (currentVariable.flipColormap) {
