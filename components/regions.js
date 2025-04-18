@@ -56,7 +56,6 @@ const Regions = () => {
   ]
 
   const colorExpression = useMemo(() => {
-    console.log(colorLimits)
     const adjustedLower = colorLimits[0] - storageLoss
     const adjustedUpper = colorLimits[1] - storageLoss
     const totalRange = adjustedUpper - adjustedLower
