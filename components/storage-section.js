@@ -1,11 +1,17 @@
 import React, { useMemo } from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Badge, Column, Row } from '@carbonplan/components'
-import useStore from '../store'
+import useStore, { variables } from '../store'
+import {
+  createCombinedColormap,
+  getColorForValue,
+  useVariableColormap,
+} from '../utils'
+import { useThemedColormap } from '@carbonplan/colormaps'
 
 const formatNumber = (value, decimals = 2) => {
   const formatted = Number(value).toFixed(decimals)
-  return value > 0 ? `+${formatted}` : formatted
+  return value > 0 ? `${formatted}` : formatted
 }
 
 const StorageSection = ({ sx }) => {
@@ -14,9 +20,22 @@ const StorageSection = ({ sx }) => {
   const selectedRegion = useStore((state) => state.selectedRegion)
   const hoveredRegion = useStore((state) => state.hoveredRegion)
   const overviewElapsedTime = useStore((state) => state.overviewElapsedTime)
+  const currentVariable = useStore((state) => state.currentVariable)
+  const isOverview = useStore((s) => variables[s.variableFamily].overview)
 
   const activeRegion = selectedRegion ?? hoveredRegion
   const hasRegionData = activeRegion !== null
+
+  const colormap = useVariableColormap()
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const combinedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    storageLoss
+  )
 
   const { currentEfficiency, netEfficiency } = useMemo(() => {
     if (!hasRegionData) {
@@ -41,6 +60,14 @@ const StorageSection = ({ sx }) => {
     overviewElapsedTime,
     storageLoss,
   ])
+
+  const color = getColorForValue(
+    currentEfficiency,
+    combinedColormap,
+    currentVariable
+  )
+
+  if (!isOverview) return null
 
   return (
     <>
@@ -67,13 +94,13 @@ const StorageSection = ({ sx }) => {
                 alignItems: 'center',
               }}
             >
-              <Box as='span' sx={{ color: 'secondary' }}>
+              <Box as='span' sx={{ color: 'primary' }}>
                 reuptake
               </Box>
               <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
                 -
               </Box>
-              <Box as='span' sx={{ color: 'secondary' }}>
+              <Box as='span' sx={{ color: 'primary' }}>
                 Storage Loss
               </Box>
             </Flex>
@@ -82,7 +109,12 @@ const StorageSection = ({ sx }) => {
         <Row columns={[3]} sx={{ mt: 3 }}>
           <Column start={[1, 1, 1, 1]} width={[1, 1, 1, 1]}>
             <Flex sx={{ justifyContent: 'space-between' }}>
-              <Badge sx={{ color: 'primary' }}>
+              <Badge
+                sx={{
+                  color: 'primary',
+                  bg: hasRegionData ? color : 'muted',
+                }}
+              >
                 {hasRegionData ? formatNumber(netEfficiency) : '----'}
               </Badge>
               <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
@@ -92,16 +124,14 @@ const StorageSection = ({ sx }) => {
           </Column>
           <Column start={[2, 2, 2, 2]} width={[2]}>
             <Flex sx={{ gap: 2 }}>
-              <Badge sx={{ color: 'secondary' }}>
+              <Badge sx={{ color: 'primary' }}>
                 {hasRegionData ? currentEfficiency.toFixed(2) : '----'}
               </Badge>
               <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
                 {' '}
                 -{' '}
               </Box>
-              <Badge sx={{ color: 'secondary' }}>
-                {storageLoss.toFixed(2)}
-              </Badge>
+              <Badge sx={{ color: 'primary' }}>{storageLoss.toFixed(2)}</Badge>
             </Flex>
           </Column>
         </Row>

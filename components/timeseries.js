@@ -187,13 +187,10 @@ const OverviewBadge = ({ selectedLines }) => {
     return null
   }
   const data = activeLineData.data[overviewElapsedTime]
-  const color = getColorForValue(data[1], combinedColormap, currentVariable, {
-    storageLoss,
-    combinedColormap,
-  })
+  const color = getColorForValue(data[1], combinedColormap, currentVariable)
   const x = data[0]
   const y = data[1]
-  const point = { x, y, color, text: formatValue(y) }
+  const point = { x, y, color, text: formatValue(y - storageLoss) }
   return renderDataBadge(point)
 }
 
@@ -260,8 +257,8 @@ const ZeroLine = ({ xLimits }) => {
   return (
     <Line
       data={[
-        [xLimits[0], storageLoss],
-        [xLimits[1], storageLoss],
+        [xLimits[0], storageLoss + 0.002],
+        [xLimits[1], storageLoss + 0.002],
       ]}
       color='primary'
     />
