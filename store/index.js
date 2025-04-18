@@ -12,7 +12,7 @@ export const variables = {
         colorLimits: [0, 1],
         colormap: 'cool',
         label: 'Net efficiency',
-        unit: 'mole CO₂ / mole alkalinity',
+        unit: 'mole CO₂ reabsorbed / removed',
         graphUnit: '',
       },
     ],
