@@ -7,6 +7,9 @@ import { centerOfMass } from '@turf/turf'
 import { createCombinedColormap } from '../utils/color'
 
 const Regions = () => {
+  const { map } = useMapbox()
+  const { theme } = useThemeUI()
+
   const hoveredRegion = useStore((s) => s.hoveredRegion)
   const setHoveredRegion = useStore((s) => s.setHoveredRegion)
   const selectedRegion = useStore((s) => s.selectedRegion)
@@ -39,8 +42,6 @@ const Regions = () => {
 
   const colorLimits = currentVariable.colorLimits
 
-  const { map } = useMapbox()
-  const { theme } = useThemeUI()
   const hoveredRegionRef = useRef(hoveredRegion)
   const previouslySelectedRegionRef = useRef(null)
 
@@ -55,6 +56,7 @@ const Regions = () => {
   ]
 
   const colorExpression = useMemo(() => {
+    console.log(colorLimits)
     const adjustedLower = colorLimits[0] - storageLoss
     const adjustedUpper = colorLimits[1] - storageLoss
     const totalRange = adjustedUpper - adjustedLower
@@ -70,7 +72,7 @@ const Regions = () => {
       fillColor[2].push(t, combinedColormap[i])
     }
     return fillColor
-  }, [combinedColormap, colorLimits, transparent, storageLoss])
+  }, [combinedColormap, colorLimits, transparent, storageLoss, theme])
 
   useEffect(() => {
     if (!regionGeojson || !map?.getSource('regions') || !overviewLineData) {
@@ -386,10 +388,18 @@ const Regions = () => {
       map.setPaintProperty(
         'regions-selected',
         'line-color',
-        theme.rawColors.primary
+        theme.rawColors?.primary
+      )
+
+      // Update fill colors when theme changes
+      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
+      map.setPaintProperty(
+        'selected-region-fill',
+        'fill-color',
+        colorExpression
       )
     }
-  }, [map, theme])
+  }, [map, theme, colorExpression])
 
   return null
 }
