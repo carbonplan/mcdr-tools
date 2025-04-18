@@ -11,7 +11,7 @@ import Checkbox from './checkbox'
 const DESCRIPTIONS = {
   EFFICIENCY: {
     overview:
-      'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
+      'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
     region:
       'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
   },
@@ -30,7 +30,8 @@ const DESCRIPTIONS = {
       'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
   },
   DIC_SURF: {
-    region: 'TK',
+    region:
+      'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
   },
   FG: {
     region:

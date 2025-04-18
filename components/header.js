@@ -13,7 +13,9 @@ const Header = ({ expanded, setExpanded }) => {
     <>
       <Meta
         // card={'https://images.carbonplan.org/social/oae-efficiency.png'} // TODO: add card
-        description={'TK'}
+        description={
+          'Interactive mapping tool for exploring the efficiency of Direct Ocean Removal (DOR).'
+        }
         title={'DOR Efficiency – CarbonPlan'}
       />
 
