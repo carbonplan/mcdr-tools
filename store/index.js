@@ -112,7 +112,7 @@ export const variables = {
   },
   DIC: {
     label: 'Integrated dissolved inorganic carbon',
-    threshold: 0.00001,
+    threshold: -0.00001,
     optionsTooltip:
       'View the change in integrated dissolved inorganic carbon, or the total integrated dissolved inorganic carbon value.',
     variables: [
@@ -120,7 +120,7 @@ export const variables = {
         variable: 'DIC',
         delta: true,
         logScale: true,
-        colorLimits: [0, 0.0025],
+        colorLimits: [-0.1, 0],
         logColorLimits: [0.00001, 0.1],
         colormap: 'warm',
         label: 'Change',
@@ -131,7 +131,7 @@ export const variables = {
   },
   DIC_SURF: {
     label: 'Surface dissolved inorganic carbon',
-    threshold: 0.00001,
+    threshold: -0.00001,
     optionsTooltip:
       'View the change in DIC. Total values are not available for this variable.',
     variables: [
@@ -139,7 +139,7 @@ export const variables = {
         variable: 'DIC_SURF',
         delta: true,
         logScale: true,
-        colorLimits: [0, 0.0025],
+        colorLimits: [-0.0001, 0],
         logColorLimits: [0.00001, 0.1],
         colormap: 'warm',
         label: 'Change',
