@@ -7,6 +7,7 @@ import useStore, { variables } from '../store'
 import { Chart, TickLabels, Ticks } from '@carbonplan/charts'
 import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
+import { useColormap } from '@carbonplan/colormaps'
 
 const DESCRIPTIONS = {
   EFFICIENCY: {
@@ -23,7 +24,7 @@ const DESCRIPTIONS = {
   },
   ALK: {
     region:
-      'Concentration of alkalinity in surface waters. Alkalinity increases the ocean’s ability to absorb carbon.',
+      "Concentration of alkalinity in surface waters. Alkalinity increases the ocean's ability to absorb carbon.",
   },
   DIC: {
     region:
@@ -66,14 +67,28 @@ const DisplaySection = ({ sx }) => {
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
 
+  const isEfficiency = variableFamily === 'EFFICIENCY'
+  const efficiencyLowerBound = -0.2
+
   const min = logScale
     ? currentVariable.logColorLimits[0]
+    : isEfficiency
+    ? efficiencyLowerBound
     : currentVariable.colorLimits[0]
   const max = logScale
     ? currentVariable.logColorLimits[1]
     : currentVariable.colorLimits[1]
+
   const logLabels = logScale ? generateLogTicks(min, max) : null
   const colormap = useVariableColormap()
+
+  const negativeColorMap = [
+    ...useColormap('reds', { count: Math.ceil(colormap.length / 5) }),
+  ].reverse()
+
+  const efficiencyColorMap = useMemo(() => {
+    return [...negativeColorMap, ...colormap]
+  }, [colormap, negativeColorMap, isEfficiency])
 
   const filterValues = useMemo(() => {
     return variables[variableFamily].variables.reduce(
@@ -213,7 +228,7 @@ const DisplaySection = ({ sx }) => {
         </Column>
         <Column start={[1]} width={[6, 8, 4, 4]} sx={{ mb: 2 }}>
           <Colorbar
-            colormap={colormap}
+            colormap={isEfficiency ? efficiencyColorMap : colormap}
             discrete={logScale}
             horizontal
             width={'100%'}
@@ -242,10 +257,37 @@ const DisplaySection = ({ sx }) => {
             />
             <TickLabels
               values={logScale ? logLabels : null}
-              format={(d) => formatValue(d, { 0.001: '.0e' })}
+              format={(d) => {
+                if (isEfficiency && d === efficiencyLowerBound) {
+                  return '-1.0'
+                }
+                return formatValue(d, { 0.001: '.0e' })
+              }}
               sx={{ textTransform: 'none' }}
               bottom
             />
+
+            {isEfficiency && (
+              <>
+                <Ticks
+                  bottom
+                  values={[
+                    efficiencyLowerBound / 2 - 0.01,
+                    efficiencyLowerBound / 2 + 0.01,
+                  ]}
+                  sx={{
+                    transform: 'rotate(30deg)',
+                    mt: '-18px',
+                    height: 22,
+                  }}
+                />
+                <TickLabels
+                  bottom
+                  values={[efficiencyLowerBound]}
+                  format={() => '-1.0'}
+                />
+              </>
+            )}
           </Chart>
         </Column>
       </Row>
