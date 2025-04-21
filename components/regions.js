@@ -34,10 +34,9 @@ const Regions = () => {
     format: 'hex',
     count: colormap.length,
   })
-  const combinedColormap = createCombinedColormap(
-    colormap,
-    negativeColormap,
-    storageLoss
+  const combinedColormap = useMemo(
+    () => createCombinedColormap(colormap, negativeColormap, storageLoss),
+    [colormap, negativeColormap, storageLoss]
   )
 
   const colorLimits = currentVariable.colorLimits
