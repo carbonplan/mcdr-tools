@@ -29,6 +29,7 @@ const Regions = () => {
 
   const colormap = useThemedColormap(currentVariable.colormap, {
     format: 'hex',
+    count: 100,
   })
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
@@ -55,6 +56,10 @@ const Regions = () => {
   ]
 
   const colorExpression = useMemo(() => {
+    if (!variables[variableFamily].overview) {
+      return
+    }
+
     const adjustedLower = colorLimits[0] - storageLoss
     const adjustedUpper = colorLimits[1] - storageLoss
     const totalRange = adjustedUpper - adjustedLower
@@ -388,7 +393,6 @@ const Regions = () => {
         'line-color',
         theme.rawColors?.primary
       )
-
       // Update fill colors when theme changes
       map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
       map.setPaintProperty(
