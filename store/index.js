@@ -120,8 +120,7 @@ export const variables = {
         variable: 'DIC',
         delta: true,
         logScale: true,
-        flipColormap: true,
-        colorLimits: [-0.1, 0],
+        colorLimits: [0, -0.01],
         logColorLimits: [0.00001, 0.1],
         colormap: 'warm',
         label: 'Change',
@@ -140,8 +139,7 @@ export const variables = {
         variable: 'DIC_SURF',
         delta: true,
         logScale: true,
-        flipColormap: true,
-        colorLimits: [-0.0001, 0],
+        colorLimits: [0, -0.0001],
         logColorLimits: [0.00001, 0.1],
         colormap: 'warm',
         label: 'Change',
@@ -303,8 +301,8 @@ const useStore = create((set) => ({
           )
           return {
             selectedRegion,
-            currentVariable: variables.DIC.variables[0],
-            variableFamily: 'DIC',
+            currentVariable: variables.DIC_SURF.variables[0],
+            variableFamily: 'DIC_SURF',
             activeLineData,
             selectedRegionGeojson,
           }
