@@ -1,7 +1,7 @@
 import { Filter } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 
-import useStore from '../../store'
+import { useCurrentStore } from '../../store'
 
 const sx = {
   label: {
@@ -14,6 +14,7 @@ const sx = {
 }
 
 const InjectionMonth = () => {
+  const useStore = useCurrentStore()
   const injectionSeason = useStore((state) => state.injectionSeason)
   const setInjectionSeason = useStore((state) => state.setInjectionSeason)
 

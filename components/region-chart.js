@@ -8,7 +8,7 @@ import { Down, Search, X } from '@carbonplan/icons'
 import Timeseries from './timeseries'
 import PlaceholderChart from './placeholder-chart'
 import DownloadCSV from './download-csv'
-import useStore from '../store'
+import { useCurrentStore } from '../store'
 import {
   generateLogTicks,
   getColorForValue,
@@ -47,6 +47,7 @@ const getArrayData = (arr, lats, zoom, unitConversion) => {
 }
 
 const RegionChart = ({ sx }) => {
+  const useStore = useCurrentStore()
   const currentVariable = useStore((s) => s.currentVariable)
   const showRegionPicker = useStore((s) => s.showRegionPicker)
   const setShowRegionPicker = useStore((s) => s.setShowRegionPicker)

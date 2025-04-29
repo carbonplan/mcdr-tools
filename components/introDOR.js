@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from 'theme-ui'
 import { Link } from '@carbonplan/components'
 
-const Intro = ({ sx }) => {
+const IntroDOR = ({ sx }) => {
   return (
     <Box sx={{ ...sx.description, mb: 3 }}>
       This is an interactive tool for exploring the efficiency of direct ocean
@@ -19,4 +19,4 @@ const Intro = ({ sx }) => {
   )
 }
 
-export default Intro
+export default IntroDOR

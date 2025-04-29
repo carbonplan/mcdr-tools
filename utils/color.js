@@ -1,7 +1,7 @@
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { useMemo } from 'react'
 
-import useStore from '../store'
+import { useCurrentStore } from '../store'
 import { generateLogTicks } from './log'
 
 export const createCombinedColormap = (
@@ -61,6 +61,7 @@ export const getColorForValue = (
 }
 
 export const useVariableColormap = () => {
+  const useStore = useCurrentStore()
   const currentVariable = useStore((s) => s.currentVariable)
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
 

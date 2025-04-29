@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Badge, Column, Row } from '@carbonplan/components'
-import useStore, { variables } from '../store'
+import { useCurrentStore, useVariables } from '../store'
 import {
   createCombinedColormap,
   getColorForValue,
@@ -15,13 +15,16 @@ const formatNumber = (value, decimals = 2) => {
 }
 
 const StorageSection = ({ sx }) => {
+  const useStore = useCurrentStore()
+  const variables = useVariables()
   const storageLoss = useStore((state) => state.storageLoss)
   const overviewLineData = useStore((state) => state.overviewLineData)
   const selectedRegion = useStore((state) => state.selectedRegion)
   const hoveredRegion = useStore((state) => state.hoveredRegion)
   const overviewElapsedTime = useStore((state) => state.overviewElapsedTime)
   const currentVariable = useStore((state) => state.currentVariable)
-  const isOverview = useStore((s) => variables[s.variableFamily].overview)
+  const variableFamily = useStore((state) => state.variableFamily)
+  const isOverview = variables[variableFamily].overview
 
   const activeRegion = selectedRegion ?? hoveredRegion
   const hasRegionData = activeRegion !== null

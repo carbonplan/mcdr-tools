@@ -3,12 +3,13 @@ import { Box, Flex } from 'theme-ui'
 import { Column, Filter, Select, Row, Colorbar } from '@carbonplan/components'
 
 import TooltipWrapper from './tooltip'
-import useStore, { variables } from '../store'
+import { useCurrentStore, useVariables } from '../store'
 import { Chart, TickLabels, Ticks } from '@carbonplan/charts'
 import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
 import { useColormap } from '@carbonplan/colormaps'
 
+// TODO: move split versions for dor and oae
 const DESCRIPTIONS = {
   EFFICIENCY: {
     overview:
@@ -57,6 +58,9 @@ const DESCRIPTIONS = {
 }
 
 const DisplaySection = ({ sx }) => {
+  const useStore = useCurrentStore()
+  const variables = useVariables()
+
   const hasSelectedRegion = useStore(
     (state) => typeof state.selectedRegion === 'number'
   )

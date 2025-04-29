@@ -3,18 +3,17 @@ import { Sidebar, SidebarAttachment } from '@carbonplan/layouts'
 import { Box, Spinner } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 
-import useStore from '../store'
-import Header from './header'
-import MapWrapper from './map'
-import Footer from './footer'
-import MobileSettings from './mobile-settings'
-import Intro from './intro'
-import RegionInfo from './region-info'
-import About from './about'
-import DisplaySection from './display-section'
-import ChartSection from './chart-section'
-import StorageSection from './storage-section'
-import useRegionUrlSync from '../utils/useRegionUrlSync'
+import { useOAEStore } from '../../../store'
+import Header from '../../../components/header'
+import MapWrapper from '../../../components/map'
+import Footer from '../../../components/footer'
+import MobileSettings from '../../../components/mobile-settings'
+import Intro from '../../../components/introOAE'
+import RegionInfo from '../../../components/region-info'
+import About from '../../../components/aboutOAE'
+import DisplaySection from '../../../components/display-section'
+import ChartSection from '../../../components/chart-section'
+import useRegionUrlSync from '../../../utils/useRegionUrlSync'
 
 const sx = {
   heading: {
@@ -38,12 +37,12 @@ const sx = {
 }
 
 const Main = () => {
-  const loading = useStore((state) => state.loading)
-  const expanded = useStore((state) => state.expanded)
-  const setExpanded = useStore((state) => state.setExpanded)
-  const setShowRegionPicker = useStore((state) => state.setShowRegionPicker)
+  const loading = useOAEStore((state) => state.loading)
+  const expanded = useOAEStore((state) => state.expanded)
+  const setExpanded = useOAEStore((state) => state.setExpanded)
+  const setShowRegionPicker = useOAEStore((state) => state.setShowRegionPicker)
   const index = useBreakpointIndex({ defaultIndex: 2 })
-  useRegionUrlSync()
+  useRegionUrlSync(useOAEStore)
 
   // toggle sidebar based on breakpoint
   const prevIndexRef = useRef(index)
@@ -83,7 +82,6 @@ const Main = () => {
                 <RegionInfo sx={sx} />
                 <DisplaySection sx={sx} />
                 <ChartSection sx={sx} />
-                <StorageSection sx={sx} />
                 <About sx={sx} />
               </>
             </Sidebar>
@@ -119,7 +117,6 @@ const Main = () => {
               <RegionInfo sx={sx} />
               <DisplaySection sx={sx} />
               <ChartSection sx={sx} />
-              <StorageSection sx={sx} />
               <About sx={sx} />
             </MobileSettings>
             <Footer />

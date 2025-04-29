@@ -4,9 +4,10 @@ import { Badge, Expander } from '@carbonplan/components'
 import { mix } from '@theme-ui/color'
 import { SidebarDivider } from '@carbonplan/layouts'
 
-import useStore from '../store'
+import { useCurrentStore } from '../store'
 
 const RegionInfo = ({ sx }) => {
+  const useStore = useCurrentStore()
   const hoveredRegion = useStore((state) => state.hoveredRegion)
   const selectedRegion = useStore((state) => state.selectedRegion)
   const setSelectedRegion = useStore((state) => state.setSelectedRegion)

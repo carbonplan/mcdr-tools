@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Select } from '@carbonplan/components'
 import { useCallback } from 'react'
 
-import useStore, { variables } from '../../store'
+import { useCurrentStore, useVariables } from '../../store'
 import { Box } from 'theme-ui'
 
 const OFFSETS = {
@@ -13,6 +13,9 @@ const OFFSETS = {
 }
 
 const MonthPicker = ({ sx }) => {
+  const useStore = useCurrentStore()
+  const variables = useVariables()
+
   const elapsedTime = useStore((state) => {
     return variables[state.variableFamily].overview
       ? state.overviewElapsedTime

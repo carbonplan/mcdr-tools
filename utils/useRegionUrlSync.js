@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import useStore from '../store'
 
-const useRegionUrlSync = () => {
+const useRegionUrlSync = (useStore) => {
   const router = useRouter()
   const selectedRegion = useStore((state) => state.selectedRegion)
   const setSelectedRegion = useStore((state) => state.setSelectedRegion)

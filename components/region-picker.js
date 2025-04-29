@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { RegionPicker, useMapbox, useRegion } from '@carbonplan/maps'
 import { useThemeUI } from 'theme-ui'
 
-import useStore from '../store'
+import { useCurrentStore } from '../store'
 
 const RegionPickerWrapper = () => {
+  const useStore = useCurrentStore()
   const selectedRegionCenter = useStore((state) => state.selectedRegionCenter)
   const setCirclePickerMetaData = useStore(
     (state) => state.setCirclePickerMetaData
