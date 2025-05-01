@@ -256,33 +256,6 @@ const Regions = () => {
 
   useEffect(() => {
     addRegions()
-    return () => {
-      if (map && map.getSource('regions')) {
-        map.off('mousemove', 'regions-fill', handleMouseMove)
-        map.off('mouseleave', 'regions-fill', handleMouseLeave)
-        map.off('click', 'regions-fill', handleClick)
-
-        map.removeFeatureState({
-          source: 'regions',
-        })
-
-        if (map.getLayer('regions-fill')) {
-          map.removeLayer('regions-fill')
-        }
-        if (map.getLayer('regions-line')) {
-          map.removeLayer('regions-line')
-        }
-        if (map.getLayer('regions-hover')) {
-          map.removeLayer('regions-hover')
-        }
-        if (map.getLayer('regions-selected')) {
-          map.removeLayer('regions-selected')
-        }
-        if (map.getLayer('selected-region-fill')) {
-          map.removeLayer('selected-region-fill')
-        }
-      }
-    }
   }, [])
 
   useEffect(() => {
