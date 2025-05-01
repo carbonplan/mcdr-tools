@@ -5,7 +5,7 @@ export default function Custom404() {
   const router = useRouter()
 
   useEffect(() => {
-    router.replace('/research/oae-efficiency') // TODO: redirect to new landing page
+    router.replace('/research/ocean-cdr')
   })
 
   return null
