@@ -24,7 +24,8 @@ const StorageSection = ({ sx }) => {
   const overviewElapsedTime = useStore((state) => state.overviewElapsedTime)
   const currentVariable = useStore((state) => state.currentVariable)
   const variableFamily = useStore((state) => state.variableFamily)
-  const isOverview = variables[variableFamily].overview
+  const isDOR = useStore((state) => state.isDOR)
+  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
 
   const activeRegion = selectedRegion ?? hoveredRegion
   const hasRegionData = activeRegion !== null
@@ -70,7 +71,7 @@ const StorageSection = ({ sx }) => {
     currentVariable
   )
 
-  if (!isOverview) return null
+  if (!isDOREfficiency) return null
 
   return (
     <>

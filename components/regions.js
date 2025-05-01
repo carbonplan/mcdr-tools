@@ -28,6 +28,9 @@ const Regions = () => {
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
   const storageLoss = useStore((s) => s.storageLoss)
+  const isDOR = useStore((s) => s.isDOR)
+
+  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
 
   const colormap = useThemedColormap(currentVariable.colormap, {
     format: 'hex',
@@ -38,8 +41,13 @@ const Regions = () => {
     count: colormap.length,
   })
   const combinedColormap = useMemo(
-    () => createCombinedColormap(colormap, negativeColormap, storageLoss),
-    [colormap, negativeColormap, storageLoss]
+    () =>
+      createCombinedColormap(
+        colormap,
+        negativeColormap,
+        isDOREfficiency ? storageLoss : 0
+      ),
+    [colormap, negativeColormap, storageLoss, isDOREfficiency]
   )
 
   const colorLimits = currentVariable.colorLimits
@@ -62,8 +70,8 @@ const Regions = () => {
       return
     }
 
-    const adjustedLower = colorLimits[0] - storageLoss
-    const adjustedUpper = colorLimits[1] - storageLoss
+    const adjustedLower = colorLimits[0] - (isDOREfficiency ? storageLoss : 0)
+    const adjustedUpper = colorLimits[1] - (isDOREfficiency ? storageLoss : 0)
     const totalRange = adjustedUpper - adjustedLower
     const fillColor = [
       'case',
@@ -77,7 +85,14 @@ const Regions = () => {
       fillColor[2].push(t, combinedColormap[i])
     }
     return fillColor
-  }, [combinedColormap, colorLimits, transparent, storageLoss, theme])
+  }, [
+    combinedColormap,
+    colorLimits,
+    transparent,
+    storageLoss,
+    theme,
+    isDOREfficiency,
+  ])
 
   useEffect(() => {
     if (!regionGeojson || !map?.getSource('regions') || !overviewLineData) {
@@ -88,7 +103,7 @@ const Regions = () => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = rawValue - storageLoss
+      const currentValue = rawValue - (isDOREfficiency ? storageLoss : 0)
 
       map.setFeatureState(
         {
@@ -116,6 +131,7 @@ const Regions = () => {
     currentVariable,
     overviewElapsedTime,
     storageLoss,
+    isDOREfficiency,
   ])
 
   const handleMouseMove = (e) => {
