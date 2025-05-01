@@ -2,12 +2,11 @@ import StorageLoss from '../storage-loss'
 import FooterWrapper from './footer-wrapper'
 import InjectionMonth from './injection-month'
 import TimeSlider from './time-slider'
-import { useRouter } from 'next/router'
+import { useCurrentStore } from '../../store'
 
 const Footer = () => {
-  const router = useRouter()
-  const isDORRoute = router.pathname.includes('dor-efficiency')
-
+  const useStore = useCurrentStore()
+  const isDOR = useStore((s) => s.isDOR)
   return (
     <>
       <FooterWrapper bottom={[64, 64, 0, 0]}>
@@ -16,7 +15,7 @@ const Footer = () => {
       <FooterWrapper>
         <TimeSlider />
       </FooterWrapper>
-      {isDORRoute && (
+      {isDOR && (
         <FooterWrapper bottom={[64, 64, 0, 0]}>
           <StorageLoss />
         </FooterWrapper>

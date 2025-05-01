@@ -71,12 +71,13 @@ const DisplaySection = ({ sx }) => {
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
 
-  const isEfficiency = variableFamily === 'EFFICIENCY'
+  const isDOREfficiency =
+    variableFamily === 'EFFICIENCY' && useStore((s) => s.isDOR)
   const efficiencyLowerBound = -0.2
 
   const min = logScale
     ? currentVariable.logColorLimits[0]
-    : isEfficiency
+    : isDOREfficiency
     ? efficiencyLowerBound
     : currentVariable.colorLimits[0]
   const max = logScale
@@ -92,7 +93,7 @@ const DisplaySection = ({ sx }) => {
 
   const efficiencyColorMap = useMemo(() => {
     return [...negativeColorMap, ...colormap]
-  }, [colormap, negativeColorMap, isEfficiency])
+  }, [colormap, negativeColorMap, isDOREfficiency])
 
   const filterValues = useMemo(() => {
     return variables[variableFamily].variables.reduce(
@@ -232,7 +233,7 @@ const DisplaySection = ({ sx }) => {
         </Column>
         <Column start={[1]} width={[6, 8, 4, 4]} sx={{ mb: 2 }}>
           <Colorbar
-            colormap={isEfficiency ? efficiencyColorMap : colormap}
+            colormap={isDOREfficiency ? efficiencyColorMap : colormap}
             discrete={logScale}
             horizontal
             width={'100%'}
@@ -262,7 +263,7 @@ const DisplaySection = ({ sx }) => {
             <TickLabels
               values={logScale ? logLabels : null}
               format={(d) => {
-                if (isEfficiency && d === efficiencyLowerBound) {
+                if (isDOREfficiency && d === efficiencyLowerBound) {
                   return '-1.0'
                 }
                 return formatValue(d, { 0.001: '.0e' })
@@ -271,7 +272,7 @@ const DisplaySection = ({ sx }) => {
               bottom
             />
 
-            {isEfficiency && (
+            {isDOREfficiency && (
               <>
                 <Ticks
                   bottom

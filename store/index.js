@@ -29,6 +29,7 @@ const findVariableFamily = (variable, variables) => {
 
 const createStore = (variables, isDOR = false) => {
   return create((set) => ({
+    isDOR,
     loading: false,
     setLoading: (loading) => set({ loading }),
 
