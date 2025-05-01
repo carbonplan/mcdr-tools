@@ -1,6 +1,12 @@
 export const DOR_VARIABLES = {
   EFFICIENCY: {
     label: 'Efficiency',
+    description: {
+      overview:
+        'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
+      region:
+        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+    },
     threshold: 0.001,
     overview: true,
     url: 'https://carbonplan-dor-efficiency.s3.us-west-2.amazonaws.com/store1b.zarr',
@@ -16,8 +22,59 @@ export const DOR_VARIABLES = {
     ],
   },
 
+  FG_CO2: {
+    label: 'Spread of CO₂ uptake',
+    description: {
+      overview:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region. Select a region to view additional experimental outputs.',
+      region:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region.',
+    },
+    threshold: 0.001,
+    overview: true,
+    url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
+    optionsTooltip:
+      'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
+    variables: [
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 0,
+        label: '500 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 1,
+        label: '1000 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 2,
+        label: '2000 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+    ],
+  },
+
   pCO2SURF: {
     label: 'Partial pressure of CO₂',
+    description: {
+      region:
+        'The partial pressure of carbon dioxide (pCO₂) at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere',
+    },
     optionsTooltip: 'View the change in pCO₂, or the total pCO₂ value.',
     variables: [
       {
@@ -43,6 +100,10 @@ export const DOR_VARIABLES = {
   },
   FG: {
     label: 'Air-sea CO₂ flux',
+    description: {
+      region:
+        'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
+    },
     optionsTooltip: 'View the change in CO₂ flux, or the total flux value.',
     variables: [
       {
@@ -71,6 +132,10 @@ export const DOR_VARIABLES = {
   },
   DIC: {
     label: 'Integrated dissolved inorganic carbon',
+    description: {
+      region:
+        'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
+    },
     threshold: -0.00001,
     optionsTooltip:
       'View the change in integrated dissolved inorganic carbon, or the total integrated dissolved inorganic carbon value.',
@@ -90,6 +155,10 @@ export const DOR_VARIABLES = {
   },
   DIC_SURF: {
     label: 'Surface dissolved inorganic carbon',
+    description: {
+      region:
+        'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
+    },
     threshold: -0.00001,
     optionsTooltip:
       'View the change in DIC. Total values are not available for this variable.',
@@ -109,6 +178,10 @@ export const DOR_VARIABLES = {
   },
   PH: {
     label: 'pH',
+    description: {
+      region:
+        'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
+    },
     threshold: 1e-8,
     optionsTooltip: 'View the change in pH, or the total pH value.',
     variables: [

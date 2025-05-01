@@ -9,54 +9,6 @@ import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
 import { useColormap } from '@carbonplan/colormaps'
 
-// TODO: move split versions for dor and oae
-const DESCRIPTIONS = {
-  EFFICIENCY: {
-    overview:
-      'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
-    region:
-      'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
-  },
-  FG_CO2: {
-    overview:
-      'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region. Select a region to view additional experimental outputs.',
-    region:
-      'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region.',
-  },
-  ALK: {
-    region:
-      "Concentration of alkalinity in surface waters. Alkalinity increases the ocean's ability to absorb carbon.",
-  },
-  DIC: {
-    region:
-      'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
-  },
-  DIC_SURF: {
-    region:
-      'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
-  },
-  FG: {
-    region:
-      'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
-  },
-  Omega_arag: {
-    region:
-      'The saturation state of surface seawater with respect to aragonite . Aragonite is a type of calcium carbonate (CaCO₃) that is precipitated by many shell-forming marine organisms. A value of more than 1 indicates supersaturation, which supports the growth of calcifying organisms and indicates a higher likelihood of abiotic mineral precipitation.',
-  },
-  Omega_calc: {
-    region:
-      'The saturation state of surface seawater with respect to calcite, which is a type of calcium carbonate (CaCO₃). A value greater than 1 indicates supersaturation, which supports the growth of calcifying organisms and indicates a higher likelihood of abiotic mineral precipitation.',
-  },
-  PH: {
-    region:
-      'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
-  },
-  pCO2SURF: {
-    region:
-      'The partial pressure of carbon dioxide (pCO₂) at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere',
-  },
-}
-
 const DisplaySection = ({ sx }) => {
   const useStore = useCurrentStore()
   const variables = useVariables()
@@ -70,9 +22,9 @@ const DisplaySection = ({ sx }) => {
   const setVariableFamily = useStore((s) => s.setVariableFamily)
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
+  const isDOR = useStore((s) => s.isDOR)
 
-  const isDOREfficiency =
-    variableFamily === 'EFFICIENCY' && useStore((s) => s.isDOR)
+  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
   const efficiencyLowerBound = -0.2
 
   const min = logScale
@@ -184,7 +136,7 @@ const DisplaySection = ({ sx }) => {
             }}
           >
             {
-              DESCRIPTIONS[variableFamily][
+              variables[variableFamily].description[
                 hasSelectedRegion ? 'region' : 'overview'
               ]
             }

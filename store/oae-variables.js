@@ -1,6 +1,12 @@
 export const OAE_VARIABLES = {
   EFFICIENCY: {
     label: 'Efficiency',
+    description: {
+      overview:
+        'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
+      region:
+        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+    },
     threshold: 0.001,
     overview: true,
     url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v3/store1b.zarr',
@@ -17,6 +23,12 @@ export const OAE_VARIABLES = {
   },
   FG_CO2: {
     label: 'Spread of CO₂ uptake',
+    description: {
+      overview:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region. Select a region to view additional experimental outputs.',
+      region:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region.',
+    },
     threshold: 0.001,
     overview: true,
     url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
@@ -57,6 +69,10 @@ export const OAE_VARIABLES = {
   },
   ALK: {
     label: 'Surface alkalinity',
+    description: {
+      region:
+        'Concentration of alkalinity in surface waters. Alkalinity increases the ocean’s ability to absorb carbon.',
+    },
     threshold: 0.0001,
     optionsTooltip:
       'View the change in alkalinity, or the total alkalinity value.',
@@ -83,6 +99,10 @@ export const OAE_VARIABLES = {
   },
   pCO2SURF: {
     label: 'Partial pressure of CO₂',
+    description: {
+      region:
+        'The partial pressure of carbon dioxide (pCO₂) at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere',
+    },
     optionsTooltip: 'View the change in pCO₂, or the total pCO₂ value.',
     variables: [
       {
@@ -108,6 +128,10 @@ export const OAE_VARIABLES = {
   },
   FG: {
     label: 'Air-sea CO₂ flux',
+    description: {
+      region:
+        'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
+    },
     optionsTooltip: 'View the change in CO₂ flux, or the total flux value.',
     variables: [
       {
@@ -136,6 +160,10 @@ export const OAE_VARIABLES = {
   },
   DIC: {
     label: 'Dissolved inorganic carbon',
+    description: {
+      region:
+        'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
+    },
     threshold: 0.00001,
     optionsTooltip:
       'View the change in DIC. Total values are not available for this variable.',
@@ -155,6 +183,10 @@ export const OAE_VARIABLES = {
   },
   PH: {
     label: 'pH',
+    description: {
+      region:
+        'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
+    },
     threshold: 1e-8,
     optionsTooltip: 'View the change in pH, or the total pH value.',
     variables: [
