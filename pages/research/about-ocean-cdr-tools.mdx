@@ -1,0 +1,91 @@
+# About the Ocean CDR Tools
+
+The Ocean CDR tools is a joint project between CarbonPlan and [[C]Worthy](https://www.cworthy.org/), and contains two map tools for understanding how marine CDR works.
+
+Both tools allow users to explore how a marine CDR intervention taking place in a certain region and season leads to carbon removal over time. The first focuses on ocean alkalinity enhancement (OAE) — an approach that adds alkalinity to the surface ocean, increasing its ability to absorb CO2 without acidifying. The second focuses on direct ocean removal (DOR) — an approach that extracts CO2 from seawater, creating space for the ocean to re-absorb CO2 to return to its original state.
+
+Both map tools are based on the same modeling framework, using a coarse-resolution global ocean circulation model from the [Community Earth System Model](https://www.cesm.ucar.edu/). Briefly, we divided the surface ocean into 690 regions, and simulating an OAE or DOR intervention occurring in that region for 1 month (e.g. adding alkalinity or removing dissolved inorganic carbon at a rate of at a rate of 10 mol m<sup>–2</sup>yr<sup>–1</sup>). We then ran the model for 15 years to simulate how this intervention led to atmospheric carbon removal.
+
+You can use the tools to explore global patterns in carbon removal efficiency, or drill down to visualize how these interventions move through the ocean and result in carbon removal over time.
+
+## Map variables
+
+The two mapping tools share many of the same variables.
+
+<Table
+  header={'Map Variables'}
+  color={'secondary'}
+  columns={[6]}
+  start={[[1], [2], [4], [5]]}
+  width={[[1], [2], [1], [2]]}
+  data={[
+    [
+      'Efficiency',
+      'mol CO₂ reabsorbed / alkalinity added',
+      'OAE only',
+      'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal.',
+    ],
+    [
+      'Efficiency',
+      'mol CO₂ reabsorbed / CO₂ deficit created',
+      'Both',
+      'CO₂ removed from the atmosphere per unit of CO₂ deficit created by the DOR or OAE intervention. For DOR, the CO₂ deficit corresponds directly with the amount of CO₂ extracted during the intervention period. For OAE, the CO₂ deficit is estimated based on estimating the maximum CO₂ removal made possible by the alkalinity addition. Accessed in OAE under the field "Efficiency (CO₂ deficit basis)".',
+    ],
+    [
+      'DIC anomaly/full field (only at surface)',
+      'mol/m²',
+      'Both',
+      'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
+    ],
+    [
+      'Dissolved inorganic carbon (DIC)',
+      'mol/m²',
+      'Both',
+      'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
+    ],
+    [
+      'Partial pressure of CO₂ (pCO₂)',
+      'µatm',
+      'Both',
+      'The partial pressure of carbon dioxide at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere.',
+    ],
+    [
+      'Air-sea CO₂ flux',
+      'mol/m²/yr',
+      'Both',
+      'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
+    ],
+    [
+      'pH',
+      'n/a',
+      'Both',
+      'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
+    ],
+  ]}
+  borderTop={false}
+  borderBottom={false}
+  index={false}
+  sx={{ my: [5] }}
+/>
+
+## Version history
+
+June 4, 2025
+DOR: initial release
+OAE: corrected DIC units; integrated sea surface height into DIC and Efficiency calculations and updated tool data; added new field titled "Efficiency (CO2 deficit basis)" to enable direct comparisons with the DOR data
+
+October 15, 2024
+OAE: initial release
+
+### Additional resources
+
+You can read more about the tools, the underlying modeling, and the key results:
+
+[Scientific article](https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D) describing the OAE modeling and key results.
+[OAE explainer](https://carbonplan.org/research/oae-efficiency-explainer) introducing the OAE map tool.
+[DOR explainer](https://carbonplan.org/research/dor-efficiency-explainer) introducing the DOR map tool.
+
+You can also access the data and code underlying these tools:
+
+Research grade data for [OAE](https://source.coop/repositories/cworthy/oae-efficiency-atlas/description) and [DOR data](TK) on Source Cooperative.
+Code implementing the [OAE](https://github.com/carbonplan/oae-web) and [DOR](TK) web tools.

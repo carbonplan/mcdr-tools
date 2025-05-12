@@ -1,5 +1,12 @@
 import { Box } from 'theme-ui'
-import { Layout, Heading, Row, Column, Button } from '@carbonplan/components'
+import {
+  Layout,
+  Heading,
+  Row,
+  Column,
+  Button,
+  Link,
+} from '@carbonplan/components'
 import { RotatingArrow } from '@carbonplan/icons'
 
 const Index = () => {
@@ -15,8 +22,12 @@ const Index = () => {
       <Row>
         <Column start={[1, 1, 2, 2]} width={[6, 8, 10, 10]}>
           <Box sx={{ mb: [5, 6, 7, 8] }}>
-            Here we index tools we have released for analyzing and mapping ocean
-            CDR.
+            Here we index tools we have released for analyzing and mapping the
+            efficiency and dynamics of ocean CDR.{' '}
+            <Link href='/research/about-ocean-cdr-tools'>
+              Read more about the tools
+            </Link>
+            .
           </Box>
         </Column>
       </Row>
