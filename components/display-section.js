@@ -23,8 +23,12 @@ const DisplaySection = ({ sx }) => {
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
   const isDOR = useStore((s) => s.isDOR)
+  const etaMaxCorrected = useStore((s) => s.etaMaxCorrected)
+  const setEtaMaxCorrected = useStore((s) => s.setEtaMaxCorrected)
 
   const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
+  const isOAEEfficiency = variableFamily === 'EFFICIENCY' && !isDOR
+
   const efficiencyLowerBound = -0.2
 
   const min = logScale
@@ -143,7 +147,8 @@ const DisplaySection = ({ sx }) => {
           </Box>
           <Box sx={{ mt: 3 }}>
             {Object.keys(filterValues).length &&
-              variables[variableFamily].optionsTooltip && (
+              variables[variableFamily].optionsTooltip &&
+              !isOAEEfficiency && (
                 <TooltipWrapper
                   sx={{ justifyContent: 'flex-start', gap: 2 }}
                   tooltip={variables[variableFamily].optionsTooltip}
@@ -157,6 +162,32 @@ const DisplaySection = ({ sx }) => {
               )}
           </Box>
         </Column>
+        {isOAEEfficiency && (
+          <>
+            <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
+              basis
+            </Column>
+            <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
+              <TooltipWrapper
+                tooltip={variables[variableFamily].optionsTooltip}
+              >
+                <Filter
+                  key={variableFamily}
+                  sx={{
+                    mt: -1,
+                  }}
+                  values={{
+                    alkalinity: !etaMaxCorrected,
+                    'CO₂': etaMaxCorrected,
+                  }}
+                  setValues={(values) => {
+                    setEtaMaxCorrected(values['CO₂'])
+                  }}
+                />
+              </TooltipWrapper>
+            </Column>
+          </>
+        )}
 
         <Column start={1} width={[6, 8, 4, 4]} sx={{ ...sx.label, mt: 4 }}>
           <Flex sx={{ justifyContent: 'space-between', height: 25 }}>
@@ -166,7 +197,9 @@ const DisplaySection = ({ sx }) => {
                 <>
                   (
                   <Box as='span' sx={{ textTransform: 'none' }}>
-                    {currentVariable.unit}
+                    {currentVariable.eta_unit && etaMaxCorrected
+                      ? currentVariable.eta_unit
+                      : currentVariable.unit}
                   </Box>
                   )
                 </>

@@ -9,7 +9,9 @@ export const OAE_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v3/store1b.zarr',
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b.zarr',
+    optionsTooltip:
+      'Toggle the basis of the efficiency calculation between alkalinity added and induced CO₂ deficit.',
     variables: [
       {
         variable: 'OAE_efficiency',
@@ -17,6 +19,7 @@ export const OAE_VARIABLES = {
         colormap: 'cool',
         label: 'Efficiency ratio',
         unit: 'mole CO₂ / mole alkalinity',
+        eta_unit: 'mole CO₂ / mole CO₂',
         graphUnit: '',
       },
     ],
@@ -31,7 +34,7 @@ export const OAE_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
     optionsTooltip:
       'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
     variables: [

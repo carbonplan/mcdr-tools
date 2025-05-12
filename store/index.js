@@ -78,6 +78,9 @@ const createStore = (variables, isDOR = false) => {
         return { logScale }
       }),
 
+    etaMaxCorrected: false,
+    setEtaMaxCorrected: (etaMaxCorrected) => set({ etaMaxCorrected }),
+
     selectedRegion: null,
     setSelectedRegion: (selectedRegion) =>
       selectedRegion !== null
