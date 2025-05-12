@@ -160,9 +160,7 @@ const Regions = () => {
   }
 
   const addRegions = async () => {
-    fetch(
-      'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/regions.geojson'
-    )
+    fetch('https://carbonplan-oae-efficiency.s3.amazonaws.com/regions.geojson')
       .then((response) => response.json())
       .then((data) => {
         setRegionGeojson(data)

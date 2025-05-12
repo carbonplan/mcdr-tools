@@ -9,7 +9,7 @@ export const DOR_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-dor-efficiency.s3.us-west-2.amazonaws.com/store1b.zarr',
+    url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v3/store1b.zarr',
     variables: [
       {
         variable: 'DOR_efficiency',
@@ -32,7 +32,7 @@ export const DOR_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
     optionsTooltip:
       'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
     variables: [
@@ -65,6 +65,52 @@ export const DOR_VARIABLES = {
         graphLabel: 'Uptake percentage',
         unit: '%',
         graphUnit: '',
+      },
+    ],
+  },
+  DIC_SURF: {
+    label: 'Surface dissolved inorganic carbon',
+    description: {
+      region:
+        'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
+    },
+    threshold: -0.00001,
+    optionsTooltip:
+      'View the change in DIC. Total values are not available for this variable.',
+    variables: [
+      {
+        variable: 'DIC_SURF',
+        delta: true,
+        logScale: true,
+        colorLimits: [0, -0.0001],
+        logColorLimits: [-1e-5, -1],
+        colormap: 'warm',
+        label: 'Change',
+        unit: 'mol/m²',
+        unitConversion: 0.001,
+      },
+    ],
+  },
+  DIC: {
+    label: 'Integrated dissolved inorganic carbon',
+    description: {
+      region:
+        'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
+    },
+    threshold: -0.00001,
+    optionsTooltip:
+      'View the change in integrated dissolved inorganic carbon, or the total integrated dissolved inorganic carbon value.',
+    variables: [
+      {
+        variable: 'DIC',
+        delta: true,
+        logScale: true,
+        colorLimits: [0, -0.1],
+        logColorLimits: [-1e-4, -1],
+        colormap: 'warm',
+        label: 'Change',
+        unit: 'mol/m²',
+        unitConversion: 0.001,
       },
     ],
   },
@@ -127,52 +173,6 @@ export const DOR_VARIABLES = {
         label: 'Total',
         unit: 'mol/m²/yr',
         unitConversion: -315.36,
-      },
-    ],
-  },
-  DIC: {
-    label: 'Integrated dissolved inorganic carbon',
-    description: {
-      region:
-        'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
-    },
-    threshold: -0.00001,
-    optionsTooltip:
-      'View the change in integrated dissolved inorganic carbon, or the total integrated dissolved inorganic carbon value.',
-    variables: [
-      {
-        variable: 'DIC',
-        delta: true,
-        logScale: true,
-        colorLimits: [0, -0.01],
-        logColorLimits: [-1e-4, -1],
-        colormap: 'warm',
-        label: 'Change',
-        unit: 'mol/m²',
-        unitConversion: 0.001,
-      },
-    ],
-  },
-  DIC_SURF: {
-    label: 'Surface dissolved inorganic carbon',
-    description: {
-      region:
-        'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
-    },
-    threshold: -0.00001,
-    optionsTooltip:
-      'View the change in DIC. Total values are not available for this variable.',
-    variables: [
-      {
-        variable: 'DIC_SURF',
-        delta: true,
-        logScale: true,
-        colorLimits: [0, -0.0001],
-        logColorLimits: [-1e-5, -1],
-        colormap: 'warm',
-        label: 'Change',
-        unit: 'mol/m²',
-        unitConversion: 0.001,
       },
     ],
   },

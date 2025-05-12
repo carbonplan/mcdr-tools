@@ -44,8 +44,8 @@ const createStore = (variables, isDOR = false) => {
     setExpanded: (expanded) => set({ expanded }),
 
     zarrStore: isDOR
-      ? 'https://carbonplan-dor-efficiency.s3.us-west-2.amazonaws.com/v2/store2.zarr'
-      : 'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/v3/store2.zarr',
+      ? 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v2/store2.zarr'
+      : 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store2.zarr',
 
     variableFamily: 'EFFICIENCY',
     setVariableFamily: (variableFamily) => set({ variableFamily }),
