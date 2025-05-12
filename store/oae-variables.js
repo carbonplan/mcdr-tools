@@ -19,11 +19,33 @@ export const OAE_VARIABLES = {
         colormap: 'cool',
         label: 'Efficiency ratio',
         unit: 'mole CO₂ / mole alkalinity',
-        eta_unit: 'mole CO₂ / mole CO₂',
         graphUnit: '',
       },
     ],
   },
+  EFFICIENCY_ETA: {
+    label: 'Efficiency (CO₂ deficit)',
+    description: {
+      overview:
+        'CO₂ removed compared to the CO₂ deficit induced by the alkalinity addition. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
+      region:
+        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+    },
+    threshold: 0.001,
+    overview: true,
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b_eta.zarr', //tk
+    variables: [
+      {
+        variable: 'OAE_efficiency_eta',
+        colorLimits: [0, 1],
+        colormap: 'cool',
+        label: 'Efficiency ratio',
+        unit: 'CO₂ absorbed / CO₂ deficit created',
+        graphUnit: '',
+      },
+    ],
+  },
+
   FG_CO2: {
     label: 'Spread of CO₂ uptake',
     description: {

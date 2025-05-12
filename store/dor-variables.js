@@ -16,7 +16,7 @@ export const DOR_VARIABLES = {
         colorLimits: [0, 1],
         colormap: 'cool',
         label: 'Net efficiency',
-        unit: 'mole CO₂ reabsorbed / removed',
+        unit: 'mol CO₂ reabsorbed / removed',
         graphUnit: '',
       },
     ],
@@ -32,7 +32,7 @@ export const DOR_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
+    url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
     optionsTooltip:
       'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
     variables: [

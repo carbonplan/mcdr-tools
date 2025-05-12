@@ -162,32 +162,6 @@ const DisplaySection = ({ sx }) => {
               )}
           </Box>
         </Column>
-        {isOAEEfficiency && (
-          <>
-            <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-              basis
-            </Column>
-            <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-              <TooltipWrapper
-                tooltip={variables[variableFamily].optionsTooltip}
-              >
-                <Filter
-                  key={variableFamily}
-                  sx={{
-                    mt: -1,
-                  }}
-                  values={{
-                    alkalinity: !etaMaxCorrected,
-                    'CO₂': etaMaxCorrected,
-                  }}
-                  setValues={(values) => {
-                    setEtaMaxCorrected(values['CO₂'])
-                  }}
-                />
-              </TooltipWrapper>
-            </Column>
-          </>
-        )}
 
         <Column start={1} width={[6, 8, 4, 4]} sx={{ ...sx.label, mt: 4 }}>
           <Flex sx={{ justifyContent: 'space-between', height: 25 }}>
