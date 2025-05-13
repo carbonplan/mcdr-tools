@@ -10,8 +10,6 @@ export const OAE_VARIABLES = {
     threshold: 0.001,
     overview: true,
     url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b.zarr',
-    optionsTooltip:
-      'Toggle the basis of the efficiency calculation between alkalinity added and induced CO₂ deficit.',
     variables: [
       {
         variable: 'OAE_efficiency',

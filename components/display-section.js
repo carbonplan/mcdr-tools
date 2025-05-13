@@ -23,11 +23,8 @@ const DisplaySection = ({ sx }) => {
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
   const isDOR = useStore((s) => s.isDOR)
-  const etaMaxCorrected = useStore((s) => s.etaMaxCorrected)
-  const setEtaMaxCorrected = useStore((s) => s.setEtaMaxCorrected)
 
   const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
-  const isOAEEfficiency = variableFamily === 'EFFICIENCY' && !isDOR
 
   const efficiencyLowerBound = -0.2
 
@@ -147,8 +144,7 @@ const DisplaySection = ({ sx }) => {
           </Box>
           <Box sx={{ mt: 3 }}>
             {Object.keys(filterValues).length &&
-              variables[variableFamily].optionsTooltip &&
-              !isOAEEfficiency && (
+              variables[variableFamily].optionsTooltip && (
                 <TooltipWrapper
                   sx={{ justifyContent: 'flex-start', gap: 2 }}
                   tooltip={variables[variableFamily].optionsTooltip}
@@ -171,9 +167,7 @@ const DisplaySection = ({ sx }) => {
                 <>
                   (
                   <Box as='span' sx={{ textTransform: 'none' }}>
-                    {currentVariable.eta_unit && etaMaxCorrected
-                      ? currentVariable.eta_unit
-                      : currentVariable.unit}
+                    {currentVariable.unit}
                   </Box>
                   )
                 </>
