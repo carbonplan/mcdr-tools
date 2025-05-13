@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useCurrentStore, useVariables } from '../store'
+import useStore, { useVariables } from '../store'
 import { useMapbox } from '@carbonplan/maps'
 import { useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
@@ -9,7 +9,6 @@ import { createCombinedColormap } from '../utils/color'
 const Regions = () => {
   const { map } = useMapbox()
   const { theme } = useThemeUI()
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const hoveredRegion = useStore((s) => s.hoveredRegion)

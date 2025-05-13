@@ -3,7 +3,7 @@ import { Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useState } from 'react'
 
-import { useCurrentStore, useVariables } from '../../store'
+import useStore, { useVariables } from '../../store'
 import MonthPicker from './month-picker'
 
 const sx = {
@@ -85,7 +85,6 @@ const UnitSlider = ({
 }
 
 const TimeSlider = () => {
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const elapsedTime = useStore((state) => {

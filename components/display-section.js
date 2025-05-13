@@ -3,14 +3,13 @@ import { Box, Flex } from 'theme-ui'
 import { Column, Filter, Select, Row, Colorbar } from '@carbonplan/components'
 
 import TooltipWrapper from './tooltip'
-import { useCurrentStore, useVariables } from '../store'
+import useStore, { useVariables } from '../store'
 import { Chart, TickLabels, Ticks } from '@carbonplan/charts'
 import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
 import { useColormap } from '@carbonplan/colormaps'
 
 const DisplaySection = ({ sx }) => {
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const hasSelectedRegion = useStore(

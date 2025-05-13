@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react'
 import { X } from '@carbonplan/icons'
 import { Button } from '@carbonplan/components'
-import { useCurrentStore } from '../store'
+import useStore from '../store'
 import { useMapbox } from '@carbonplan/maps'
 import { Marker } from 'mapbox-gl'
 import { bbox, nearestPointOnLine, polygonToLine } from '@turf/turf'
@@ -10,7 +10,6 @@ import { adjustLongitudeWorldCopy } from '../utils/format'
 const getSize = (zoom) => Math.round(zoom * 2 + 13)
 
 const CloseIcon = () => {
-  const useStore = useCurrentStore()
   const setSelectedRegion = useStore((s) => s.setSelectedRegion)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
   const selectedRegionCenter = useStore((s) => s.selectedRegionCenter)

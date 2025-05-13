@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Badge, Column, Row } from '@carbonplan/components'
-import { useCurrentStore, useVariables } from '../store'
+import useStore from '../store'
 import {
   createCombinedColormap,
   getColorForValue,
@@ -15,8 +15,6 @@ const formatNumber = (value, decimals = 2) => {
 }
 
 const StorageSection = ({ sx }) => {
-  const useStore = useCurrentStore()
-  const variables = useVariables()
   const storageLoss = useStore((state) => state.storageLoss)
   const overviewLineData = useStore((state) => state.overviewLineData)
   const selectedRegion = useStore((state) => state.selectedRegion)

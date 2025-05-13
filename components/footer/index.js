@@ -2,10 +2,9 @@ import StorageLoss from '../storage-loss'
 import FooterWrapper from './footer-wrapper'
 import InjectionMonth from './injection-month'
 import TimeSlider from './time-slider'
-import { useCurrentStore } from '../../store'
+import useStore from '../../store'
 
 const Footer = () => {
-  const useStore = useCurrentStore()
   const isDOR = useStore((s) => s.isDOR)
   return (
     <>

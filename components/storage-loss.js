@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Slider } from '@carbonplan/components'
-import { useCurrentStore, useVariables } from '../store'
+import useStore from '../store'
 
 const sx = {
   label: {
@@ -14,8 +14,6 @@ const sx = {
 }
 
 const StorageLoss = () => {
-  const useStore = useCurrentStore()
-  const variables = useVariables()
   const storageLoss = useStore((state) => state.storageLoss)
   const setStorageLoss = useStore((state) => state.setStorageLoss)
   const variableFamily = useStore((state) => state.variableFamily)

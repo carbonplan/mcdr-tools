@@ -7,10 +7,9 @@ import {
   Header as HeaderComponent,
   Settings,
 } from '@carbonplan/components'
-import { useCurrentStore } from '../store'
+import useStore from '../store'
 
 const Header = ({ expanded, setExpanded }) => {
-  const useStore = useCurrentStore()
   const isDOR = useStore((state) => state.isDOR)
   return (
     <>

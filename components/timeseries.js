@@ -14,7 +14,7 @@ import {
 } from '@carbonplan/charts'
 import { Badge } from '@carbonplan/components'
 
-import { useCurrentStore, useVariables } from '../store'
+import useStore, { useVariables } from '../store'
 import { formatValue, useVariableColormap } from '../utils'
 import { getColorForValue, createCombinedColormap } from '../utils/color'
 import { useThemedColormap } from '@carbonplan/colormaps'
@@ -53,7 +53,6 @@ const renderDataBadge = (point) => {
 }
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
-  const useStore = useCurrentStore()
   const storageLoss = useStore((s) => s.storageLoss)
   const isDOR = useStore((s) => s.isDOR)
   const variableFamily = useStore((s) => s.variableFamily)
@@ -128,7 +127,6 @@ const RenderLines = ({
 }
 
 const ActiveLine = ({ selectedLines }) => {
-  const useStore = useCurrentStore()
   const hoveredRegion = useStore((s) => s.hoveredRegion)
   const selectedRegion = useStore((s) => s.selectedRegion)
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
@@ -169,7 +167,6 @@ const ActiveLine = ({ selectedLines }) => {
 }
 
 const OverviewBadge = ({ selectedLines }) => {
-  const useStore = useCurrentStore()
   const hoveredRegion = useStore((s) => s.hoveredRegion)
   const selectedRegion = useStore((s) => s.selectedRegion)
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
@@ -210,7 +207,6 @@ const OverviewBadge = ({ selectedLines }) => {
 }
 
 const TimeIndicator = ({ yLimits, isOverview = false }) => {
-  const useStore = useCurrentStore()
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const detailElapsedTime = useStore((s) => s.detailElapsedTime)
   const elapsedYears = isOverview
@@ -231,7 +227,6 @@ const TimeIndicator = ({ yLimits, isOverview = false }) => {
 }
 
 const AxisChart = ({ xLimits, yLimits }) => {
-  const useStore = useCurrentStore()
   const storageLoss = useStore((s) => s.storageLoss)
   const isDOR = useStore((s) => s.isDOR)
   const variableFamily = useStore((s) => s.variableFamily)
@@ -277,7 +272,6 @@ const AxisChart = ({ xLimits, yLimits }) => {
 }
 
 const ZeroLine = ({ xLimits }) => {
-  const useStore = useCurrentStore()
   const storageLoss = useStore((s) => s.storageLoss)
   const isDOR = useStore((s) => s.isDOR)
   const variableFamily = useStore((s) => s.variableFamily)
@@ -311,7 +305,6 @@ const Timeseries = ({
   logy = false,
   logLabels = [],
 }) => {
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const regionDataLoading = useStore((s) => s.regionDataLoading)

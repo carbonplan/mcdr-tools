@@ -3,7 +3,7 @@ import { Sidebar, SidebarAttachment } from '@carbonplan/layouts'
 import { Box, Spinner } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 
-import { useOAEStore } from '../../store'
+import useStore from '../../store'
 import Header from '../../components/header'
 import MapWrapper from '../../components/map'
 import Footer from '../../components/footer'
@@ -37,10 +37,10 @@ const sx = {
 }
 
 const Main = () => {
-  const loading = useOAEStore((state) => state.loading)
-  const expanded = useOAEStore((state) => state.expanded)
-  const setExpanded = useOAEStore((state) => state.setExpanded)
-  const setShowRegionPicker = useOAEStore((state) => state.setShowRegionPicker)
+  const loading = useStore((state) => state.loading)
+  const expanded = useStore((state) => state.expanded)
+  const setExpanded = useStore((state) => state.setExpanded)
+  const setShowRegionPicker = useStore((state) => state.setShowRegionPicker)
   const index = useBreakpointIndex({ defaultIndex: 2 })
   useRegionUrlSync()
 

@@ -5,7 +5,7 @@ import { Box, useThemeUI } from 'theme-ui'
 import Regions from './regions'
 import RegionPickerWrapper from './region-picker'
 import CloseIcon from './close-icon'
-import { useCurrentStore, useVariables } from '../store'
+import useStore, { useVariables } from '../store'
 import { useVariableColormap } from '../utils'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-maps/'
@@ -53,7 +53,6 @@ const MONTH_MAP = {
   4: 10,
 }
 const MapWrapper = () => {
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const setLoading = useStore((s) => s.setLoading)

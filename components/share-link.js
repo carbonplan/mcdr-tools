@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { useCurrentStore } from '../store'
+import useStore from '../store'
 import { SidebarAttachment } from '@carbonplan/layouts'
 import { Button } from '@carbonplan/components'
 import { Down } from '@carbonplan/icons'
 
 const ShareLink = () => {
-  const useStore = useCurrentStore()
   const selectedRegion = useStore((state) => state.selectedRegion)
   const [buttonText, setButtonText] = useState('Copy region link')
 

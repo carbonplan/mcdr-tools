@@ -184,9 +184,6 @@ const createStore = (variables, isDOR = false) => {
   }))
 }
 
-const useOAEStore = createStore(OAE_VARIABLES, false)
-const useDORStore = createStore(DOR_VARIABLES, true)
-
 export const useVariables = () => {
   const router = useRouter()
   return router.pathname.includes('dor-efficiency')
@@ -194,7 +191,14 @@ export const useVariables = () => {
     : OAE_VARIABLES
 }
 
-export const useCurrentStore = () => {
+const useOAEStore = createStore(OAE_VARIABLES, false)
+const useDORStore = createStore(DOR_VARIABLES, true)
+
+export const useStore = (selector) => {
   const router = useRouter()
-  return router.pathname.includes('dor-efficiency') ? useDORStore : useOAEStore
+  return router.pathname.includes('dor-efficiency')
+    ? useDORStore(selector)
+    : useOAEStore(selector)
 }
+
+export default useStore

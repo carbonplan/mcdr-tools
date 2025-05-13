@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { Box, Divider, Flex, useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 
-import { useCurrentStore, useVariables } from '../store'
+import useStore, { useVariables } from '../store'
 import Timeseries from './timeseries'
 import { openZarr, getChunk, getTimeSeriesData, downloadCsv } from '../utils'
 import DownloadCSV from './download-csv'
@@ -12,7 +12,6 @@ const toMonthsIndex = (year, startYear) => (year - startYear) * 12 - 1
 const ids = Array.from({ length: 690 }, (_, i) => i)
 
 const OverviewChart = ({ sx }) => {
-  const useStore = useCurrentStore()
   const variables = useVariables()
 
   const selectedRegion = useStore((state) => state.selectedRegion)
