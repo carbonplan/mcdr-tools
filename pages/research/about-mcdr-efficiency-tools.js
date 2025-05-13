@@ -6,7 +6,7 @@ import { Supplement } from '@carbonplan/layouts'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
 
 import AboutMcdrEfficiencyToolsContent from './about-mcdr-efficiency-tools.mdx'
-import { Table } from '@carbonplan/components'
+import { Table, Link } from '@carbonplan/components'
 
 const meta = {
   title: 'About MCDR Efficiency Tools',
@@ -22,7 +22,7 @@ const AboutMcdrEfficiencyTools = () => {
   return (
     <ThemeUIProvider theme={theme}>
       <Supplement meta={meta} back='/research/mcdr-efficiency'>
-        <MDXProvider components={{ ...components, Table }}>
+        <MDXProvider components={{ ...components, Table, Link }}>
           <AboutMcdrEfficiencyToolsContent />
         </MDXProvider>
       </Supplement>

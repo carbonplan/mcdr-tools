@@ -13,11 +13,15 @@ You can use the tools to explore global patterns in carbon removal efficiency, o
 The two mapping tools share many of the same variables.
 
 <Table
-  header={'Map Variables'}
-  color={'secondary'}
   columns={[6]}
-  start={[[1], [2], [4], [5]]}
-  width={[[1], [2], [1], [2]]}
+  start={[[1], [4], [6], [1]]}
+  width={[[3], [2], [1], [6]]}
+  index={false}
+  sx={{
+     'td:last-of-type': { color: 'primary', mt: 3 },
+     'td': { color: 'secondary' },
+    'td:first-of-type': { color: 'blue' },
+  }}
   data={[
     [
       'Efficiency',
@@ -26,7 +30,7 @@ The two mapping tools share many of the same variables.
       'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal.',
     ],
     [
-      'Efficiency',
+      'Efficiency (CO₂ deficit basis)',
       'mol CO₂ reabsorbed / CO₂ deficit created',
       'Both',
       'CO₂ removed from the atmosphere per unit of CO₂ deficit created by the DOR or OAE intervention. For DOR, the CO₂ deficit corresponds directly with the amount of CO₂ extracted during the intervention period. For OAE, the CO₂ deficit is estimated based on estimating the maximum CO₂ removal made possible by the alkalinity addition. Accessed in OAE under the field "Efficiency (CO₂ deficit basis)".',
@@ -62,30 +66,98 @@ The two mapping tools share many of the same variables.
       'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
     ],
   ]}
-  borderTop={false}
-  borderBottom={false}
-  index={false}
-  sx={{ my: [5] }}
+
 />
 
 ## Version history
 
-June 4, 2025
-DOR: initial release
-OAE: corrected DIC units; integrated sea surface height into DIC and Efficiency calculations and updated tool data; added new field titled "Efficiency (CO2 deficit basis)" to enable direct comparisons with the DOR data
+<Table
+  columns={[3]}
+  start={[[1], [1], [1], [1], [1]]}
+  width={[[3], [3], [3], [3], [3]]}
+  index={false}
+  sx={{
+    'td:nth-of-type(2), td:nth-of-type(4)': {
+      color: 'secondary',
+      mb: 1,
+      mt: 2,
+    },
+    'td:first-of-type': { color: 'blue' },
+  }}
+  data={[
+    [
+      'June 4, 2025',
+      'DOR',
+      'Initial Release',
+      'OAE',
+      'Corrected DIC units; integrated sea surface height into DIC and Efficiency calculations and updated tool data; added new field titled "Efficiency (CO2 deficit basis)" to enable direct comparisons with the DOR data',
+    ],
+    ['October 15, 2024', 'OAE', 'Initial release'],
+  ]}
+/>
+June 4, 2025 DOR: initial release OAE: corrected DIC units; integrated sea surface
+height into DIC and Efficiency calculations and updated tool data; added new field
+titled "Efficiency (CO2 deficit basis)" to enable direct comparisons with the DOR
+data
 
 October 15, 2024
 OAE: initial release
 
 ### Additional resources
 
-You can read more about the tools, the underlying modeling, and the key results:
+<Table
+  columns={[4]}
+  start={[[1], [1], [3], [1], [3]]}
+  width={[[4], [2], [2], [2], [2]]}
+  index={false}
+  borderBottom={false}
+  sx={{
+    'td:nth-of-type(2)': {
+      color: 'secondary',
+      mb: 1,
+      mt: 2,
+    },
+    'td:nth-of-type(3)': {
+      color: 'secondary',
+      mb: 1,
+      mt: 2,
+    },
+    'td:first-of-type': { color: 'blue' },
+  }}
+  data={[
+    [
+      'Scientific papers',
+      <Link href='https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D'>
+        OAE Nature paper
+      </Link>,
+      'tk',
+    ],
+    [
+      'Explainers',
+      <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>
+        OAE explainer
+      </Link>,
+      <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>
+        DOR explainer
+      </Link>,
+    ],
+        [
+      'Tools',
+      <Link href='https://carbonplan.org/research/oae-efficiency'>
+        OAE map tool
+      </Link>,
+      <Link href='https://carbonplan.org/research/dor-efficiency'>
+        DOR map tool
+      </Link>,
+    ],
+    [
+      'Data',
+      <Link href='https://source.coop/repositories/cworthy/oae-efficiency-atlas/description'>
+        OAE data
+      </Link>,
+      <Link href='https://source.coop/repositories/cworthy/dor-efficiency-atlas/description'>DOR data</Link>,
+    ],
+    ['Code', <Link href='https://github.com/carbonplan/oae-web'>Github</Link>],
 
-[Scientific article](https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D) describing the OAE modeling and key results.
-[OAE explainer](https://carbonplan.org/research/oae-efficiency-explainer) introducing the OAE map tool.
-[DOR explainer](https://carbonplan.org/research/dor-efficiency-explainer) introducing the DOR map tool.
-
-You can also access the data and code underlying these tools:
-
-Research grade data for [OAE](https://source.coop/repositories/cworthy/oae-efficiency-atlas/description) and [DOR data](TK) on Source Cooperative.
-Code implementing the [OAE](https://github.com/carbonplan/oae-web) and [DOR](TK) web tools.
+]}
+/>
