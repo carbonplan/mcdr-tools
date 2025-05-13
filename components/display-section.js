@@ -60,8 +60,9 @@ const DisplaySection = ({ sx }) => {
 
   const handleFamilySelection = useCallback(
     (e) => {
-      setVariableFamily(e.target.value)
-      setCurrentVariable(variables[e.target.value].variables[0])
+      const newFamily = e.target.value
+      setVariableFamily(newFamily)
+      setCurrentVariable(variables[newFamily].variables[0], newFamily)
     },
     [setVariableFamily, setCurrentVariable, variables]
   )
@@ -76,11 +77,11 @@ const DisplaySection = ({ sx }) => {
           (variable) => variable.label === selectedLabel
         )
         if (selectedVariable) {
-          setCurrentVariable(selectedVariable)
+          setCurrentVariable(selectedVariable, variableFamily)
         }
       }
     },
-    [variableFamily, setCurrentVariable]
+    [variableFamily, setCurrentVariable, variables]
   )
   return (
     <>

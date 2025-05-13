@@ -51,9 +51,8 @@ const createStore = (variables, isDOR = false) => {
     setVariableFamily: (variableFamily) => set({ variableFamily }),
 
     currentVariable: variables.EFFICIENCY.variables[0],
-    setCurrentVariable: (currentVariable) =>
+    setCurrentVariable: (currentVariable, variableFamily) =>
       set(() => {
-        const variableFamily = findVariableFamily(currentVariable, variables)
         if (variableFamily && variables[variableFamily]?.overview) {
           return {
             currentOverviewVariable: currentVariable,
