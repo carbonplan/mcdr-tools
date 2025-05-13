@@ -42,7 +42,7 @@ const Main = () => {
   const setExpanded = useOAEStore((state) => state.setExpanded)
   const setShowRegionPicker = useOAEStore((state) => state.setShowRegionPicker)
   const index = useBreakpointIndex({ defaultIndex: 2 })
-  useRegionUrlSync(useOAEStore)
+  useRegionUrlSync()
 
   // toggle sidebar based on breakpoint
   const prevIndexRef = useRef(index)

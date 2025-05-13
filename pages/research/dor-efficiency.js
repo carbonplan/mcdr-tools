@@ -43,7 +43,7 @@ const Main = () => {
   const setExpanded = useDORStore((state) => state.setExpanded)
   const setShowRegionPicker = useDORStore((state) => state.setShowRegionPicker)
   const index = useBreakpointIndex({ defaultIndex: 2 })
-  useRegionUrlSync(useDORStore)
+  useRegionUrlSync()
 
   // toggle sidebar based on breakpoint
   const prevIndexRef = useRef(index)
