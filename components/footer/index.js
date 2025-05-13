@@ -8,10 +8,10 @@ const Footer = () => {
   const isDOR = useStore((s) => s.isDOR)
   return (
     <>
-      <FooterWrapper bottom={[128, 128, 0, 0]}>
+      <FooterWrapper bottom={isDOR ? [128, 128, 0, 0] : [64, 64, 0, 0]}>
         <InjectionMonth />
       </FooterWrapper>
-      <FooterWrapper bottom={[64, 64, 0, 0]}>
+      <FooterWrapper bottom={isDOR ? [64, 64, 0, 0] : [0, 0, 0, 0]}>
         <TimeSlider />
       </FooterWrapper>
       {isDOR && (
