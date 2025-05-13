@@ -27,9 +27,7 @@ const Regions = () => {
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
   const storageLoss = useStore((s) => s.storageLoss)
-  const isDOR = useStore((s) => s.isDOR)
-
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
   const colormap = useThemedColormap(currentVariable.colormap, {
     format: 'hex',
@@ -44,9 +42,9 @@ const Regions = () => {
       createCombinedColormap(
         colormap,
         negativeColormap,
-        isDOREfficiency ? storageLoss : 0
+        showStorageLoss ? storageLoss : 0
       ),
-    [colormap, negativeColormap, storageLoss, isDOREfficiency]
+    [colormap, negativeColormap, storageLoss, showStorageLoss]
   )
 
   const colorLimits = currentVariable.colorLimits
@@ -69,8 +67,8 @@ const Regions = () => {
       return
     }
 
-    const adjustedLower = colorLimits[0] - (isDOREfficiency ? storageLoss : 0)
-    const adjustedUpper = colorLimits[1] - (isDOREfficiency ? storageLoss : 0)
+    const adjustedLower = colorLimits[0] - (showStorageLoss ? storageLoss : 0)
+    const adjustedUpper = colorLimits[1] - (showStorageLoss ? storageLoss : 0)
     const totalRange = adjustedUpper - adjustedLower
     const fillColor = [
       'case',
@@ -90,7 +88,7 @@ const Regions = () => {
     transparent,
     storageLoss,
     theme,
-    isDOREfficiency,
+    showStorageLoss,
   ])
 
   useEffect(() => {
@@ -102,7 +100,7 @@ const Regions = () => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = rawValue - (isDOREfficiency ? storageLoss : 0)
+      const currentValue = rawValue - (showStorageLoss ? storageLoss : 0)
 
       map.setFeatureState(
         {
@@ -130,7 +128,7 @@ const Regions = () => {
     currentVariable,
     overviewElapsedTime,
     storageLoss,
-    isDOREfficiency,
+    showStorageLoss,
   ])
 
   const handleMouseMove = (e) => {

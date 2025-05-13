@@ -21,17 +21,18 @@ const DisplaySection = ({ sx }) => {
   const setVariableFamily = useStore((s) => s.setVariableFamily)
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
-  const isDOR = useStore((s) => s.isDOR)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
+  const dorEfficiencyLowerBound = -0.2
 
-  const efficiencyLowerBound = -0.2
-
-  const min = logScale
-    ? currentVariable.logColorLimits[0]
-    : isDOREfficiency
-    ? efficiencyLowerBound
-    : currentVariable.colorLimits[0]
+  let min
+  if (logScale) {
+    min = currentVariable.logColorLimits[0]
+  } else if (showStorageLoss) {
+    min = dorEfficiencyLowerBound
+  } else {
+    min = currentVariable.colorLimits[0]
+  }
   const max = logScale
     ? currentVariable.logColorLimits[1]
     : currentVariable.colorLimits[1]
@@ -45,7 +46,7 @@ const DisplaySection = ({ sx }) => {
 
   const efficiencyColorMap = useMemo(() => {
     return [...negativeColorMap, ...colormap]
-  }, [colormap, negativeColorMap, isDOREfficiency])
+  }, [colormap, negativeColorMap, showStorageLoss])
 
   const filterValues = useMemo(() => {
     return variables[variableFamily].variables.reduce(
@@ -186,7 +187,7 @@ const DisplaySection = ({ sx }) => {
         </Column>
         <Column start={[1]} width={[6, 8, 4, 4]} sx={{ mb: 2 }}>
           <Colorbar
-            colormap={isDOREfficiency ? efficiencyColorMap : colormap}
+            colormap={showStorageLoss ? efficiencyColorMap : colormap}
             discrete={logScale}
             horizontal
             width={'100%'}
@@ -216,7 +217,7 @@ const DisplaySection = ({ sx }) => {
             <TickLabels
               values={logScale ? logLabels : null}
               format={(d) => {
-                if (isDOREfficiency && d === efficiencyLowerBound) {
+                if (showStorageLoss && d === dorEfficiencyLowerBound) {
                   return '-1.0'
                 }
                 return formatValue(d, { 0.001: '.0e' })
@@ -225,13 +226,13 @@ const DisplaySection = ({ sx }) => {
               bottom
             />
 
-            {isDOREfficiency && (
+            {showStorageLoss && (
               <>
                 <Ticks
                   bottom
                   values={[
-                    efficiencyLowerBound / 2 - 0.01,
-                    efficiencyLowerBound / 2 + 0.01,
+                    dorEfficiencyLowerBound / 2 - 0.01,
+                    dorEfficiencyLowerBound / 2 + 0.01,
                   ]}
                   sx={{
                     transform: 'rotate(30deg)',
@@ -241,7 +242,7 @@ const DisplaySection = ({ sx }) => {
                 />
                 <TickLabels
                   bottom
-                  values={[efficiencyLowerBound]}
+                  values={[dorEfficiencyLowerBound]}
                   format={() => '-1.0'}
                 />
               </>

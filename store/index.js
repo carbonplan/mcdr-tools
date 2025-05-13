@@ -58,9 +58,10 @@ const createStore = (variables, isDOR = false) => {
             currentOverviewVariable: currentVariable,
             currentVariable,
             variableFamily,
+            showStorageLoss: isDOR && variableFamily === 'EFFICIENCY',
           }
         } else {
-          return { currentVariable, variableFamily }
+          return { currentVariable, variableFamily, showStorageLoss: false }
         }
       }),
 
@@ -96,6 +97,7 @@ const createStore = (variables, isDOR = false) => {
               variableFamily,
               activeLineData,
               selectedRegionGeojson,
+              showStorageLoss: false,
             }
           })
         : set((state) => {
@@ -118,6 +120,7 @@ const createStore = (variables, isDOR = false) => {
               activeLineData: null,
               logScale: false,
               selectedRegionCenter: null,
+              showStorageLoss: isDOR,
             }
           }),
 
@@ -178,6 +181,8 @@ const createStore = (variables, isDOR = false) => {
 
     storageLoss: isDOR ? 0.25 : 0,
     setStorageLoss: (storageLoss) => set({ storageLoss }),
+
+    showStorageLoss: isDOR,
 
     regionData: null,
     setRegionData: (regionData) => set({ regionData }),

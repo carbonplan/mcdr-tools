@@ -54,9 +54,7 @@ const renderDataBadge = (point) => {
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  const isDOR = useStore((s) => s.isDOR)
-  const variableFamily = useStore((s) => s.variableFamily)
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
@@ -65,7 +63,7 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const adjustedColormap = createCombinedColormap(
     colormap,
     negativeColormap,
-    isDOREfficiency ? storageLoss : 0
+    showStorageLoss ? storageLoss : 0
   )
   return (
     <defs>
@@ -172,9 +170,7 @@ const OverviewBadge = ({ selectedLines }) => {
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const currentVariable = useStore((s) => s.currentVariable)
   const storageLoss = useStore((s) => s.storageLoss)
-  const isDOR = useStore((s) => s.isDOR)
-  const variableFamily = useStore((s) => s.variableFamily)
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
   const colormap = useVariableColormap()
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
@@ -183,7 +179,7 @@ const OverviewBadge = ({ selectedLines }) => {
   const combinedColormap = createCombinedColormap(
     colormap,
     negativeColormap,
-    isDOREfficiency ? storageLoss : 0
+    showStorageLoss ? storageLoss : 0
   )
 
   const activeRegion = hoveredRegion ?? selectedRegion
@@ -201,7 +197,7 @@ const OverviewBadge = ({ selectedLines }) => {
     x,
     y,
     color,
-    text: formatValue(y - (isDOREfficiency ? storageLoss : 0)),
+    text: formatValue(y - (showStorageLoss ? storageLoss : 0)),
   }
   return renderDataBadge(point)
 }
@@ -228,11 +224,9 @@ const TimeIndicator = ({ yLimits, isOverview = false }) => {
 
 const AxisChart = ({ xLimits, yLimits }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  const isDOR = useStore((s) => s.isDOR)
-  const variableFamily = useStore((s) => s.variableFamily)
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
-  const adjustedStorageLoss = isDOREfficiency ? storageLoss : 0
-  const adjustedYLimits = isDOREfficiency
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  const adjustedStorageLoss = showStorageLoss ? storageLoss : 0
+  const adjustedYLimits = showStorageLoss
     ? [yLimits[0] - adjustedStorageLoss, 1 - adjustedStorageLoss]
     : yLimits
 
@@ -253,12 +247,12 @@ const AxisChart = ({ xLimits, yLimits }) => {
         <Grid vertical />
         <Grid horizontal />
         <Ticks left />
-        {isDOREfficiency && (
+        {showStorageLoss && (
           <Ticks left sx={{ borderColor: 'primary' }} values={[0]} />
         )}
         <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
         <TickLabels left />
-        {isDOREfficiency && (
+        {showStorageLoss && (
           <TickLabels
             left
             sx={{ color: 'primary', fontSize: 2 }}
@@ -273,10 +267,8 @@ const AxisChart = ({ xLimits, yLimits }) => {
 
 const ZeroLine = ({ xLimits }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  const isDOR = useStore((s) => s.isDOR)
-  const variableFamily = useStore((s) => s.variableFamily)
-  const isDOREfficiency = variableFamily === 'EFFICIENCY' && isDOR
-  if (!isDOREfficiency) return null
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  if (!showStorageLoss) return null
 
   return (
     <Line
