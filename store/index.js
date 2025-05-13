@@ -184,8 +184,8 @@ const createStore = (variables, isDOR = false) => {
   }))
 }
 
-export const useOAEStore = createStore(OAE_VARIABLES, false)
-export const useDORStore = createStore(DOR_VARIABLES, true)
+const useOAEStore = createStore(OAE_VARIABLES, false)
+const useDORStore = createStore(DOR_VARIABLES, true)
 
 export const useVariables = () => {
   const router = useRouter()

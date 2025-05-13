@@ -9,9 +9,9 @@ import AboutMcdrEfficiencyToolsContent from './about-mcdr-efficiency-tools.mdx'
 import { Table, Link } from '@carbonplan/components'
 
 const meta = {
-  title: 'About MCDR Efficiency Tools',
+  title: 'About mCDR Efficiency Tools',
   date: '2025-06-04',
-  quickLook: 'Information about MCDR Efficiency Tools',
+  quickLook: 'Information about mCDR Efficiency Tools',
   path: '/research/about-mcdr-efficiency-tools',
   card: 'mcdr-efficiency-tools', //TODO: card?
 }
