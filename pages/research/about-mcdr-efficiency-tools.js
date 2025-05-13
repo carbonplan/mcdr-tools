@@ -5,29 +5,29 @@ import theme from '@carbonplan/theme'
 import { Supplement } from '@carbonplan/layouts'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
 
-import OceanCdrToolsContent from './about-ocean-cdr-tools.mdx'
+import AboutMcdrEfficiencyToolsContent from './about-mcdr-efficiency-tools.mdx'
 import { Table } from '@carbonplan/components'
 
 const meta = {
-  title: 'About Ocean CDR Tools',
+  title: 'About MCDR Efficiency Tools',
   date: '2025-06-04',
-  quickLook: 'Information about Ocean CDR Tools',
-  path: '/research/about-ocean-cdr-tools',
-  card: 'ocean-cdr-tools',
+  quickLook: 'Information about MCDR Efficiency Tools',
+  path: '/research/about-mcdr-efficiency-tools',
+  card: 'mcdr-efficiency-tools', //TODO: card?
 }
 
-const AboutOceanCdrTools = () => {
+const AboutMcdrEfficiencyTools = () => {
   const components = useThemedStylesWithMdx(useMDXComponents())
 
   return (
     <ThemeUIProvider theme={theme}>
-      <Supplement meta={meta} back='/research/ocean-cdr'>
+      <Supplement meta={meta} back='/research/mcdr-efficiency'>
         <MDXProvider components={{ ...components, Table }}>
-          <OceanCdrToolsContent />
+          <AboutMcdrEfficiencyToolsContent />
         </MDXProvider>
       </Supplement>
     </ThemeUIProvider>
   )
 }
 
-export default AboutOceanCdrTools
+export default AboutMcdrEfficiencyTools
