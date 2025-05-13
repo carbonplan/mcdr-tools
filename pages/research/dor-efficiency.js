@@ -9,12 +9,12 @@ import MapWrapper from '../../components/map'
 import Footer from '../../components/footer'
 import MobileSettings from '../../components/mobile-settings'
 import RegionInfo from '../../components/region-info'
-import AboutDOR from '../../components/aboutDOR'
+import AboutDOR from '../../components/about-dor'
 import DisplaySection from '../../components/display-section'
 import ChartSection from '../../components/chart-section'
 import StorageSection from '../../components/storage-section'
 import useRegionUrlSync from '../../utils/useRegionUrlSync'
-import IntroDOR from '../../components/introDOR'
+import IntroDOR from '../../components/intro-dor'
 
 const sx = {
   heading: {
