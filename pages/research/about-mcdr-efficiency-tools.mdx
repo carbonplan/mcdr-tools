@@ -16,13 +16,21 @@ The two mapping tools share many of the same variables.
   columns={[6]}
   start={[[1], [4], [6], [1]]}
   width={[[3], [2], [1], [6]]}
+  borderTop={false}
   index={false}
   sx={{
-     'td:last-of-type': { color: 'primary', mt: 3 },
-     'td': { color: 'secondary' },
+    'tr:first-child': { td: {color: 'primary'} },
+    'td:last-of-type': { color: 'primary', mt: 3 },
+    'td': { color: 'secondary' },
     'td:first-of-type': { color: 'blue' },
   }}
-  data={[
+      data={[
+        [  
+      'Variable',  
+      'Units',  
+      'Tool',  
+      '',  
+    ],  
     [
       'Efficiency',
       'mol CO₂ reabsorbed / alkalinity added',
