@@ -32,13 +32,13 @@ export const DOR_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v2/cumulative_FG_CO2_percent.zarr',
     optionsTooltip:
       'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
     variables: [
       {
         variable: 'FG_CO2_percent_cumulative',
-        colorLimits: [0, 100],
+        colorLimits: [0, 0],
         colormap: 'cool',
         optionIndex: 0,
         label: '500 km',
@@ -48,7 +48,7 @@ export const DOR_VARIABLES = {
       },
       {
         variable: 'FG_CO2_percent_cumulative',
-        colorLimits: [0, 100],
+        colorLimits: [0, 0],
         colormap: 'cool',
         optionIndex: 1,
         label: '1000 km',
@@ -58,7 +58,7 @@ export const DOR_VARIABLES = {
       },
       {
         variable: 'FG_CO2_percent_cumulative',
-        colorLimits: [0, 100],
+        colorLimits: [0, 0],
         colormap: 'cool',
         optionIndex: 2,
         label: '2000 km',

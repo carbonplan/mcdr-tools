@@ -31,11 +31,11 @@ export const OAE_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b_eta.zarr', //tk
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b.zarr', //tk
     variables: [
       {
-        variable: 'OAE_efficiency_eta',
-        colorLimits: [0, 1],
+        variable: 'OAE_efficiency',
+        colorLimits: [0, 100], // temp, set to 0,1 when data ready
         colormap: 'cool',
         label: 'Efficiency ratio',
         unit: 'CO₂ absorbed / CO₂ deficit created',
