@@ -110,18 +110,24 @@ The two mapping tools share many of the same variables.
   sx={{
     'td:first-of-type': { color: 'blue' },
   }}  
-  data={[
+      data={[
+        ['Map tools', 
+        <Link href='https://carbonplan.org/research/oae-efficiency'>OAE</Link>,
+          <Link href='https://carbonplan.org/research/dor-efficiency'>DOR</Link>
+        ],
+        ['Explainers',
+    <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>OAE</Link>,
+          <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>DOR</Link>],
+    
     [
     'Scientific papers',
-
     <Link href='https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D'>
       OAE
     </Link>
-    , 'Forthcoming', ], [ 'Explainers',
-    <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>OAE</Link>,
-    <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>DOR</Link> ],
+      , 'Forthcoming',],
+
     [
-      'Data',
+      'Research grade data',
       <Link href='https://source.coop/repositories/cworthy/oae-efficiency-atlas/description'>
         OAE
       </Link>,
