@@ -22,8 +22,11 @@ const Index = () => {
       <Row>
         <Column start={[1, 1, 2, 2]} width={[6, 8, 10, 10]}>
           <Box sx={{ mb: [5, 6, 7, 8] }}>
-            Here we index tools we have released for analyzing and mapping the
-            efficiency and dynamics of marine CDR.{' '}
+            Below are two tools that map the efficiency of CDR in the oceans
+            using two distinct methods - ocean alkalinity enhancement and direct
+            ocean removal. Both tools allow users to explore how a marine CDR
+            intervention taking place in a certain region and season leads to
+            carbon removal over time.{' '}
             <Link href='/research/about-mcdr-efficiency-tools'>
               Read more about the tools
             </Link>
@@ -40,6 +43,10 @@ const Index = () => {
           >
             Ocean Alkalinity Enhancement
           </Button>
+          <Box sx={{ mt: 3 }}>
+            Adding alkalinity to the ocean and increasing its ability to absorb
+            CO₂.
+          </Box>
         </Column>
         <Column start={[1, 1, 7, 7]} width={[6, 8, 4, 4]}>
           <Button
@@ -49,6 +56,10 @@ const Index = () => {
           >
             Direct Ocean Removal
           </Button>
+          <Box sx={{ mt: 3 }}>
+            Extracting CO₂ from the ocean and creating space for the ocean to
+            re-absorb CO₂.
+          </Box>
         </Column>
       </Row>
     </Layout>
