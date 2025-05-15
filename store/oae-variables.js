@@ -22,7 +22,7 @@ export const OAE_VARIABLES = {
     ],
   },
   EFFICIENCY_ETA: {
-    label: 'Efficiency (CO₂ deficit)',
+    label: 'Efficiency (DOR comparison)',
     description: {
       overview:
         'CO₂ removed compared to the CO₂ deficit induced by the alkalinity addition. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
@@ -31,11 +31,11 @@ export const OAE_VARIABLES = {
     },
     threshold: 0.001,
     overview: true,
-    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b.zarr', //tk
+    url: 'https://carbonplan-oae-efficiency.s3.amazonaws.com/v3/store1b_eta_max.zarr',
     variables: [
       {
-        variable: 'OAE_efficiency',
-        colorLimits: [0, 100], // temp, set to 0,1 when data ready
+        variable: 'OAE_efficiency_eta_max',
+        colorLimits: [0, 1],
         colormap: 'cool',
         label: 'Efficiency ratio',
         unit: 'CO₂ absorbed / CO₂ deficit created',
