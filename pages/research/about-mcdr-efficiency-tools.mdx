@@ -19,7 +19,7 @@ The two mapping tools share many of the same variables.
   borderTop={false}
   index={false}
   sx={{
-    'tr:first-child': { td: {color: 'primary'} },
+    'tr:first-child': { td: {color: 'primary', fontFamily: 'heading', textTransform: 'uppercase'} },
     'td:last-of-type': { color: 'primary', mt: 3 },
     'td': { color: 'secondary' },
     'td:first-of-type': { color: 'blue' },
@@ -85,7 +85,13 @@ The two mapping tools share many of the same variables.
   width={[[1], [2], [2]]}
   index={false}
   sx={{
-    'tr:first-child': { td: { color: 'primary' } },
+    'tr:first-child': {
+      td: {
+        color: 'primary',
+        fontFamily: 'heading',
+        textTransform: 'uppercase',
+      },
+    },
     'td:first-of-type': { color: 'blue' },
   }}
   data={[
