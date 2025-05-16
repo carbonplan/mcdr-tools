@@ -25,9 +25,9 @@ export const OAE_VARIABLES = {
     label: 'Efficiency (DOR comparison)',
     description: {
       overview:
-        'CO₂ removed compared to the CO₂ removal potential induced by the alkalinity addition. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
+        'CO₂ removed from the atmosphere compared to the removal potential induced by adding alkalinity. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'CO₂ removed compared to the CO₂ removal potential induced by the alkalinity addition. Higher values indicate more efficient carbon removal.',
+        'CO₂ removed from the atmosphere compared to the removal potential induced by adding alkalinity. Higher values indicate more efficient carbon removal.',
     },
     threshold: 0.001,
     overview: true,

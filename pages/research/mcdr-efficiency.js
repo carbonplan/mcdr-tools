@@ -23,7 +23,7 @@ const Index = () => {
         <Column start={[1, 1, 2, 2]} width={[6, 6, 6, 6]}>
           <Box sx={{ mb: [5, 6, 7, 8] }}>
             Below are two tools that map the efficiency of CDR in the oceans
-            using two distinct methods - ocean alkalinity enhancement and direct
+            using distinct methods - ocean alkalinity enhancement and direct
             ocean removal. Both tools allow users to explore how a marine CDR
             intervention taking place in a certain region and season leads to
             carbon removal over time.{' '}

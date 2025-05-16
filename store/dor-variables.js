@@ -15,7 +15,7 @@ export const DOR_VARIABLES = {
         variable: 'DOR_efficiency',
         colorLimits: [0, 1],
         colormap: 'cool',
-        unit: 'mol CO₂ reabsorbed / removed',
+        unit: 'CO₂ reabsorbed / potential removal',
         graphLabel: 'Net efficiency',
         graphUnit: '',
       },
@@ -72,7 +72,7 @@ export const DOR_VARIABLES = {
     label: 'Surface dissolved inorganic carbon',
     description: {
       region:
-        'Extracting CO₂ creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
+        'Extracting CO₂ from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
     },
     threshold: -0.00001,
     optionsTooltip:
