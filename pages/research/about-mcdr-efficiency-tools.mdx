@@ -1,8 +1,8 @@
 # About the Marine CDR Efficiency Tools
 
-The Ocean CDR tools is a joint project between CarbonPlan and [[C]Worthy](https://www.cworthy.org/), and contains two map tools for understanding how marine CDR works.
+These Marine CDR tools are a joint project between CarbonPlan and [[C]Worthy](https://www.cworthy.org/) to help people understand how marine CDR works.
 
-Both tools allow users to explore how a marine CDR intervention taking place in a certain region and season leads to carbon removal over time. The first focuses on ocean alkalinity enhancement (OAE) — an approach that adds alkalinity to the surface ocean, increasing its ability to absorb CO2 without acidifying. The second focuses on direct ocean removal (DOR) — an approach that extracts CO2 from seawater, creating space for the ocean to re-absorb CO2 to return to its original state.
+Both tools allow users to explore how a marine CDR intervention taking place in a certain region and season leads to carbon removal over time. The first focuses on ocean alkalinity enhancement (OAE) — an approach that adds alkalinity to the surface ocean, increasing its ability to absorb CO2 without acidifying. The second focuses on direct ocean removal (DOR) — an approach that extracts CO2 from seawater, storing it, and creating space for the ocean to re-absorb CO2 to return to its original state.
 
 Both map tools are based on the same modeling framework, using a coarse-resolution global ocean circulation model from the [Community Earth System Model](https://www.cesm.ucar.edu/). Briefly, we divided the surface ocean into 690 regions, and simulating an OAE or DOR intervention occurring in that region for 1 month (e.g. adding alkalinity or removing dissolved inorganic carbon at a rate of at a rate of 10 mol m<sup>–2</sup>yr<sup>–1</sup>). We then ran the model for 15 years to simulate how this intervention led to atmospheric carbon removal.
 
@@ -76,6 +76,12 @@ The two mapping tools share many of the same variables.
 
 />
 
+## Comparing OAE and DOR
+
+We initially defined OAE efficiency as the amount of CO₂ removed per unit of alkalinity added. But to compare across DOR and OAE, we had to translate that concept of efficiency into a common efficiency metric: the amount of CO₂ removed per unit of removal potential. This requires calculating the maximum removal potential associated with the simulated alkalinity additions.
+
+[TK: eta max methods description]
+
 ## Version history
 
 <Table
@@ -111,7 +117,6 @@ The two mapping tools share many of the same variables.
   start={[[1], [2], [3], ]}
   width={[[1], [1], [1], ]}
   index={false}
-  borderBottom={false}
   sx={{
     'td:first-of-type': { color: 'blue' },
   }}  
@@ -142,3 +147,7 @@ The two mapping tools share many of the same variables.
 
 ]}
 />
+
+## Terms
+
+TK
