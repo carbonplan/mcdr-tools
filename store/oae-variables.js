@@ -5,7 +5,7 @@ export const OAE_VARIABLES = {
       overview:
         'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+        'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal.',
     },
     threshold: 0.001,
     overview: true,
@@ -25,9 +25,9 @@ export const OAE_VARIABLES = {
     label: 'Efficiency (DOR comparison)',
     description: {
       overview:
-        'CO₂ removed compared to the CO₂ deficit induced by the alkalinity addition. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
+        'CO₂ removed compared to the CO₂ removal potential induced by the alkalinity addition. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+        'CO₂ removed compared to the CO₂ removal potential induced by the alkalinity addition. Higher values indicate more efficient carbon removal.',
     },
     threshold: 0.001,
     overview: true,
@@ -38,7 +38,7 @@ export const OAE_VARIABLES = {
         colorLimits: [0, 1],
         colormap: 'cool',
         label: 'Efficiency ratio',
-        unit: 'CO₂ absorbed / CO₂ deficit created',
+        unit: 'mol CO₂ absorbed / potential removal',
         graphUnit: '',
       },
     ],

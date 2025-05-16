@@ -5,7 +5,7 @@ export const DOR_VARIABLES = {
       overview:
         'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
+        'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal.',
     },
     threshold: 0.001,
     overview: true,
@@ -26,15 +26,15 @@ export const DOR_VARIABLES = {
     label: 'Spread of CO₂ uptake',
     description: {
       overview:
-        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region. Select a region to view additional experimental outputs.',
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region. Select a region to view additional experimental outputs.',
       region:
-        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region.',
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region.',
     },
     threshold: 0.001,
     overview: true,
     url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v3/cumulative_FG_CO2_percent.zarr',
     optionsTooltip:
-      'View the percentage of cumulative CO₂ uptake taking place within 500 km, 1000 km, or 2000 km of the injection center.',
+      'View the percentage of cumulative CO₂ re-uptake taking place within 500 km, 1000 km, or 2000 km of the intervention center.',
     variables: [
       {
         variable: 'FG_CO2_percent_cumulative',
