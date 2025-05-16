@@ -14,7 +14,7 @@ import {
 } from '@carbonplan/charts'
 import { Badge } from '@carbonplan/components'
 
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import { formatValue, useVariableColormap } from '../utils'
 import { getColorForValue, createCombinedColormap } from '../utils/color'
 import { useThemedColormap } from '@carbonplan/colormaps'
@@ -54,6 +54,8 @@ const renderDataBadge = (point) => {
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
     count: colormap.length,
@@ -61,7 +63,7 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
   const adjustedColormap = createCombinedColormap(
     colormap,
     negativeColormap,
-    storageLoss
+    showStorageLoss ? storageLoss : 0
   )
   return (
     <defs>
@@ -168,6 +170,7 @@ const OverviewBadge = ({ selectedLines }) => {
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const currentVariable = useStore((s) => s.currentVariable)
   const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
   const colormap = useVariableColormap()
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
@@ -176,7 +179,7 @@ const OverviewBadge = ({ selectedLines }) => {
   const combinedColormap = createCombinedColormap(
     colormap,
     negativeColormap,
-    storageLoss
+    showStorageLoss ? storageLoss : 0
   )
 
   const activeRegion = hoveredRegion ?? selectedRegion
@@ -190,7 +193,12 @@ const OverviewBadge = ({ selectedLines }) => {
   const color = getColorForValue(data[1], combinedColormap, currentVariable)
   const x = data[0]
   const y = data[1]
-  const point = { x, y, color, text: formatValue(y - storageLoss) }
+  const point = {
+    x,
+    y,
+    color,
+    text: formatValue(y - (showStorageLoss ? storageLoss : 0)),
+  }
   return renderDataBadge(point)
 }
 
@@ -216,12 +224,17 @@ const TimeIndicator = ({ yLimits, isOverview = false }) => {
 
 const AxisChart = ({ xLimits, yLimits }) => {
   const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  const adjustedStorageLoss = showStorageLoss ? storageLoss : 0
+  const adjustedYLimits = showStorageLoss
+    ? [yLimits[0] - adjustedStorageLoss, 1 - adjustedStorageLoss]
+    : yLimits
 
   return (
     <>
       <Chart
         x={xLimits}
-        y={[-storageLoss, 1 - storageLoss]}
+        y={adjustedYLimits}
         padding={{ top: 30 }}
         sx={{
           position: 'absolute',
@@ -234,18 +247,19 @@ const AxisChart = ({ xLimits, yLimits }) => {
         <Grid vertical />
         <Grid horizontal />
         <Ticks left />
-        <Ticks left sx={{ borderColor: 'primary' }} values={[0]} />
+        {showStorageLoss && (
+          <Ticks left sx={{ borderColor: 'primary' }} values={[0]} />
+        )}
         <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
         <TickLabels left />
-        <TickLabels left sx={{ color: 'primary', fontSize: 2 }} values={[0]} />
+        {showStorageLoss && (
+          <TickLabels
+            left
+            sx={{ color: 'primary', fontSize: 2 }}
+            values={[0]}
+          />
+        )}
         <TickLabels bottom values={[0, 5, 10, 15]} />
-        <Line
-          data={[
-            [xLimits[0], 0],
-            [xLimits[1], 0],
-          ]}
-          color='primary'
-        />
       </Chart>
     </>
   )
@@ -253,12 +267,14 @@ const AxisChart = ({ xLimits, yLimits }) => {
 
 const ZeroLine = ({ xLimits }) => {
   const storageLoss = useStore((s) => s.storageLoss)
-  if (storageLoss === 0) return null
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  if (!showStorageLoss) return null
+
   return (
     <Line
       data={[
-        [xLimits[0], storageLoss + 0.002],
-        [xLimits[1], storageLoss + 0.002],
+        [xLimits[0], storageLoss],
+        [xLimits[1], storageLoss],
       ]}
       color='primary'
     />
@@ -281,10 +297,12 @@ const Timeseries = ({
   logy = false,
   logLabels = [],
 }) => {
+  const variables = useVariables()
+
   const regionDataLoading = useStore((s) => s.regionDataLoading)
   const [mousePosition, setMousePosition] = useState(null)
-  const [isHovering, setIsHovering] = useState(false)
   const [xSelectorValue, setXSelectorValue] = useState(null)
+  const [isHovering, setIsHovering] = useState(false)
   const currentVariable = useStore((s) => s.currentVariable)
   const variableFamily = useStore((s) => s.variableFamily)
   const isOverview = variables[variableFamily].overview

@@ -7,16 +7,26 @@ import {
   Header as HeaderComponent,
   Settings,
 } from '@carbonplan/components'
+import useStore from '../store'
 
 const Header = ({ expanded, setExpanded }) => {
+  const isDOR = useStore((state) => state.isDOR)
   return (
     <>
       <Meta
-        // card={'https://images.carbonplan.org/social/oae-efficiency.png'} // TODO: add card
-        description={
-          'Interactive mapping tool for exploring the efficiency of Direct Ocean Removal (DOR).'
+        card={
+          isDOR
+            ? 'https://images.carbonplan.org/social/dor-efficiency.png' // TODO: add card
+            : 'https://images.carbonplan.org/social/oae-efficiency.png'
         }
-        title={'DOR Efficiency – CarbonPlan'}
+        description={
+          isDOR
+            ? 'Interactive mapping tool for exploring the efficiency of Direct Ocean Removal (DOR).'
+            : 'Interactive mapping tool for exploring the efficiency of Ocean Alkalinity Enhancement (OAE).'
+        }
+        title={
+          isDOR ? 'DOR Efficiency – CarbonPlan' : 'OAE Efficiency – CarbonPlan'
+        }
       />
 
       <Container>

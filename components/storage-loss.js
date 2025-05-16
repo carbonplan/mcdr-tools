@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Slider } from '@carbonplan/components'
-import useStore, { variables } from '../store'
+import useStore from '../store'
 
 const sx = {
   label: {
@@ -16,9 +16,7 @@ const sx = {
 const StorageLoss = () => {
   const storageLoss = useStore((state) => state.storageLoss)
   const setStorageLoss = useStore((state) => state.setStorageLoss)
-  const isOverview = useStore(
-    (state) => variables[state.variableFamily].overview
-  )
+  const showStorageLoss = useStore((state) => state.showStorageLoss)
 
   const handleChange = (e) => {
     const value = Math.min(1, Math.max(0, parseFloat(e.target.value)))
@@ -27,31 +25,31 @@ const StorageLoss = () => {
 
   return (
     <Flex sx={{ gap: [3, 4, 4, 5], alignItems: 'center' }}>
-      <Box sx={{ ...sx.label, color: isOverview ? 'secondary' : 'muted' }}>
+      <Box sx={{ ...sx.label, color: showStorageLoss ? 'secondary' : 'muted' }}>
         Storage loss
       </Box>
       <Flex sx={{ flex: 1, gap: 3, alignItems: 'center' }}>
         <Box sx={{ flex: 1 }}>
           <Slider
             sx={{
-              color: isOverview ? 'primary' : 'secondary',
-              opacity: isOverview ? 1 : 0.5,
+              color: showStorageLoss ? 'primary' : 'secondary',
+              opacity: showStorageLoss ? 1 : 0.5,
             }}
             value={storageLoss}
             onChange={handleChange}
             min={0}
             max={1}
             step={0.01}
-            disabled={!isOverview}
+            disabled={!showStorageLoss}
           />
         </Box>
         <Box
           sx={{
             ...sx.label,
-            color: isOverview ? 'primary' : 'secondary',
+            color: showStorageLoss ? 'primary' : 'secondary',
             width: '45px',
             textAlign: 'right',
-            opacity: isOverview ? 1 : 0.5,
+            opacity: showStorageLoss ? 1 : 0.5,
           }}
         >
           {(storageLoss * 100).toFixed(0)}%

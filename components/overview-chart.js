@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { Box, Divider, Flex, useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import Timeseries from './timeseries'
 import { openZarr, getChunk, getTimeSeriesData, downloadCsv } from '../utils'
 import DownloadCSV from './download-csv'
@@ -12,6 +12,8 @@ const toMonthsIndex = (year, startYear) => (year - startYear) * 12 - 1
 const ids = Array.from({ length: 690 }, (_, i) => i)
 
 const OverviewChart = ({ sx }) => {
+  const variables = useVariables()
+
   const selectedRegion = useStore((state) => state.selectedRegion)
   const setSelectedRegion = useStore((state) => state.setSelectedRegion)
   const setHoveredRegion = useStore((state) => state.setHoveredRegion)
@@ -36,6 +38,8 @@ const OverviewChart = ({ sx }) => {
   const setActiveLineData = useStore((state) => state.setActiveLineData)
   const setLoading = useStore((state) => state.setLoading)
   const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
+  const storageLoss = useStore((state) => state.storageLoss)
+  const showStorageLoss = useStore((state) => state.showStorageLoss)
 
   const colormap = useThemedColormap(currentVariable.colormap, {
     count: 100,
@@ -132,23 +136,43 @@ const OverviewChart = ({ sx }) => {
     const csvData = Array.from({ length: totalMonths }, (_, index) => ({
       month: index + 1,
       injection_month: injectionMonthString,
+      units: currentVariable.unit,
+      ...(showStorageLoss && { storage_loss: storageLoss }),
     }))
     Object.values(selectedLines).forEach((line) => {
       line.data.forEach(([year, value]) => {
         const monthIndex = toMonthsIndex(year, 0)
-        csvData[monthIndex][`region_${line.id}`] = value
+        csvData[monthIndex][`region_${line.id}`] = showStorageLoss
+          ? value - storageLoss
+          : value
       })
     })
-    const name = currentVariable.graphLabel
-      ? `${currentVariable.graphLabel} ${currentVariable.label}`
-      : currentVariable.label
+
+    const name = (() => {
+      const { label } = variables[variableFamily]
+      const varLabel = currentVariable.graphLabel || currentVariable.label
+
+      if (label.includes('Efficiency')) {
+        return label === 'Efficiency' ? varLabel : 'Efficiency_DOR_comparison'
+      }
+      if (label === 'Spread of CO₂ uptake')
+        return `${label}_${currentVariable.label}`
+      return `${label}_${varLabel}`
+    })()
+
     downloadCsv(
       csvData,
-      `${filterToRegionsInView ? 'filtered_' : ''}${name}_timeseries.csv`
-        .replace(/ /g, '_')
-        .toLocaleLowerCase()
+      `${
+        filterToRegionsInView ? 'filtered_' : ''
+      }${name}_timeseries.csv`.replace(/ /g, '_')
     )
-  }, [selectedLines, toMonthsIndex])
+  }, [
+    selectedLines,
+    toMonthsIndex,
+    storageLoss,
+    showStorageLoss,
+    variableFamily,
+  ])
 
   return (
     <Box sx={{ mb: 4 }}>

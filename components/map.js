@@ -5,7 +5,7 @@ import { Box, useThemeUI } from 'theme-ui'
 import Regions from './regions'
 import RegionPickerWrapper from './region-picker'
 import CloseIcon from './close-icon'
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import { useVariableColormap } from '../utils'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-maps/'
@@ -53,6 +53,8 @@ const MONTH_MAP = {
   4: 10,
 }
 const MapWrapper = () => {
+  const variables = useVariables()
+
   const setLoading = useStore((s) => s.setLoading)
   const setRegionDataLoading = useStore((s) => s.setRegionDataLoading)
   const selectedRegion = useStore((s) => s.selectedRegion)
@@ -65,6 +67,7 @@ const MapWrapper = () => {
   const setShowRegionPicker = useStore((s) => s.setShowRegionPicker)
   const setRegionData = useStore((s) => s.setRegionData)
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
+  const zarrStore = useStore((s) => s.zarrStore)
 
   const colormap = useVariableColormap()
   const { theme } = useThemeUI()
@@ -135,9 +138,7 @@ const MapWrapper = () => {
             <Raster
               key={variableFamily}
               variable={variableFamily}
-              source={
-                'https://carbonplan-dor-efficiency.s3.us-west-2.amazonaws.com/v2/store2.zarr'
-              }
+              source={zarrStore}
               colormap={colormap}
               clim={
                 logScale

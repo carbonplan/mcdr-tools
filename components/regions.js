@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import { useMapbox } from '@carbonplan/maps'
 import { useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
@@ -9,6 +9,7 @@ import { createCombinedColormap } from '../utils/color'
 const Regions = () => {
   const { map } = useMapbox()
   const { theme } = useThemeUI()
+  const variables = useVariables()
 
   const hoveredRegion = useStore((s) => s.hoveredRegion)
   const setHoveredRegion = useStore((s) => s.setHoveredRegion)
@@ -26,6 +27,7 @@ const Regions = () => {
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
   const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
   const colormap = useThemedColormap(currentVariable.colormap, {
     format: 'hex',
@@ -36,8 +38,13 @@ const Regions = () => {
     count: colormap.length,
   })
   const combinedColormap = useMemo(
-    () => createCombinedColormap(colormap, negativeColormap, storageLoss),
-    [colormap, negativeColormap, storageLoss]
+    () =>
+      createCombinedColormap(
+        colormap,
+        negativeColormap,
+        showStorageLoss ? storageLoss : 0
+      ),
+    [colormap, negativeColormap, storageLoss, showStorageLoss]
   )
 
   const colorLimits = currentVariable.colorLimits
@@ -60,8 +67,8 @@ const Regions = () => {
       return
     }
 
-    const adjustedLower = colorLimits[0] - storageLoss
-    const adjustedUpper = colorLimits[1] - storageLoss
+    const adjustedLower = colorLimits[0] - (showStorageLoss ? storageLoss : 0)
+    const adjustedUpper = colorLimits[1] - (showStorageLoss ? storageLoss : 0)
     const totalRange = adjustedUpper - adjustedLower
     const fillColor = [
       'case',
@@ -75,7 +82,14 @@ const Regions = () => {
       fillColor[2].push(t, combinedColormap[i])
     }
     return fillColor
-  }, [combinedColormap, colorLimits, transparent, storageLoss, theme])
+  }, [
+    combinedColormap,
+    colorLimits,
+    transparent,
+    storageLoss,
+    theme,
+    showStorageLoss,
+  ])
 
   useEffect(() => {
     if (!regionGeojson || !map?.getSource('regions') || !overviewLineData) {
@@ -86,7 +100,7 @@ const Regions = () => {
       const polygonId = feature.properties.polygon_id
       const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      const currentValue = rawValue - storageLoss
+      const currentValue = rawValue - (showStorageLoss ? storageLoss : 0)
 
       map.setFeatureState(
         {
@@ -114,6 +128,7 @@ const Regions = () => {
     currentVariable,
     overviewElapsedTime,
     storageLoss,
+    showStorageLoss,
   ])
 
   const handleMouseMove = (e) => {
@@ -142,9 +157,7 @@ const Regions = () => {
   }
 
   const addRegions = async () => {
-    fetch(
-      'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/regions.geojson'
-    )
+    fetch('https://carbonplan-oae-efficiency.s3.amazonaws.com/regions.geojson')
       .then((response) => response.json())
       .then((data) => {
         setRegionGeojson(data)
@@ -238,33 +251,6 @@ const Regions = () => {
 
   useEffect(() => {
     addRegions()
-    return () => {
-      if (map && map.getSource('regions')) {
-        map.off('mousemove', 'regions-fill', handleMouseMove)
-        map.off('mouseleave', 'regions-fill', handleMouseLeave)
-        map.off('click', 'regions-fill', handleClick)
-
-        map.removeFeatureState({
-          source: 'regions',
-        })
-
-        if (map.getLayer('regions-fill')) {
-          map.removeLayer('regions-fill')
-        }
-        if (map.getLayer('regions-line')) {
-          map.removeLayer('regions-line')
-        }
-        if (map.getLayer('regions-hover')) {
-          map.removeLayer('regions-hover')
-        }
-        if (map.getLayer('regions-selected')) {
-          map.removeLayer('regions-selected')
-        }
-        if (map.getLayer('selected-region-fill')) {
-          map.removeLayer('selected-region-fill')
-        }
-      }
-    }
   }, [])
 
   useEffect(() => {
