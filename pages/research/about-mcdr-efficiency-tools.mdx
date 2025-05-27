@@ -18,7 +18,7 @@ The two mapping tools share many of the same variables.
   width={[[3], [2], [1], [6]]}
   index={false}
   sx={{
-    'tr:first-child': { td: {color: 'primary', fontFamily: 'heading', textTransform: 'uppercase', mt: 0 }},
+    'tr:first-child': { td: {color: 'blue', fontFamily: 'heading', textTransform: 'uppercase', mt: 0 }},
     'td:last-of-type': { color: 'primary', mt: 3 },
     'td': { color: 'blue' },
     'td:first-of-type': { color: 'blue' },
@@ -41,6 +41,11 @@ The two mapping tools share many of the same variables.
       'CO₂ absorbed / alkalinity added',
       'OAE only',
       'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal.',
+        ],
+    [ 'Spread of CO₂ uptake',
+      '%',
+      'OAE only, DOR forthcoming',
+      'Percentage of cumulative CO₂ uptake taking place within a specified distance from the center of the intervention region.',
     ],
     [
       'DIC anomaly/full field (only at surface)',
@@ -92,12 +97,12 @@ We initially defined OAE efficiency as the amount of CO₂ removed per unit of a
   sx={{
     'tr:first-child': {
       td: {
-        color: 'primary',
+        color: 'blue',
         fontFamily: 'heading',
         textTransform: 'uppercase',
       },
     },
-    'td:first-of-type': { color: 'blue' },
+    'td:first-of-type': { color: 'blue', fontFamily: 'mono' },
   }}
   data={[
     ['Date', 'OAE', 'DOR'],
@@ -125,7 +130,7 @@ We initially defined OAE efficiency as the amount of CO₂ removed per unit of a
         <Link href='https://carbonplan.org/research/oae-efficiency'>OAE</Link>,
           <Link href='https://carbonplan.org/research/dor-efficiency'>DOR</Link>
         ],
-        ['Explainer Articles',
+        ['Explainer articles',
     <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>OAE</Link>,
           <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>DOR</Link>],
     
