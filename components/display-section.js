@@ -161,19 +161,17 @@ const DisplaySection = ({ sx }) => {
         </Column>
 
         <Column start={1} width={[6, 8, 4, 4]} sx={{ ...sx.label, mt: 4 }}>
-          <Flex sx={{ justifyContent: 'space-between', height: 25 }}>
-            <Box>
-              Color range{' '}
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Flex sx={{ flexWrap: 'wrap', gap: 1 }}>
+              <Box as='span' sx={{ whiteSpace: 'nowrap' }}>
+                Color range
+              </Box>
               {currentVariable.unit && (
-                <>
-                  (
-                  <Box as='span' sx={{ textTransform: 'none' }}>
-                    {currentVariable.unit}
-                  </Box>
-                  )
-                </>
+                <Box sx={{ textTransform: 'none' }}>
+                  ({currentVariable.unit})
+                </Box>
               )}
-            </Box>
+            </Flex>
             <Box>
               {currentVariable.logScale && (
                 <Checkbox
