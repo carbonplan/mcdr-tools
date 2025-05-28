@@ -1,6 +1,6 @@
 import React from 'react'
 import { MDXProvider, useMDXComponents } from '@mdx-js/react'
-import { ThemeUIProvider } from 'theme-ui'
+import { ThemeUIProvider, Box } from 'theme-ui'
 import theme from '@carbonplan/theme'
 import { Supplement } from '@carbonplan/layouts'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
@@ -22,7 +22,7 @@ const AboutMcdrEfficiencyTools = () => {
   return (
     <ThemeUIProvider theme={theme}>
       <Supplement meta={meta} back='/research/mcdr-efficiency'>
-        <MDXProvider components={{ ...components, Table, Link }}>
+        <MDXProvider components={{ ...components, Table, Link, Box }}>
           <AboutMcdrEfficiencyToolsContent />
         </MDXProvider>
       </Supplement>
