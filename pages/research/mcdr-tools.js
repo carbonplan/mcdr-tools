@@ -15,10 +15,10 @@ const Index = () => {
       description={
         'Index of tools visualizing marine CDR efficiency and dynamics.'
       }
-      title='Marine CDR – CarbonPlan'
+      title='Mapping Marine CDR – CarbonPlan'
       nav={'research'}
     >
-      <Heading>Marine Carbon Dioxide Removal</Heading>
+      <Heading>Mapping Marine CDR</Heading>
       <Row>
         <Column start={[1, 1, 2, 2]} width={[6, 6, 6, 6]}>
           <Box sx={{ mb: [5, 6, 7, 8] }}>
@@ -27,7 +27,7 @@ const Index = () => {
             ocean removal. Both tools allow users to explore how a marine CDR
             intervention taking place in a certain region and season leads to
             carbon removal over time.{' '}
-            <Link href='/research/about-mcdr-efficiency-tools'>
+            <Link href='/research/about-mcdr-tools'>
               Read more about the tools
             </Link>
             .
