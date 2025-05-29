@@ -8,6 +8,7 @@ import {
   useVariableColormap,
 } from '../utils'
 import { useThemedColormap } from '@carbonplan/colormaps'
+import TooltipWrapper from './tooltip'
 
 const formatNumber = (value, decimals = 2) => {
   const formatted = Number(value).toFixed(decimals)
@@ -71,15 +72,42 @@ const StorageSection = ({ sx }) => {
 
   return (
     <>
-      <Box sx={{ ...sx.heading }}>EFFICIENCY COMPONENTS</Box>
-      <Box sx={{ ...sx.label, color: 'primary', mt: [4, 4, 4, 5] }}>
-        <Row columns={[3]} sx={{ mt: 3 }}>
+      <TooltipWrapper
+        sx={{
+          justifyContent: 'flex-start',
+          gap: 2,
+          alignItems: 'center',
+        }}
+        tooltip={
+          <Box sx={{ color: 'secondary', fontSize: 1 }}>
+            <Box as='span' sx={{ color: 'primary' }}>
+              Reuptake
+            </Box>{' '}
+            is the fraction of removed CO₂ that is reabsorbed by the ocean.{' '}
+            <Box as='span' sx={{ color: 'primary' }}>
+              Storage loss
+            </Box>{' '}
+            is the fraction of removed CO₂ lost to the atmosphere during
+            transport, storage, or use. Combined, they represent the{' '}
+            <Box as='span' sx={{ color: 'primary' }}>
+              net
+            </Box>{' '}
+            efficiency. Change the storage loss using the slider below.
+          </Box>
+        }
+      >
+        <Box sx={{ ...sx.heading, mb: 0 }}>EFFICIENCY COMPONENTS</Box>
+      </TooltipWrapper>
+      <Box sx={{ ...sx.label, color: 'primary', mt: [3, 3, 3, 4] }}>
+        <Row columns={[3]}>
           <Column
             start={1}
             width={[1, 1, 1, 1]}
             sx={{ ...sx.label, color: 'primary' }}
           >
-            <Flex sx={{ justifyContent: 'space-between' }}>
+            <Flex
+              sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}
+            >
               <Box as='span'>NET</Box>
               <Box as='span' sx={{ color: 'primary', fontSize: 2 }}>
                 =
@@ -91,7 +119,7 @@ const StorageSection = ({ sx }) => {
               sx={{
                 flexWrap: 'wrap',
                 gap: 2,
-                alignItems: 'center',
+                alignItems: 'baseline',
               }}
             >
               <Box as='span' sx={{ color: 'primary' }}>
