@@ -22,11 +22,11 @@ const Index = () => {
       <Row>
         <Column start={[1, 1, 2, 2]} width={[6, 6, 6, 6]}>
           <Box sx={{ mb: [5, 6, 7, 8] }}>
-            Below are two tools that map the efficiency of CDR in the oceans
-            using distinct methods — ocean alkalinity enhancement and direct
-            ocean removal. Both tools allow users to explore how a marine CDR
-            intervention taking place in a certain region and season leads to
-            carbon removal over time.{' '}
+            We created tools to map the efficiency of two different methods of
+            ocean-based CDR — ocean alkalinity enhancement and direct ocean
+            removal. Both tools allow users to explore how differences in
+            location and season affect how much carbon a marine CDR intervention
+            is able to remove from the atmosphere over time.{' '}
             <Link href='/research/about-mcdr-tools'>
               Read more about the tools
             </Link>
@@ -50,7 +50,7 @@ const Index = () => {
             Enhancement
           </Button>
           <Box sx={{ mt: 3 }}>
-            Adding alkalinity to the ocean and increasing its ability to absorb
+            Adding alkalinity to the ocean, increasing its ability to absorb
             CO₂.
           </Box>
         </Column>
@@ -68,8 +68,8 @@ const Index = () => {
             <Box as='br' sx={{ display: ['none', 'none', 'block'] }} /> Removal
           </Button>
           <Box sx={{ mt: 3 }}>
-            Extracting CO₂ from the ocean and creating space for the ocean to
-            re-absorb CO₂.
+            Extracting CO₂ from the ocean, creating space for it to re-absorb
+            CO₂.
           </Box>
         </Column>
       </Row>

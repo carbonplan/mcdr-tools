@@ -2,9 +2,9 @@
 
 These Marine CDR tools are a joint project between CarbonPlan and [[C]Worthy](https://www.cworthy.org/) designed to help people understand how marine CDR works.
 
-Both tools allow users to explore how a marine CDR intervention taking place in a certain region and season leads to carbon removal over time. The first focuses on ocean alkalinity enhancement (OAE) — an approach that adds alkalinity to the surface ocean, increasing its ability to absorb CO2 by adding chemical buffering capacity. The second focuses on direct ocean removal (DOR) — an approach that extracts CO2 from seawater, creating space for the ocean to re-absorb CO2 to return to its original state, and storing or otherwise utilizing the extracted CO2.
+Both tools allow users to explore how differences in location and season affect how much carbon removal a marine CDR intervention can achieve over time. The first focuses on ocean alkalinity enhancement (OAE) — an approach that adds alkalinity to the surface ocean, increasing its ability to absorb CO2 by improving chemical buffering capacity. The second focuses on direct ocean removal (DOR) — an approach that extracts CO2 from seawater, creating space for the ocean to re-absorb atmospheric CO2 to return to its original state, and storing or otherwise utilizing the extracted CO2.
 
-Both map tools are based on the same modeling framework, using a coarse-resolution global ocean circulation model from the [Community Earth System Model](https://www.cesm.ucar.edu/). Briefly, we divided the surface ocean into 690 regions, and simulated an OAE or DOR intervention occurring in that region for 1 month (e.g., adding alkalinity or removing dissolved inorganic carbon at a rate of at a rate of 10 mol m<sup>–2</sup>yr<sup>–1</sup>). We then ran the model for 15 years to simulate how this intervention led to atmospheric carbon removal.
+Both map tools are based on the same modeling framework, using a coarse-resolution global ocean circulation model from the [Community Earth System Model](https://www.cesm.ucar.edu/). Briefly, we divided the surface ocean into 690 regions, and simulated an OAE or DOR intervention occurring in that region for 1 month (e.g., adding alkalinity or removing dissolved inorganic carbon at a rate of 10 mol m<sup>–2</sup>yr<sup>–1</sup>). We then ran the model for 15 years to simulate how this intervention led to atmospheric carbon removal.
 
 You can use the tools to explore global patterns in carbon removal efficiency, or drill down to visualize how these interventions move through the ocean and result in carbon removal over time.
 
@@ -34,7 +34,7 @@ The two mapping tools share many of the same variables.
       'Efficiency (DOR comparison)',
       'CO₂ absorbed / potential removal',
       'Both',
-      'CO₂ removed from the atmosphere per unit of removal potential created by the DOR or OAE intervention. Higher values indicate more efficient carbon removal. For DOR, the maximum potential removal corresponds directly with the CO₂ deficit created by CO₂ extraction during the intervention period. For OAE, the maximum CO₂ removal is estimated based on the amount of alkalinity added during the intervention period. Accessed in OAE under the field "Efficiency (DOR comparison)".',
+      'CO₂ removed from the atmosphere per unit of removal potential created by the DOR or OAE intervention. Higher values indicate more efficient carbon removal. For DOR, the maximum potential removal corresponds directly with the CO2 deficit created by CO2 extraction during the intervention period. For OAE, the maximum CO2 removal is estimated based on the amount of alkalinity added during the intervention period and the seawater chemistry in the injection region. Accessed in OAE under the field “Efficiency (DOR comparison)” and “Efficiency” in the DOR tool.',
     ],
     [
       'Efficiency',
@@ -57,7 +57,7 @@ The two mapping tools share many of the same variables.
       'Dissolved inorganic carbon (DIC)',
       'mol/m³',
       'Both',
-      'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
+      'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown in the tools',
     ],
     [
       'Partial pressure of CO₂ (pCO₂)',

@@ -3,9 +3,9 @@ export const DOR_VARIABLES = {
     label: 'Efficiency',
     description: {
       overview:
-        'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
+        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO2. This metric accounts for both ocean uptake of atmospheric CO2 after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'CO₂ removed from the atmosphere per unit of CO₂ extracted from the ocean. This metric accounts for both ocean re-uptake of atmospheric CO₂ and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal.',
+        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO2. This metric accounts for both ocean uptake of atmospheric CO2 after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal.',
     },
     threshold: 0.001,
     overview: true,
@@ -15,7 +15,7 @@ export const DOR_VARIABLES = {
         variable: 'DOR_efficiency',
         colorLimits: [0, 1],
         colormap: 'cool',
-        unit: 'CO₂ reabsorbed / potential removal',
+        unit: 'CO₂ absorbed / potential removal',
         graphLabel: 'Net efficiency',
         graphUnit: '',
       },
@@ -72,7 +72,7 @@ export const DOR_VARIABLES = {
     label: 'Surface dissolved inorganic carbon',
     description: {
       region:
-        'Extracting CO₂ from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
+        'Extracting CO2 from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO2 from the atmosphere.',
     },
     threshold: -0.00001,
     optionsTooltip:
@@ -119,7 +119,7 @@ export const DOR_VARIABLES = {
     label: 'Partial pressure of CO₂',
     description: {
       region:
-        'The partial pressure of carbon dioxide (pCO₂) at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere',
+        'The partial pressure of carbon dioxide at the ocean surface is a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere.',
     },
     optionsTooltip: 'View the change in pCO₂, or the total pCO₂ value.',
     variables: [
