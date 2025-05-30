@@ -17,7 +17,9 @@ const Intro = ({ sx }) => {
       <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>
         explainer article
       </Link>{' '}
-      for more details. Developed in collaboration with{' '}
+      for more details, or compare with our tool for{' '}
+      <Link href='/research/dor-efficiency'>direct ocean removal</Link>.
+      Developed in collaboration with{' '}
       <Link href='https://cworthy.org/'>[C]Worthy</Link>.
     </Box>
   )
