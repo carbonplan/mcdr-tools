@@ -83,16 +83,18 @@ const StorageSection = ({ sx }) => {
             <Box as='span' sx={{ color: 'primary' }}>
               Reuptake
             </Box>{' '}
-            is the fraction of removed CO₂ that is reabsorbed by the ocean.{' '}
+            is the fraction of extracted CO₂ that is reabsorbed by the ocean.{' '}
             <Box as='span' sx={{ color: 'primary' }}>
               Storage loss
             </Box>{' '}
-            is the fraction of removed CO₂ lost to the atmosphere during
-            transport, storage, or use. Combined, they represent the{' '}
+            is the fraction of extracted CO₂ lost to the atmosphere during
+            transport, storage, or utilization. Combined, they represent the{' '}
             <Box as='span' sx={{ color: 'primary' }}>
               net
             </Box>{' '}
-            efficiency. Change the storage loss using the slider below.
+            efficiency of the intervention at removing carbon from the
+            atmosphere. Use the slider below to explore how storage loss impacts
+            the efficiency of DOR.
           </Box>
         }
       >
