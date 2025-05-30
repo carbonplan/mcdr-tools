@@ -3,10 +3,11 @@ import AnimateHeight from 'react-animate-height'
 import { IconButton, Box, Flex } from 'theme-ui'
 import { Info } from '@carbonplan/icons'
 
-const Tooltip = ({ expanded, setExpanded, sx }) => {
+const Tooltip = ({ expanded, setExpanded, sx, disabled }) => {
   return (
     <IconButton
       onClick={() => setExpanded(!expanded)}
+      disabled={disabled}
       role='checkbox'
       aria-checked={expanded}
       aria-label='Information'
@@ -16,7 +17,7 @@ const Tooltip = ({ expanded, setExpanded, sx }) => {
         width: '16px',
         '@media (hover: hover) and (pointer: fine)': {
           '&:hover > #info': {
-            stroke: 'primary',
+            stroke: !disabled ? 'primary' : '',
           },
         },
         p: [0],
@@ -29,6 +30,7 @@ const Tooltip = ({ expanded, setExpanded, sx }) => {
         width='16px'
         sx={{
           stroke: expanded ? 'primary' : 'secondary',
+          opacity: disabled ? 0.5 : 1,
           transition: '0.1s',
         }}
       />
@@ -42,6 +44,7 @@ const TooltipWrapper = ({
   mt = 0,
   color = 'secondary',
   sx,
+  disabled = false,
 }) => {
   const [expanded, setExpanded] = useState(false)
   return (
@@ -55,6 +58,7 @@ const TooltipWrapper = ({
       >
         {children}
         <Tooltip
+          disabled={disabled}
           expanded={expanded}
           setExpanded={setExpanded}
           sx={{ mt: mt, flexShrink: 0 }}

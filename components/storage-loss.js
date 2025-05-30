@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Slider } from '@carbonplan/components'
 import useStore from '../store'
+import TooltipWrapper from './tooltip'
 
 const sx = {
   label: {
@@ -24,38 +25,52 @@ const StorageLoss = () => {
   }
 
   return (
-    <Flex sx={{ gap: [3, 4, 4, 5], alignItems: 'center' }}>
-      <Box sx={{ ...sx.label, color: showStorageLoss ? 'secondary' : 'muted' }}>
-        Storage loss
-      </Box>
-      <Flex sx={{ flex: 1, gap: 3, alignItems: 'center' }}>
-        <Box sx={{ flex: 1 }}>
-          <Slider
-            sx={{
-              color: showStorageLoss ? 'primary' : 'secondary',
-              opacity: showStorageLoss ? 1 : 0.5,
-            }}
-            value={storageLoss}
-            onChange={handleChange}
-            min={0}
-            max={1}
-            step={0.01}
-            disabled={!showStorageLoss}
-          />
-        </Box>
+    <TooltipWrapper
+      sx={{ gap: 1 }}
+      disabled={!showStorageLoss}
+      tooltip='Percentage of CO₂ extracted from the ocean that is lost to the atmosphere.'
+    >
+      <Flex sx={{ gap: [3, 4, 4, 5], alignItems: 'center', width: '100%' }}>
         <Box
+          sx={{ ...sx.label, color: showStorageLoss ? 'secondary' : 'muted' }}
+        >
+          Storage loss
+        </Box>
+        <Flex
           sx={{
-            ...sx.label,
-            color: showStorageLoss ? 'primary' : 'secondary',
-            width: '45px',
-            textAlign: 'right',
-            opacity: showStorageLoss ? 1 : 0.5,
+            flex: 1,
+            gap: 2,
+            alignItems: 'center',
           }}
         >
-          {(storageLoss * 100).toFixed(0)}%
-        </Box>
+          <Box sx={{ flex: 1 }}>
+            <Slider
+              sx={{
+                color: showStorageLoss ? 'primary' : 'secondary',
+                opacity: showStorageLoss ? 1 : 0.5,
+              }}
+              value={storageLoss}
+              onChange={handleChange}
+              min={0}
+              max={1}
+              step={0.01}
+              disabled={!showStorageLoss}
+            />
+          </Box>
+          <Box
+            sx={{
+              ...sx.label,
+              color: showStorageLoss ? 'primary' : 'secondary',
+              width: '33px',
+              textAlign: 'right',
+              opacity: showStorageLoss ? 1 : 0.5,
+            }}
+          >
+            {(storageLoss * 100).toFixed(0)}%
+          </Box>
+        </Flex>
       </Flex>
-    </Flex>
+    </TooltipWrapper>
   )
 }
 
