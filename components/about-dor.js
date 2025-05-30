@@ -1,9 +1,7 @@
 import React from 'react'
 import { Box } from 'theme-ui'
 import { SidebarDivider } from '@carbonplan/layouts'
-import { Column, Link, Logo, Row } from '@carbonplan/components'
-
-import { CarbonToSea, CWorthy, EDF } from './logos'
+import { Link } from '@carbonplan/components'
 
 const AboutDOR = ({ sx }) => {
   return (
@@ -22,23 +20,11 @@ const AboutDOR = ({ sx }) => {
             ocean alkalinity enhancement
           </Link>
           . Together, CarbonPlan and [C]Worthy built the interactive tool, with
-          funding from TK.
+          funding from with funding from the Chan Zuckerberg Initiative, the
+          Navigation Fund, and the Grantham Foundation for the Protection of the
+          Environment.
         </p>
       </Box>
-      {/* <Row columns={[6, 8, 4, 4]} sx={{ mt: 5 }}>
-        <Column start={1} width={[3, 4, 2, 2]}>
-          <CWorthy sx={{ width: '75%', maxWidth: '200px' }} />
-        </Column>
-        <Column start={[4, 5, 3, 3]} width={[3, 4, 2, 2]}>
-          <CarbonToSea sx={{ mt: 1, width: '80%', maxWidth: '200px' }} />
-        </Column>
-        <Column start={1} width={[3, 4, 2, 2]}>
-          <EDF sx={{ mt: 4, width: '80%', maxWidth: '200px' }} />
-        </Column>
-        <Column start={[4, 5, 3, 3]} width={[3, 4, 2, 2]}>
-          <Logo sx={{ mt: 4, width: '80%', maxWidth: '200px' }} />
-        </Column>
-      </Row> */}
     </>
   )
 }
