@@ -5,14 +5,14 @@ import theme from '@carbonplan/theme'
 import { Supplement } from '@carbonplan/layouts'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
 
-import AboutMcdrToolsContent from './about-mcdr-tools.mdx'
+import AboutMcdrToolsContent from './mcdr-tools-about.mdx'
 import { Table, Link } from '@carbonplan/components'
 
 const meta = {
   title: 'About mCDR Efficiency Tools',
   date: '2025-06-04',
   quickLook: 'Information about mCDR Efficiency Tools',
-  path: '/research/about-mcdr-tools',
+  path: '/research/mcdr-tools-about',
   card: 'mcdr-tools', //TODO: card?
 }
 

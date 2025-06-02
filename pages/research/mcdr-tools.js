@@ -27,7 +27,7 @@ const Index = () => {
             removal. Both tools allow users to explore how differences in
             location and season affect how much carbon a marine CDR intervention
             is able to remove from the atmosphere over time.{' '}
-            <Link href='/research/about-mcdr-tools'>
+            <Link href='/research/mcdr-tools-about'>
               Read more about the tools
             </Link>
             .
