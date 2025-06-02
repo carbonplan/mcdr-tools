@@ -29,7 +29,7 @@
     "@carbonplan/colormaps": "^4.0.0",
     "@carbonplan/components": "^12.6.5",
     "@carbonplan/icons": "^2.0.0",
-    "@carbonplan/layouts": "^5.0.2",
+    "@carbonplan/layouts": "^5.1.1",
     "@carbonplan/maps": "^3.4.0",
     "@carbonplan/theme": "^7.0.0",
     "@mdx-js/loader": "^3.1.0",
