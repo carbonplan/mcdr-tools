@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Box, Spinner } from 'theme-ui'
-import { alpha } from '@theme-ui/color'
 import {
   AxisLabel,
   Chart,
@@ -15,8 +14,10 @@ import {
 } from '@carbonplan/charts'
 import { Badge } from '@carbonplan/components'
 
-import useStore from '../store'
-import { formatValue } from '../utils'
+import useStore, { useVariables } from '../store'
+import { formatValue, useVariableColormap } from '../utils'
+import { getColorForValue, createCombinedColormap } from '../utils/color'
+import { useThemedColormap } from '@carbonplan/colormaps'
 
 const renderPoint = (point) => {
   const { x, y, color } = point
@@ -35,7 +36,6 @@ const renderPoint = (point) => {
 const renderDataBadge = (point) => {
   if (!point || !point.text) return null
   const { x, y, color, text } = point
-  const fullColor = alpha(color, 1)
   return (
     <Point x={x} y={y} align={'center'} width={2}>
       <Badge
@@ -43,7 +43,7 @@ const renderDataBadge = (point) => {
           fontSize: 1,
           height: '20px',
           mt: 2,
-          bg: fullColor,
+          bg: color,
         }}
       >
         {text}
@@ -53,6 +53,18 @@ const renderDataBadge = (point) => {
 }
 
 const ColormapGradient = ({ colormap, opacity = 1 }) => {
+  const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const adjustedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    showStorageLoss ? storageLoss : 0
+  )
   return (
     <defs>
       <linearGradient
@@ -63,13 +75,15 @@ const ColormapGradient = ({ colormap, opacity = 1 }) => {
         y2='0%'
         gradientUnits='userSpaceOnUse'
       >
-        {colormap.map((rgb, index) => {
-          const offset = index / (colormap.length - 1)
+        {adjustedColormap.map((hex, index) => {
+          const offset = Number(
+            (index / (adjustedColormap.length - 1)).toFixed(2)
+          )
           return (
             <stop
               key={index}
               offset={`${offset * 100}%`}
-              stopColor={`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`}
+              stopColor={hex}
               stopOpacity={opacity}
             />
           )
@@ -110,9 +124,14 @@ const RenderLines = ({
   ))
 }
 
-const ActiveLine = () => {
-  const activeLineData = useStore((s) => s.activeLineData)
+const ActiveLine = ({ selectedLines }) => {
+  const hoveredRegion = useStore((s) => s.hoveredRegion)
+  const selectedRegion = useStore((s) => s.selectedRegion)
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
+
+  const activeRegion = hoveredRegion ?? selectedRegion
+  const activeLineData =
+    activeRegion !== null ? selectedLines[activeRegion] : null
 
   if (!activeLineData || !activeLineData.data) {
     return null
@@ -145,18 +164,121 @@ const ActiveLine = () => {
   )
 }
 
-const OverviewBadge = () => {
-  const activeLineData = useStore((s) => s.activeLineData)
+const OverviewBadge = ({ selectedLines }) => {
+  const hoveredRegion = useStore((s) => s.hoveredRegion)
+  const selectedRegion = useStore((s) => s.selectedRegion)
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
+  const currentVariable = useStore((s) => s.currentVariable)
+  const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  const colormap = useVariableColormap()
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const combinedColormap = createCombinedColormap(
+    colormap,
+    negativeColormap,
+    showStorageLoss ? storageLoss : 0
+  )
+
+  const activeRegion = hoveredRegion ?? selectedRegion
+  const activeLineData =
+    activeRegion !== null ? selectedLines[activeRegion] : null
+
   if (!activeLineData || !activeLineData.data) {
     return null
   }
-  const { color } = activeLineData
   const data = activeLineData.data[overviewElapsedTime]
+  const color = getColorForValue(data[1], combinedColormap, currentVariable)
   const x = data[0]
   const y = data[1]
-  const point = { x, y, color, text: formatValue(y) }
+  const point = {
+    x,
+    y,
+    color,
+    text: formatValue(y - (showStorageLoss ? storageLoss : 0)),
+  }
   return renderDataBadge(point)
+}
+
+const TimeIndicator = ({ yLimits, isOverview = false }) => {
+  const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
+  const detailElapsedTime = useStore((s) => s.detailElapsedTime)
+  const elapsedYears = isOverview
+    ? (overviewElapsedTime + 1) / 12
+    : (detailElapsedTime + 1) / 12
+
+  if (elapsedYears === undefined) return null
+  return (
+    <Line
+      data={[
+        [elapsedYears, yLimits[0]],
+        [elapsedYears, yLimits[1]],
+      ]}
+      color='primary'
+      style={{ strokeDasharray: '2 4' }}
+    />
+  )
+}
+
+const AxisChart = ({ xLimits, yLimits }) => {
+  const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  const adjustedStorageLoss = showStorageLoss ? storageLoss : 0
+  const adjustedYLimits = showStorageLoss
+    ? [yLimits[0] - adjustedStorageLoss, 1 - adjustedStorageLoss]
+    : yLimits
+
+  return (
+    <>
+      <Chart
+        x={xLimits}
+        y={adjustedYLimits}
+        padding={{ top: 30 }}
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <Grid vertical />
+        <Grid horizontal />
+        <Ticks left />
+        {showStorageLoss && (
+          <Ticks left sx={{ borderColor: 'primary' }} values={[0]} />
+        )}
+        <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
+        <TickLabels left />
+        {showStorageLoss && (
+          <TickLabels
+            left
+            sx={{ color: 'primary', fontSize: 2 }}
+            values={[0]}
+          />
+        )}
+        <TickLabels bottom values={[0, 5, 10, 15]} />
+      </Chart>
+    </>
+  )
+}
+
+const ZeroLine = ({ xLimits }) => {
+  const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
+  if (!showStorageLoss) return null
+
+  return (
+    <Line
+      data={[
+        [xLimits[0], storageLoss],
+        [xLimits[1], storageLoss],
+      ]}
+      color='primary'
+    />
+  )
 }
 
 const Timeseries = ({
@@ -167,7 +289,6 @@ const Timeseries = ({
   handleClick,
   handleHover,
   point,
-  elapsedYears,
   colormap,
   opacity,
   showActive = false,
@@ -176,11 +297,15 @@ const Timeseries = ({
   logy = false,
   logLabels = [],
 }) => {
+  const variables = useVariables()
+
   const regionDataLoading = useStore((s) => s.regionDataLoading)
   const [mousePosition, setMousePosition] = useState(null)
-  const [isHovering, setIsHovering] = useState(false)
   const [xSelectorValue, setXSelectorValue] = useState(null)
+  const [isHovering, setIsHovering] = useState(false)
   const currentVariable = useStore((s) => s.currentVariable)
+  const variableFamily = useStore((s) => s.variableFamily)
+  const isOverview = variables[variableFamily].overview
 
   const xYearsMonth = (x) => {
     const years = Math.floor(x)
@@ -278,24 +403,30 @@ const Timeseries = ({
     >
       {renderTimeAndData()}
       <Chart x={xLimits} y={yLimits} logy={logy} padding={{ top: 30 }}>
-        <Grid vertical />
-        <Grid horizontal values={logy && logLabels} />
-        <Ticks left values={logy && logLabels} />
-        <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
-        <TickLabels
-          left
-          values={logy && logLabels}
-          format={(d) => {
-            if (logy) {
-              return formatValue(d, { 0.001: '.0e' })
-            } else if (Math.abs(d) < 0.01) {
-              return <Box sx={{ mr: -2 }}>{d}</Box>
-            } else {
-              return d
-            }
-          }}
-        />
-        <TickLabels bottom values={[0, 5, 10, 15]} />
+        {isOverview ? (
+          <AxisChart xLimits={xLimits} yLimits={yLimits} />
+        ) : (
+          <>
+            <Grid vertical />
+            <Grid horizontal values={logy && logLabels} />
+            <Ticks left values={logy && logLabels} />
+            <Ticks bottom values={Array.from({ length: 16 }, (_, i) => i)} />
+            <TickLabels
+              left
+              values={logy && logLabels}
+              format={(d) => {
+                if (logy) {
+                  return formatValue(d, { 0.001: '.0e' })
+                } else if (Math.abs(d) < 0.01) {
+                  return <Box sx={{ mr: -2 }}>{d}</Box>
+                } else {
+                  return d
+                }
+              }}
+            />
+            <TickLabels bottom values={[0, 5, 10, 15]} />
+          </>
+        )}
         <AxisLabel units={yLabels.units} left>
           {yLabels.title}
         </AxisLabel>
@@ -321,18 +452,12 @@ const Timeseries = ({
             handleClick={handleClick}
             gradient={colormap ? true : false}
           />
+          {isOverview && <ZeroLine xLimits={xLimits} />}
           {Object.keys(selectedLines).length && (
             <>
-              {showActive && <ActiveLine />}
+              {showActive && <ActiveLine selectedLines={selectedLines} />}
               {xSelector && mousePosition && renderXSelector(mousePosition)}
-              <Line
-                data={[
-                  [elapsedYears, yLimits[0]],
-                  [elapsedYears, yLimits[1]],
-                ]}
-                color='primary'
-                style={{ strokeDasharray: '2 4' }}
-              />
+              <TimeIndicator yLimits={yLimits} isOverview={isOverview} />
               {xSelector &&
                 isHovering &&
                 renderPoint({
@@ -345,7 +470,7 @@ const Timeseries = ({
           )}
         </Plot>
         {!xSelector && renderDataBadge()}
-        {showActive && <OverviewBadge />}
+        {showActive && <OverviewBadge selectedLines={selectedLines} />}
         {regionDataLoading && (
           <Box
             sx={{

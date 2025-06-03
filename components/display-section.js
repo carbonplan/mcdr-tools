@@ -3,55 +3,15 @@ import { Box, Flex } from 'theme-ui'
 import { Column, Filter, Select, Row, Colorbar } from '@carbonplan/components'
 
 import TooltipWrapper from './tooltip'
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import { Chart, TickLabels, Ticks } from '@carbonplan/charts'
 import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
-
-const DESCRIPTIONS = {
-  EFFICIENCY: {
-    overview:
-      'CO₂ removed per unit of alkalinity added. Higher values indicate more efficient carbon removal. Select a region to view additional experimental outputs.',
-    region:
-      'Carbon removal efficiency of release as a function of region, injection month, and elapsed time.',
-  },
-  FG_CO2: {
-    overview:
-      'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region. Select a region to view additional experimental outputs.',
-    region:
-      'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the injection region.',
-  },
-  ALK: {
-    region:
-      'Concentration of alkalinity in surface waters. Alkalinity increases the ocean’s ability to absorb carbon.',
-  },
-  DIC: {
-    region:
-      'Dissolved inorganic carbon (DIC) is the sum of inorganic carbon in water. Full water column values shown here.',
-  },
-  FG: {
-    region:
-      'The movement of carbon dioxide between the atmosphere and the ocean. Negative values indicate ocean CO₂ uptake.',
-  },
-  Omega_arag: {
-    region:
-      'The saturation state of surface seawater with respect to aragonite . Aragonite is a type of calcium carbonate (CaCO₃) that is precipitated by many shell-forming marine organisms. A value of more than 1 indicates supersaturation, which supports the growth of calcifying organisms and indicates a higher likelihood of abiotic mineral precipitation.',
-  },
-  Omega_calc: {
-    region:
-      'The saturation state of surface seawater with respect to calcite, which is a type of calcium carbonate (CaCO₃). A value greater than 1 indicates supersaturation, which supports the growth of calcifying organisms and indicates a higher likelihood of abiotic mineral precipitation.',
-  },
-  PH: {
-    region:
-      'The measurement of acidity, or free hydrogen ions, in surface waters. The lower the pH value, the more acidic the seawater.',
-  },
-  pCO2SURF: {
-    region:
-      'The partial pressure of carbon dioxide (pCO₂) at the ocean surface, a measure of how much CO₂ is dissolved in seawater. Ocean carbon uptake happens when the surface ocean pCO₂ is lower than the partial pressure of CO₂ in the overlying atmosphere',
-  },
-}
+import { useColormap } from '@carbonplan/colormaps'
 
 const DisplaySection = ({ sx }) => {
+  const variables = useVariables()
+
   const hasSelectedRegion = useStore(
     (state) => typeof state.selectedRegion === 'number'
   )
@@ -61,15 +21,32 @@ const DisplaySection = ({ sx }) => {
   const setVariableFamily = useStore((s) => s.setVariableFamily)
   const logScale = useStore((s) => s.logScale && s.currentVariable.logScale)
   const setLogScale = useStore((s) => s.setLogScale)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
-  const min = logScale
-    ? currentVariable.logColorLimits[0]
-    : currentVariable.colorLimits[0]
+  const dorEfficiencyLowerBound = -0.2
+
+  let min
+  if (logScale) {
+    min = currentVariable.logColorLimits[0]
+  } else if (showStorageLoss) {
+    min = dorEfficiencyLowerBound
+  } else {
+    min = currentVariable.colorLimits[0]
+  }
   const max = logScale
     ? currentVariable.logColorLimits[1]
     : currentVariable.colorLimits[1]
+
   const logLabels = logScale ? generateLogTicks(min, max) : null
   const colormap = useVariableColormap()
+
+  const negativeColorMap = [
+    ...useColormap('reds', { count: Math.ceil(colormap.length / 5) }),
+  ].reverse()
+
+  const efficiencyColorMap = useMemo(() => {
+    return [...negativeColorMap, ...colormap]
+  }, [colormap, negativeColorMap, showStorageLoss])
 
   const filterValues = useMemo(() => {
     return variables[variableFamily].variables.reduce(
@@ -83,8 +60,9 @@ const DisplaySection = ({ sx }) => {
 
   const handleFamilySelection = useCallback(
     (e) => {
-      setVariableFamily(e.target.value)
-      setCurrentVariable(variables[e.target.value].variables[0])
+      const newFamily = e.target.value
+      setVariableFamily(newFamily)
+      setCurrentVariable(variables[newFamily].variables[0], newFamily)
     },
     [setVariableFamily, setCurrentVariable, variables]
   )
@@ -99,11 +77,11 @@ const DisplaySection = ({ sx }) => {
           (variable) => variable.label === selectedLabel
         )
         if (selectedVariable) {
-          setCurrentVariable(selectedVariable)
+          setCurrentVariable(selectedVariable, variableFamily)
         }
       }
     },
-    [variableFamily, setCurrentVariable]
+    [variableFamily, setCurrentVariable, variables]
   )
   return (
     <>
@@ -160,7 +138,7 @@ const DisplaySection = ({ sx }) => {
             }}
           >
             {
-              DESCRIPTIONS[variableFamily][
+              variables[variableFamily].description[
                 hasSelectedRegion ? 'region' : 'overview'
               ]
             }
@@ -183,19 +161,17 @@ const DisplaySection = ({ sx }) => {
         </Column>
 
         <Column start={1} width={[6, 8, 4, 4]} sx={{ ...sx.label, mt: 4 }}>
-          <Flex sx={{ justifyContent: 'space-between', height: 25 }}>
-            <Box>
-              Color range{' '}
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Flex sx={{ flexWrap: 'wrap', gap: 1 }}>
+              <Box as='span' sx={{ whiteSpace: 'nowrap' }}>
+                Color range
+              </Box>
               {currentVariable.unit && (
-                <>
-                  (
-                  <Box as='span' sx={{ textTransform: 'none' }}>
-                    {currentVariable.unit}
-                  </Box>
-                  )
-                </>
+                <Box sx={{ textTransform: 'none' }}>
+                  ({currentVariable.unit})
+                </Box>
               )}
-            </Box>
+            </Flex>
             <Box>
               {currentVariable.logScale && (
                 <Checkbox
@@ -209,7 +185,7 @@ const DisplaySection = ({ sx }) => {
         </Column>
         <Column start={[1]} width={[6, 8, 4, 4]} sx={{ mb: 2 }}>
           <Colorbar
-            colormap={colormap}
+            colormap={showStorageLoss ? efficiencyColorMap : colormap}
             discrete={logScale}
             horizontal
             width={'100%'}
@@ -238,10 +214,37 @@ const DisplaySection = ({ sx }) => {
             />
             <TickLabels
               values={logScale ? logLabels : null}
-              format={(d) => formatValue(d, { 0.001: '.0e' })}
+              format={(d) => {
+                if (showStorageLoss && d === dorEfficiencyLowerBound) {
+                  return '-1.0'
+                }
+                return formatValue(d, { 0.001: '.0e' })
+              }}
               sx={{ textTransform: 'none' }}
               bottom
             />
+
+            {showStorageLoss && (
+              <>
+                <Ticks
+                  bottom
+                  values={[
+                    dorEfficiencyLowerBound / 2 - 0.01,
+                    dorEfficiencyLowerBound / 2 + 0.01,
+                  ]}
+                  sx={{
+                    transform: 'rotate(30deg)',
+                    mt: '-18px',
+                    height: 22,
+                  }}
+                />
+                <TickLabels
+                  bottom
+                  values={[dorEfficiencyLowerBound]}
+                  format={() => '-1.0'}
+                />
+              </>
+            )}
           </Chart>
         </Column>
       </Row>

@@ -1,6 +1,8 @@
-const isDev =
-  process.env.VERCEL_ENV === 'preview' || process.env.NODE_ENV === 'development'
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    providerImportSource: '@mdx-js/react',
+  },
+})
 
-module.exports = {
-  assetPrefix: isDev ? '' : 'https://oae-efficiency.carbonplan.org',
-}
+module.exports = withMDX({})

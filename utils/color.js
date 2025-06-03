@@ -4,6 +4,17 @@ import { useMemo } from 'react'
 import useStore from '../store'
 import { generateLogTicks } from './log'
 
+export const createCombinedColormap = (
+  colormap,
+  secondColormap,
+  storageLoss
+) => {
+  const belowZeroCount = Math.max(1, Math.round(colormap.length * storageLoss))
+  const negativeColormap = secondColormap.slice(1, 1 + belowZeroCount).reverse()
+  const aboveZero = colormap.slice(1, 1 + (colormap.length - belowZeroCount))
+  return [...negativeColormap, ...aboveZero]
+}
+
 export const getColorForValue = (
   value,
   colormap,
@@ -60,11 +71,12 @@ export const useVariableColormap = () => {
     ? currentVariable.logColorLimits[1]
     : currentVariable.colorLimits[1]
   const logLabels = logScale ? generateLogTicks(min, max) : null
-  const colormapBase = logScale
-    ? useThemedColormap(currentVariable.colormap, {
-        count: logLabels.length,
-      }).slice(1, logLabels.length)
-    : useThemedColormap(currentVariable.colormap)
+  const colormapBase =
+    logScale && logLabels
+      ? useThemedColormap(currentVariable.colormap, {
+          count: logLabels.length,
+        }).slice(1, logLabels.length)
+      : useThemedColormap(currentVariable.colormap)
 
   const colormap = useMemo(() => {
     if (currentVariable.flipColormap) {
