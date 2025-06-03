@@ -74,18 +74,27 @@ export const DOR_VARIABLES = {
       region:
         'Extracting CO₂ from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
     },
-    threshold: -0.00001,
     optionsTooltip:
-      'View the change in DIC. Total values are not available for this variable.',
+      'View the change in surface DIC, or the total surface DIC value.',
     variables: [
       {
         variable: 'DIC_SURF',
         delta: true,
         logScale: true,
+        threshold: -0.00001,
         colorLimits: [0, -0.0001],
         logColorLimits: [-1e-5, -1],
         colormap: 'warm',
         label: 'Change',
+        unit: 'mol/m²',
+        unitConversion: 0.001,
+      },
+      {
+        variable: 'DIC_SURF',
+        delta: false,
+        colorLimits: [1.8, 2.2],
+        colormap: 'warm',
+        label: 'Total',
         unit: 'mol/m³',
         unitConversion: 0.001,
       },
@@ -99,7 +108,7 @@ export const DOR_VARIABLES = {
     },
     threshold: -0.00001,
     optionsTooltip:
-      'View the change in integrated dissolved inorganic carbon, or the total integrated dissolved inorganic carbon value.',
+      'View the change in integrated dissolved inorganic carbon. Total values are not available for this variable.',
     variables: [
       {
         variable: 'DIC',
@@ -109,7 +118,7 @@ export const DOR_VARIABLES = {
         logColorLimits: [-1e-4, -1],
         colormap: 'warm',
         label: 'Change',
-        unit: 'mol/m³',
+        unit: 'mol/m²',
         unitConversion: 0.001,
       },
     ],
