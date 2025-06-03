@@ -16,7 +16,7 @@ const Header = ({ expanded, setExpanded }) => {
       <Meta
         card={
           isDOR
-            ? 'https://images.carbonplan.org/social/dor-efficiency.png' // TODO: add card
+            ? 'https://images.carbonplan.org/social/dor-efficiency.png'
             : 'https://images.carbonplan.org/social/oae-efficiency.png'
         }
         description={

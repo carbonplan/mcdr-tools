@@ -7,7 +7,7 @@ const IntroDOR = ({ sx }) => {
     <Box sx={{ ...sx.description, mb: 3 }}>
       This is an interactive tool for exploring the efficiency of direct ocean
       removal (DOR). You can explore global patterns, or select a polygon region
-      to see how extracting CO2 from the ocean in a specific region and month
+      to see how extracting CO₂ from the ocean in a specific region and month
       will result in carbon removal over time. Read our{' '}
       <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>
         explainer article
