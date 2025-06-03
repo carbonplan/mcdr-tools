@@ -11,11 +11,8 @@ const AboutDOR = ({ sx }) => {
 
       <Box sx={{ ...sx.description, mb: 3 }}>
         <p>
-          [C]Worthy and collaborators{' '}
-          <Link href='https://doi.org/10.21203/rs.3.rs-4124909/v1'>
-            developed
-          </Link>{' '}
-          the underlying DOR efficiency dataset, mirroring previous work done on{' '}
+          [C]Worthy and collaborators developed the underlying DOR efficiency
+          dataset, mirroring previous work done on{' '}
           <Link href='https://doi.org/10.21203/rs.3.rs-4124909/v1'>
             ocean alkalinity enhancement
           </Link>
