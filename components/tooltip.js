@@ -3,7 +3,7 @@ import AnimateHeight from 'react-animate-height'
 import { IconButton, Box, Flex } from 'theme-ui'
 import { Info } from '@carbonplan/icons'
 
-const Tooltip = ({ expanded, setExpanded, sx, disabled }) => {
+export const Tooltip = ({ expanded, setExpanded, sx, disabled }) => {
   return (
     <IconButton
       onClick={() => setExpanded(!expanded)}

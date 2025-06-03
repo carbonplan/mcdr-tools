@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 import { Slider } from '@carbonplan/components'
 import useStore from '../store'
-import TooltipWrapper from './tooltip'
+import { Tooltip } from './tooltip'
+import AnimateHeight from 'react-animate-height'
 
 const sx = {
   label: {
@@ -19,17 +20,15 @@ const StorageLoss = () => {
   const setStorageLoss = useStore((state) => state.setStorageLoss)
   const showStorageLoss = useStore((state) => state.showStorageLoss)
 
+  const [expanded, setExpanded] = useState(false)
+
   const handleChange = (e) => {
     const value = Math.min(1, Math.max(0, parseFloat(e.target.value)))
     setStorageLoss(value)
   }
 
   return (
-    <TooltipWrapper
-      sx={{ gap: 1 }}
-      disabled={!showStorageLoss}
-      tooltip='Percentage of CO₂ extracted from the ocean that is lost to the atmosphere.'
-    >
+    <>
       <Flex sx={{ gap: [3, 4, 4, 5], alignItems: 'center', width: '100%' }}>
         <Box
           sx={{ ...sx.label, color: showStorageLoss ? 'secondary' : 'muted' }}
@@ -39,38 +38,59 @@ const StorageLoss = () => {
         <Flex
           sx={{
             flex: 1,
-            gap: 2,
+            gap: 3,
             alignItems: 'center',
           }}
         >
-          <Box sx={{ flex: 1 }}>
-            <Slider
-              sx={{
-                color: showStorageLoss ? 'primary' : 'secondary',
-                opacity: showStorageLoss ? 1 : 0.5,
-              }}
-              value={storageLoss}
-              onChange={handleChange}
-              min={0}
-              max={1}
-              step={0.01}
-              disabled={!showStorageLoss}
-            />
-          </Box>
-          <Box
+          <Slider
+            sx={{
+              color: showStorageLoss ? 'primary' : 'secondary',
+              opacity: showStorageLoss ? 1 : 0.5,
+            }}
+            value={storageLoss}
+            onChange={handleChange}
+            min={0}
+            max={1}
+            step={0.01}
+            disabled={!showStorageLoss}
+          />
+          <Flex
             sx={{
               ...sx.label,
               color: showStorageLoss ? 'primary' : 'secondary',
-              width: '33px',
-              textAlign: 'right',
               opacity: showStorageLoss ? 1 : 0.5,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mr: [-2, -2, -2, -3],
+              minWidth: [52, 52, 52, 58],
             }}
           >
-            {(storageLoss * 100).toFixed(0)}%
-          </Box>
+            <Box sx={{}}>{(storageLoss * 100).toFixed(0)}%</Box>
+            <Tooltip
+              expanded={expanded}
+              setExpanded={setExpanded}
+              disabled={!showStorageLoss}
+            />
+          </Flex>
         </Flex>
       </Flex>
-    </TooltipWrapper>
+      <AnimateHeight
+        duration={100}
+        height={expanded ? 'auto' : 0}
+        easing={'linear'}
+      >
+        <Box
+          sx={{
+            mt: 1,
+            fontSize: 1,
+            color: showStorageLoss ? 'secondary' : 'muted',
+          }}
+        >
+          Percentage of CO₂ extracted from the ocean that is lost to the
+          atmosphere.
+        </Box>
+      </AnimateHeight>
+    </>
   )
 }
 
