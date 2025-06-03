@@ -13,7 +13,7 @@ const meta = {
   date: '2025-06-04',
   quickLook: 'Information about mCDR Efficiency Tools',
   path: '/research/mcdr-tools-about',
-  card: 'mcdr-tools', //TODO: card?
+  card: 'mcdr-tools-about',
 }
 
 const AboutMcdrTools = () => {

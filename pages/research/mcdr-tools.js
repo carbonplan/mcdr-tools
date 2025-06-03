@@ -17,6 +17,7 @@ const Index = () => {
       }
       title='Mapping Marine CDR – CarbonPlan'
       nav={'research'}
+      card='mcdr-tools'
     >
       <Heading>Mapping Marine CDR</Heading>
       <Row>
