@@ -3,9 +3,9 @@ export const DOR_VARIABLES = {
     label: 'Efficiency',
     description: {
       overview:
-        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO2. This metric accounts for both ocean uptake of atmospheric CO2 after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
+        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO₂. This metric accounts for both ocean uptake of atmospheric CO₂ after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal. Select a region to view additional experimental outputs.',
       region:
-        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO2. This metric accounts for both ocean uptake of atmospheric CO2 after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal.',
+        'CO₂ absorbed from the atmosphere compared to the removal potential induced by extracting CO₂. This metric accounts for both ocean uptake of atmospheric CO₂ after the DOR intervention and any losses from storage of the extracted CO₂. Higher values indicate more effective carbon removal.',
     },
     threshold: 0.001,
     overview: true,
@@ -72,7 +72,7 @@ export const DOR_VARIABLES = {
     label: 'Surface dissolved inorganic carbon',
     description: {
       region:
-        'Extracting CO2 from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO2 from the atmosphere.',
+        'Extracting CO₂ from the surface ocean creates a dissolved inorganic carbon (DIC) deficit. A larger deficit means more potential for the ocean to absorb CO₂ from the atmosphere.',
     },
     threshold: -0.00001,
     optionsTooltip:
