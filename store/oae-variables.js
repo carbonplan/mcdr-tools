@@ -199,7 +199,7 @@ export const OAE_VARIABLES = {
         logColorLimits: [0.00001, 0.1],
         colormap: 'warm',
         label: 'Change',
-        unit: 'mol/m³',
+        unit: 'mol/m²',
         unitConversion: 0.001,
       },
     ],

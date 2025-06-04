@@ -86,7 +86,7 @@ export const DOR_VARIABLES = {
         logColorLimits: [-1e-5, -1],
         colormap: 'warm',
         label: 'Change',
-        unit: 'mol/m²',
+        unit: 'mol/m³',
         unitConversion: 0.001,
       },
       {
