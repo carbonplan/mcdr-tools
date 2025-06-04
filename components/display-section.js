@@ -7,7 +7,7 @@ import useStore, { useVariables } from '../store'
 import { Chart, TickLabels, Ticks } from '@carbonplan/charts'
 import { generateLogTicks, useVariableColormap, formatValue } from '../utils'
 import Checkbox from './checkbox'
-import { useColormap } from '@carbonplan/colormaps'
+import { useThemedColormap } from '@carbonplan/colormaps'
 
 const DisplaySection = ({ sx }) => {
   const variables = useVariables()
@@ -41,7 +41,7 @@ const DisplaySection = ({ sx }) => {
   const colormap = useVariableColormap()
 
   const negativeColorMap = [
-    ...useColormap('reds', { count: Math.ceil(colormap.length / 5) }),
+    ...useThemedColormap('reds', { count: Math.ceil(colormap.length / 5) }),
   ].reverse()
 
   const efficiencyColorMap = useMemo(() => {
