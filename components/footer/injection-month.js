@@ -19,7 +19,7 @@ const InjectionMonth = () => {
 
   return (
     <Flex sx={{ gap: [3, 4, 4, 5], mt: -2, mb: -2 }}>
-      <Box sx={{ ...sx.label, pt: '2px' }}>Injection month</Box>
+      <Box sx={{ ...sx.label, pt: '2px' }}>Intervention month</Box>
 
       <Filter
         values={injectionSeason}

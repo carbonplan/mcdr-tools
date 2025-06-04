@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import useStore, { variables } from '../store'
+import useStore, { useVariables } from '../store'
 import { useMapbox } from '@carbonplan/maps'
 import { useThemeUI } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { centerOfMass } from '@turf/turf'
+import { createCombinedColormap } from '../utils/color'
 
 const Regions = () => {
+  const { map } = useMapbox()
+  const { theme } = useThemeUI()
+  const variables = useVariables()
+
   const hoveredRegion = useStore((s) => s.hoveredRegion)
   const setHoveredRegion = useStore((s) => s.setHoveredRegion)
   const selectedRegion = useStore((s) => s.selectedRegion)
@@ -21,17 +26,35 @@ const Regions = () => {
   const overviewElapsedTime = useStore((s) => s.overviewElapsedTime)
   const variableFamily = useStore((s) => s.variableFamily)
   const selectedRegionGeojson = useStore((s) => s.selectedRegionGeojson)
+  const storageLoss = useStore((s) => s.storageLoss)
+  const showStorageLoss = useStore((s) => s.showStorageLoss)
 
-  const colormap = useThemedColormap(currentVariable.colormap)
+  const colormap = useThemedColormap(currentVariable.colormap, {
+    format: 'hex',
+    count: 100,
+  })
+  const negativeColormap = useThemedColormap('reds', {
+    format: 'hex',
+    count: colormap.length,
+  })
+  const combinedColormap = useMemo(
+    () =>
+      createCombinedColormap(
+        colormap,
+        negativeColormap,
+        showStorageLoss ? storageLoss : 0
+      ),
+    [colormap, negativeColormap, storageLoss, showStorageLoss]
+  )
+
   const colorLimits = currentVariable.colorLimits
 
-  const { map } = useMapbox()
-  const { theme } = useThemeUI()
   const hoveredRegionRef = useRef(hoveredRegion)
+  const previouslySelectedRegionRef = useRef(null)
 
   //reused colors
   const transparent = 'rgba(0, 0, 0, 0)'
-  const lineColor = theme.rawColors.hinted
+  const lineColor = theme.rawColors?.hinted
   const lineHighlightColor = [
     'case',
     ['boolean', ['feature-state', 'hover'], false],
@@ -39,63 +62,74 @@ const Regions = () => {
     transparent,
   ]
 
-  const buildColorExpression = () => {
-    const dataField = 'currentValue'
-    const fillColorExpression = [
+  const colorExpression = useMemo(() => {
+    if (!variables[variableFamily].overview) {
+      return
+    }
+
+    const adjustedLower = colorLimits[0] - (showStorageLoss ? storageLoss : 0)
+    const adjustedUpper = colorLimits[1] - (showStorageLoss ? storageLoss : 0)
+    const totalRange = adjustedUpper - adjustedLower
+    const fillColor = [
       'case',
-      ['has', dataField],
-      ['step', ['get', dataField], safeColorMap[0]],
+      ['!=', ['feature-state', 'currentValue'], null],
+      ['step', ['feature-state', 'currentValue'], combinedColormap[0]],
       transparent,
     ]
-    const totalRange = colorLimits[1] - colorLimits[0]
-    const stepIncrement = totalRange / (safeColorMap.length - 1)
-    for (let i = 1; i < safeColorMap.length; i++) {
-      const threshold = colorLimits[0] + stepIncrement * i
-      fillColorExpression[2].push(threshold, safeColorMap[i])
+    const stepSize = totalRange / (combinedColormap.length - 1)
+    for (let i = 1; i < combinedColormap.length; i++) {
+      const t = adjustedLower + stepSize * i
+      fillColor[2].push(t, combinedColormap[i])
     }
-    return fillColorExpression
-  }
+    return fillColor
+  }, [
+    combinedColormap,
+    colorLimits,
+    transparent,
+    storageLoss,
+    theme,
+    showStorageLoss,
+  ])
 
   useEffect(() => {
-    if (!regionGeojson) return
-    // get currentValue from overviewLineData for each polygon and assign to new current value property
-    const features = regionGeojson.features.map((feature) => {
+    if (!regionGeojson || !map?.getSource('regions') || !overviewLineData) {
+      return
+    }
+
+    regionGeojson.features.forEach((feature) => {
       const polygonId = feature.properties.polygon_id
-      const currentValue =
+      const rawValue =
         overviewLineData?.[polygonId]?.data?.[overviewElapsedTime][1] ?? 0
-      return {
-        ...feature,
-        properties: {
-          ...feature.properties,
-          currentValue,
+      const currentValue = rawValue - (showStorageLoss ? storageLoss : 0)
+
+      map.setFeatureState(
+        {
+          source: 'regions',
+          id: polygonId,
         },
-      }
+        {
+          currentValue,
+        }
+      )
     })
-    if (map && map.getSource('regions')) {
-      const colorExpression = overviewLineData
-        ? buildColorExpression()
-        : transparent
-      map.getSource('regions').setData({ ...regionGeojson, features })
-      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
+    if (selectedRegion !== null) {
       map.setPaintProperty(
         'selected-region-fill',
         'fill-color',
         colorExpression
       )
+    } else {
+      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
     }
   }, [
-    regionGeojson,
-    overviewElapsedTime,
+    map,
     overviewLineData,
-    colormap,
-    colorLimits,
+    regionGeojson,
+    currentVariable,
+    overviewElapsedTime,
+    storageLoss,
+    showStorageLoss,
   ])
-
-  const safeColorMap = useMemo(() => {
-    return colormap[0].length === 3
-      ? colormap.map((rgb) => `rgb(${rgb.join(',')})`)
-      : colormap
-  }, [colormap])
 
   const handleMouseMove = (e) => {
     map.getCanvas().style.cursor = 'pointer'
@@ -123,9 +157,7 @@ const Regions = () => {
   }
 
   const addRegions = async () => {
-    fetch(
-      'https://carbonplan-oae-efficiency.s3.us-west-2.amazonaws.com/regions.geojson'
-    )
+    fetch('https://carbonplan-oae-efficiency.s3.amazonaws.com/regions.geojson')
       .then((response) => response.json())
       .then((data) => {
         setRegionGeojson(data)
@@ -144,7 +176,7 @@ const Regions = () => {
             type: 'fill',
             source: 'regions',
             paint: {
-              'fill-color': transparent,
+              'fill-color': colorExpression,
               'fill-outline-color': transparent,
             },
           })
@@ -179,7 +211,7 @@ const Regions = () => {
             type: 'fill',
             source: 'regions',
             paint: {
-              'fill-color': transparent,
+              'fill-color': colorExpression,
               'fill-outline-color': transparent,
               'fill-opacity': [
                 'case',
@@ -219,33 +251,6 @@ const Regions = () => {
 
   useEffect(() => {
     addRegions()
-    return () => {
-      if (map && map.getSource('regions')) {
-        map.off('mousemove', 'regions-fill', handleMouseMove)
-        map.off('mouseleave', 'regions-fill', handleMouseLeave)
-        map.off('click', 'regions-fill', handleClick)
-
-        map.removeFeatureState({
-          source: 'regions',
-        })
-
-        if (map.getLayer('regions-fill')) {
-          map.removeLayer('regions-fill')
-        }
-        if (map.getLayer('regions-line')) {
-          map.removeLayer('regions-line')
-        }
-        if (map.getLayer('regions-hover')) {
-          map.removeLayer('regions-hover')
-        }
-        if (map.getLayer('regions-selected')) {
-          map.removeLayer('regions-selected')
-        }
-        if (map.getLayer('selected-region-fill')) {
-          map.removeLayer('selected-region-fill')
-        }
-      }
-    }
   }, [])
 
   useEffect(() => {
@@ -278,17 +283,14 @@ const Regions = () => {
 
   const handleRegionsInView = useCallback(() => {
     if (selectedRegion !== null) return
-    if (
-      map.getLayer('regions-fill') &&
-      map.getLayoutProperty('regions-fill', 'visibility') === 'visible'
-    ) {
+    if (map.getLayer('regions-fill')) {
       const features = map.queryRenderedFeatures({
         layers: ['regions-fill'],
       })
       const ids = features.map((f) => f.properties.polygon_id)
       setRegionsInView(ids)
     }
-  }, [map, selectedRegion, setRegionsInView])
+  }, [map, setRegionsInView])
 
   const toggleLayerVisibilities = useCallback(
     (visible) => {
@@ -297,19 +299,22 @@ const Regions = () => {
       map.setLayoutProperty('regions-line', 'visibility', visibility)
       map.setLayoutProperty('regions-hover', 'visibility', visibility)
       map.setLayoutProperty('regions-fill', 'visibility', visibility)
-      if (visible && filterToRegionsInView) {
-        // fixes race when clearing selected region
-        map.once('idle', handleRegionsInView)
-      }
     },
-    [map, handleRegionsInView, filterToRegionsInView]
+    [map]
   )
 
   useEffect(() => {
     if (!map || !map.getSource('regions')) return
-    map.removeFeatureState({
-      source: 'regions',
-    })
+
+    if (previouslySelectedRegionRef.current !== null) {
+      map.removeFeatureState(
+        { source: 'regions', id: previouslySelectedRegionRef.current },
+        'selected'
+      )
+    }
+
+    previouslySelectedRegionRef.current = selectedRegion
+
     if (selectedRegion !== null) {
       map.setFeatureState(
         {
@@ -318,7 +323,6 @@ const Regions = () => {
         },
         { selected: true }
       )
-
       map.setFeatureState(
         {
           source: 'regions',
@@ -330,15 +334,16 @@ const Regions = () => {
     } else {
       toggleLayerVisibilities(true)
     }
-  }, [selectedRegion, map, currentVariable, toggleLayerVisibilities])
+  }, [selectedRegion, map, variableFamily])
 
   useEffect(() => {
     if (!filterToRegionsInView) {
       map.off('moveend', handleRegionsInView)
       setRegionsInView(null)
-      return
+    } else {
+      map.on('moveend', handleRegionsInView)
+      handleRegionsInView()
     }
-    map.on('moveend', handleRegionsInView)
     return () => {
       map.off('moveend', handleRegionsInView)
     }
@@ -372,10 +377,17 @@ const Regions = () => {
       map.setPaintProperty(
         'regions-selected',
         'line-color',
-        theme.rawColors.primary
+        theme.rawColors?.primary
+      )
+      // Update fill colors when theme changes
+      map.setPaintProperty('regions-fill', 'fill-color', colorExpression)
+      map.setPaintProperty(
+        'selected-region-fill',
+        'fill-color',
+        colorExpression
       )
     }
-  }, [map, theme])
+  }, [map, theme, colorExpression])
 
   return null
 }

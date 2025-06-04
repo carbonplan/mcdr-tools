@@ -3,17 +3,18 @@ import { Sidebar, SidebarAttachment } from '@carbonplan/layouts'
 import { Box, Spinner } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 
-import useStore from '../store'
-import Header from './header'
-import MapWrapper from './map'
-import Footer from './footer'
-import MobileSettings from './mobile-settings'
-import Intro from './intro'
-import RegionInfo from './region-info'
-import About from './about'
-import DisplaySection from './display-section'
-import ChartSection from './chart-section'
-import useRegionUrlSync from '../utils/useRegionUrlSync'
+import { useStore } from '../../store'
+import Header from '../../components/header'
+import MapWrapper from '../../components/map'
+import Footer from '../../components/footer'
+import MobileSettings from '../../components/mobile-settings'
+import RegionInfo from '../../components/region-info'
+import AboutDOR from '../../components/about-dor'
+import DisplaySection from '../../components/display-section'
+import ChartSection from '../../components/chart-section'
+import StorageSection from '../../components/storage-section'
+import useRegionUrlSync from '../../utils/useRegionUrlSync'
+import IntroDOR from '../../components/intro-dor'
 
 const sx = {
   heading: {
@@ -78,11 +79,12 @@ const Main = () => {
           >
             <Sidebar expanded={true} side='left' width={4} footer={<Footer />}>
               <>
-                <Intro sx={sx} />
+                <IntroDOR sx={sx} />
                 <RegionInfo sx={sx} />
                 <DisplaySection sx={sx} />
                 <ChartSection sx={sx} />
-                <About sx={sx} />
+                <StorageSection sx={sx} />
+                <AboutDOR sx={sx} />
               </>
             </Sidebar>
             {loading && (
@@ -113,11 +115,12 @@ const Main = () => {
               </Box>
             )}
             <MobileSettings expanded={expanded}>
-              <Intro sx={sx} />
+              <IntroDOR sx={sx} />
               <RegionInfo sx={sx} />
               <DisplaySection sx={sx} />
               <ChartSection sx={sx} />
-              <About sx={sx} />
+              <StorageSection sx={sx} />
+              <AboutDOR sx={sx} />
             </MobileSettings>
             <Footer />
           </>

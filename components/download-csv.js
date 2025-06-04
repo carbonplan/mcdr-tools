@@ -14,7 +14,7 @@ const DownloadCSV = ({ onClick, disabled, sx = {} }) => {
         textTransform: 'uppercase',
         fontFamily: 'mono',
         letterSpacing: 'mono',
-        minWidth: '120px',
+        minWidth: ['121px', '121px', '121px', '136px'],
         textAlign: 'right',
         whiteSpace: 'nowrap',
         '&:disabled': {

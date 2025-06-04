@@ -19,20 +19,19 @@ const getExtraStyles = (index) => {
       '&:hover': { bg: 'background' },
       cursor: 'auto',
       borderTop: '0.5px solid #393a3d',
+      my: '-0.5px', // account for border
     }
   } else {
     return {}
   }
 }
 
-const FooterWrapper = ({ children, bottom = 0 }) => {
+const FooterWrapper = ({ children }) => {
   const index = useBreakpointIndex({ defaultIndex: 2 })
 
   return (
     <SidebarFooter
       sx={{
-        position: ['absolute', 'absolute', 'relative', 'relative'],
-        bottom: bottom,
         width: ['100%', '100%', 'auto', 'auto'],
         mr: getMobileMarginFix(index),
         ml: getMobileMarginFix(index),

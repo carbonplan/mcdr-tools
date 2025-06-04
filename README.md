@@ -3,11 +3,11 @@
   height='48'
 />
 
-# carbonplan / oae-web
+# carbonplan / mcdr-tools
 
-**maps exploring ocean alkalinity enhancement efficiency and dynamics**
+**maps exploring ocean alkalinity enhancement and direct ocean removal efficiency and dynamics**
 
-Built in collaboration with [[C]Worthy](https://www.cworthy.org/), this tool explores a new dataset that makes it easier to see how the efficiency of ocean alkalinity enhancement varies around the world. This work is described in more detail in a [web article](https://carbonplan.org/research/oae-efficiency-explainer) with a companion [map tool](https://carbonplan.org/research/oae-efficiency) to explore the data. You can also read the [paper](https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D) or download the [raw data](https://beta.source.coop/repositories/cworthy/oae-efficiency-atlas/description/) for more.
+Built in collaboration with [[C]Worthy](https://www.cworthy.org/), these tools explore new datasets that makes it easier to see how the efficiency of ocean alkalinity enhancement and direct ocean removal vary around the world and across time. This work is described in more detail in two web articles ([OAE](https://carbonplan.org/research/oae-efficiency-explainer) and [DOR](https://carbonplan.org/research/dor-efficiency-explainer)) with companion map tools ([OAE](https://carbonplan.org/research/oae-efficiency) and [DOR](https://carbonplan.org/research/dor-efficiency)) to explore the data. You can also read the [OAE paper](https://www.nature.com/articles/s41558-024-02179-9.epdf?sharing_token=LgDF4VdJvkifRzIuQy5nT9RgN0jAjWel9jnR3ZoTv0ML06qtsGAXcI3ncw2VKMdvNBF8yc3ykUNvQP2YZSZZg3VEb8eJNbnayufBxkZ0cVTHRB4myOJv4osBgWv1OPyMNfRCLYPLT3MancsjfEhCqWMLGD_VUA_LXbALrR9640c%3D) (DOR forthcoming) or download the raw data ([OAE](https://beta.source.coop/repositories/cworthy/oae-efficiency-atlas/description/) and [DOR](https://beta.source.coop/repositories/cworthy/dor-efficiency-atlas/description/)) for more.
 
 [![GitHub][github-badge]][github]
 ![MIT License][]
