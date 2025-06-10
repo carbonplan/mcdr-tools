@@ -12,14 +12,19 @@ const AboutDOR = ({ sx }) => {
       <Box sx={{ ...sx.description, mb: 3 }}>
         <p>
           [C]Worthy and collaborators developed the underlying DOR efficiency
-          dataset, mirroring previous work done on{' '}
-          <Link href='https://doi.org/10.21203/rs.3.rs-4124909/v1'>
+          dataset. Together, CarbonPlan and [C]Worthy built the interactive
+          tool, with funding from the Chan Zuckerberg Initiative, the Navigation
+          Fund, and the Grantham Foundation for the Protection of the
+          Environment. See the tool’s{' '}
+          <Link href='/research/mcdr-tools-about'>about page</Link>, read our{' '}
+          <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>
+            explainer article
+          </Link>
+          , or compare with our tool for{' '}
+          <Link href='/research/oae-efficiency'>
             ocean alkalinity enhancement
           </Link>
-          . Together, CarbonPlan and [C]Worthy built the interactive tool, with
-          funding from with funding from the Chan Zuckerberg Initiative, the
-          Navigation Fund, and the Grantham Foundation for the Protection of the
-          Environment.
+          .
         </p>
       </Box>
     </>
