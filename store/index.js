@@ -179,7 +179,7 @@ const createStore = (variables, isDOR = false) => {
     showRegionPicker: false,
     setShowRegionPicker: (showRegionPicker) => set({ showRegionPicker }),
 
-    storageLoss: isDOR ? 0.25 : 0,
+    storageLoss: 0,
     setStorageLoss: (storageLoss) => set({ storageLoss }),
 
     showStorageLoss: isDOR,
