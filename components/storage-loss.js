@@ -81,13 +81,17 @@ const StorageLoss = () => {
       >
         <Box
           sx={{
-            mt: 1,
+            mt: 3,
             fontSize: 1,
             color: showStorageLoss ? 'secondary' : 'muted',
           }}
         >
-          Percentage of CO₂ extracted from the ocean that is lost to the
-          atmosphere.
+          Percentage of CO₂ extracted from the ocean that ends up in the
+          atmosphere, either from unintentional leakage during CO₂ transport or
+          storage or through short-lived utilization pathways. Losses are
+          assumed to occur instantaneously—an idealization meant to illustrate
+          the ultimate result of storage losses, rather than the timing of
+          specific scenarios.
         </Box>
       </AnimateHeight>
     </>
