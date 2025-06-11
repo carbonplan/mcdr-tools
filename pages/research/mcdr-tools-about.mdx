@@ -81,7 +81,7 @@ The two mapping tools share many of the same variables.
 
 />
 
-<Box id='comparing-oae-and-dor' sx={{ scrollMarginTop: '30px' }} />
+<Box id='comparing-oae-and-dor' sx={{ scrollMarginTop: '60px' }} />
 
 ## Comparing OAE and DOR
 
@@ -99,12 +99,13 @@ we have
 
 > 𝜂<sub>max</sub> = ∆DIC(t=∞) / ∆Alk
 
-where ∆DIC(t=∞) is the amount of potential DIC uptake induced by the chemical effects of the alkalinity addition. Therefore, to compute an efficiency metric for OAE that is directly comparable to DOR, we divide 𝜂(t) by 𝜂max, yielding
+where ∆DIC(t=∞) is the amount of potential DIC uptake induced by the chemical effects of the alkalinity addition. Therefore, to compute an efficiency metric for OAE that is directly comparable to DOR, we divide 𝜂(t) by 𝜂<sub>max</sub>, yielding
 
 > γ<sub>OAE</sub>(t) = 𝜂(t) / 𝜂<sub>max</sub>
 
 To perform this conversion on the OAE dataset, we estimate 𝜂ₘₐₓ from the background ocean state, using the thermodynamic equations defining the seawater carbonate system equilibrium chemistry. Notably, 𝜂ₘₐₓ varies from about 0.7 in the tropical surface ocean to about 0.9 at high latitudes. This approach is not perfect, as we are using time-averaged fields and mixing along the trajectory of the alkalinity plume entrains waters with distinct chemical composition. In practice, however, we find that the errors introduced by these factors are very small (less than ±0.1) relative to the large-scale spatial and seasonal structure in the efficiency fields, so the approach provides a robust basis to compare the efficiency of OAE and DOR.
 
+<Box id='choosing-system-boundaries' sx={{ scrollMarginTop: '60px' }} />
 ### Choosing system boundaries
 
 The goal of these tools is to illustrate how the efficiency of OAE and DOR interventions are constrained by ocean processes. But the ocean response alone doesn't capture the full impact of these interventions on the carbon cycle—and interpreting and comparing the reported efficiency values requires care.
@@ -139,7 +140,7 @@ Another consideration is that we do not treat potential inefficiencies such as m
     ['10-15-2024', 'Initial release', 'N/A'],
     [
       '06-04-2025',
-      'Corrected DIC units; integrated sea surface height into DIC and Efficiency calculations and updated tool data; added new field titled "Efficiency (DOR comparison)" to enable direct comparisons with the DOR data.',
+      'Corrected DIC units; small correction to DIC and Efficiency calculations to account for variation in sea surface height; added new field titled “Efficiency (DOR comparison)” to enable direct comparisons with the DOR data',
       'Initial release',
     ],
     [
@@ -148,13 +149,13 @@ Another consideration is that we do not treat potential inefficiencies such as m
       <>
         Updated the default setting for the “storage loss” slider from 25% to
         0%, based on feedback. The original default represented a midpoint
-        between CO₂ storage (low loss) and utilization ( up to 100%). But for
-        DOR projects focused on long-term carbon removal, it overstated{' '}
+        between CO₂ storage (low loss) and utilization (up to 100%). But for DOR
+        projects focused on long-term carbon removal, it overstated{' '}
         <Link href='https://www.nature.com/articles/s41467-018-04423-1'>
           likely losses
         </Link>
-        . It also created a default asymmetry when comparing to the OAE tool (see
-        above).
+        . It also created a default asymmetry when comparing to the OAE tool (see{' '}
+        <Link href='#choosing-system-boundaries'>above</Link>).
       </>,
     ],
   ]}
