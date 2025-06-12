@@ -16,12 +16,15 @@ const AboutDOR = ({ sx }) => {
           tool, with funding from the Chan Zuckerberg Initiative, the Navigation
           Fund, and the Grantham Foundation for the Protection of the
           Environment. See the tool’s{' '}
-          <Link href='/research/mcdr-tools-about'>about page</Link>, read our{' '}
+          <Link href='https://carbonplan.org/research/mcdr-tools-about'>
+            about page
+          </Link>
+          , read our{' '}
           <Link href='https://carbonplan.org/research/dor-efficiency-explainer'>
             explainer article
           </Link>
           , or compare with our tool for{' '}
-          <Link href='/research/oae-efficiency'>
+          <Link href='https://carbonplan.org/research/oae-efficiency'>
             ocean alkalinity enhancement
           </Link>
           .
