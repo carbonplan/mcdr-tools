@@ -334,7 +334,7 @@ const Regions = () => {
     } else {
       toggleLayerVisibilities(true)
     }
-  }, [selectedRegion, map, variableFamily])
+  }, [selectedRegion, map, variableFamily, regionGeojson])
 
   useEffect(() => {
     if (!filterToRegionsInView) {
