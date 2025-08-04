@@ -22,52 +22,52 @@ export const DOR_VARIABLES = {
     ],
   },
 
-  // FG_CO2: {
-  //   label: 'Spread of CO₂ uptake',
-  //   description: {
-  //     overview:
-  //       'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region. Select a region to view additional experimental outputs.',
-  //     region:
-  //       'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region.',
-  //   },
-  //   threshold: 0.001,
-  //   overview: true,
-  //   url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v3/cumulative_FG_CO2_percent.zarr',
-  //   optionsTooltip:
-  //     'View the percentage of cumulative CO₂ re-uptake taking place within 500 km, 1000 km, or 2000 km of the intervention center.',
-  //   variables: [
-  //     {
-  //       variable: 'FG_CO2_percent_cumulative',
-  //       colorLimits: [0, 100],
-  //       colormap: 'cool',
-  //       optionIndex: 0,
-  //       label: '500 km',
-  //       graphLabel: 'Uptake percentage',
-  //       unit: '%',
-  //       graphUnit: '',
-  //     },
-  //     {
-  //       variable: 'FG_CO2_percent_cumulative',
-  //       colorLimits: [0, 100],
-  //       colormap: 'cool',
-  //       optionIndex: 1,
-  //       label: '1000 km',
-  //       graphLabel: 'Uptake percentage',
-  //       unit: '%',
-  //       graphUnit: '',
-  //     },
-  //     {
-  //       variable: 'FG_CO2_percent_cumulative',
-  //       colorLimits: [0, 100],
-  //       colormap: 'cool',
-  //       optionIndex: 2,
-  //       label: '2000 km',
-  //       graphLabel: 'Uptake percentage',
-  //       unit: '%',
-  //       graphUnit: '',
-  //     },
-  //   ],
-  // },
+  FG_CO2: {
+    label: 'Spread of CO₂ uptake',
+    description: {
+      overview:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region. Select a region to view additional experimental outputs.',
+      region:
+        'Percentage of cumulative CO₂ uptake taking place within the specified distance from the center of the intervention region.',
+    },
+    threshold: 0.001,
+    overview: true,
+    url: 'https://carbonplan-dor-efficiency.s3.amazonaws.com/v3/cumulative_FG_CO2_percent.zarr',
+    optionsTooltip:
+      'View the percentage of cumulative CO₂ re-uptake taking place within 500 km, 1000 km, or 2000 km of the intervention center.',
+    variables: [
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 0,
+        label: '500 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 1,
+        label: '1000 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+      {
+        variable: 'FG_CO2_percent_cumulative',
+        colorLimits: [0, 100],
+        colormap: 'cool',
+        optionIndex: 2,
+        label: '2000 km',
+        graphLabel: 'Uptake percentage',
+        unit: '%',
+        graphUnit: '',
+      },
+    ],
+  },
   DIC_SURF: {
     label: 'Surface dissolved inorganic carbon',
     description: {
