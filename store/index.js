@@ -120,7 +120,7 @@ const createStore = (variables, isDOR = false) => {
               activeLineData: null,
               logScale: false,
               selectedRegionCenter: null,
-              showStorageLoss: isDOR,
+              showStorageLoss: isDOR && variableFamily === 'EFFICIENCY',
             }
           }),
 
