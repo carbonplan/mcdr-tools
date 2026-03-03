@@ -27,7 +27,7 @@ const About = ({ sx }) => {
         <Link href='https://carbonplan.org/research/oae-efficiency-explainer'>
           explainer article
         </Link>
-        , or compare withour tool for{' '}
+        , or compare with our tool for{' '}
         <Link href='https://carbonplan.org/research/dor-efficiency'>
           direct ocean removal
         </Link>
