@@ -117,8 +117,7 @@ const OverviewChart = ({ sx }) => {
   }, [regionsInView, filterToRegionsInView, overviewLineData])
 
   const handleClick = useCallback(
-    (e) => {
-      const id = parseInt(e.target.id)
+    (e, id) => {
       setSelectedRegion(id)
     },
     [setSelectedRegion]
