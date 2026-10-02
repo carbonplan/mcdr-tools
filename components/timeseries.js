@@ -443,6 +443,10 @@ const Timeseries = ({
   const currentVariable = useStore((s) => s.currentVariable)
   const variableFamily = useStore((s) => s.variableFamily)
   const isOverview = variables[variableFamily].overview
+  // A colormap is only passed for the overview chart, whose hundreds of
+  // gradient lines are drawn on a canvas that handles its own pointer events.
+  // Without one, the few lines are drawn as SVG paths inside the plot.
+  const canvasLines = Boolean(colormap)
 
   const xYearsMonth = (x) => {
     const years = Math.floor(x)
@@ -570,7 +574,7 @@ const Timeseries = ({
         <AxisLabel units='years' bottom>
           Time
         </AxisLabel>
-        {colormap && (
+        {canvasLines && (
           <GradientLines
             linesObject={selectedLines}
             colormap={colormap}
@@ -581,7 +585,7 @@ const Timeseries = ({
         )}
         <Plot
           sx={{
-            pointerEvents: colormap ? 'none' : 'auto',
+            pointerEvents: canvasLines ? 'none' : 'auto',
             cursor:
               (handleClick || handleHover) && xSelector && mousePosition
                 ? 'pointer'
@@ -589,7 +593,7 @@ const Timeseries = ({
           }}
           {...xSelectorHandlers}
         >
-          {!colormap && (
+          {!canvasLines && (
             <RenderLines
               linesObject={selectedLines}
               handleHover={handleHover}
