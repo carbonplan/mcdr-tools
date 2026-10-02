@@ -283,14 +283,16 @@ const Regions = () => {
 
   const handleRegionsInView = useCallback(() => {
     if (selectedRegion !== null) return
-    if (map.getLayer('regions-fill')) {
+    // regions-fill is hidden while a region is selected, so query a layer
+    // that stays visible
+    if (map.getLayer('selected-region-fill')) {
       const features = map.queryRenderedFeatures({
-        layers: ['regions-fill'],
+        layers: ['selected-region-fill'],
       })
       const ids = features.map((f) => f.properties.polygon_id)
       setRegionsInView(ids)
     }
-  }, [map, setRegionsInView])
+  }, [map, setRegionsInView, selectedRegion])
 
   const toggleLayerVisibilities = useCallback(
     (visible) => {
