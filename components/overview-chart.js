@@ -104,7 +104,7 @@ const OverviewChart = ({ sx }) => {
     const lineData = overviewLineData
     if (!lineData) return {}
 
-    if (!filterToRegionsInView || !regionsInView) {
+    if (hideFilter || !filterToRegionsInView || !regionsInView) {
       return lineData
     }
 
@@ -114,11 +114,10 @@ const OverviewChart = ({ sx }) => {
         .map((regionId) => [regionId, lineData[regionId]])
     )
     return selected
-  }, [regionsInView, filterToRegionsInView, overviewLineData])
+  }, [regionsInView, filterToRegionsInView, overviewLineData, hideFilter])
 
   const handleClick = useCallback(
-    (e) => {
-      const id = parseInt(e.target.id)
+    (e, id) => {
       setSelectedRegion(id)
     },
     [setSelectedRegion]
@@ -163,7 +162,7 @@ const OverviewChart = ({ sx }) => {
     downloadCsv(
       csvData,
       `${
-        filterToRegionsInView ? 'filtered_' : ''
+        filterToRegionsInView && !hideFilter ? 'filtered_' : ''
       }${name}_timeseries.csv`.replace(/ /g, '_')
     )
   }, [

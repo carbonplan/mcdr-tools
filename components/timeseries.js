@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Box, Spinner } from 'theme-ui'
 import {
   AxisLabel,
@@ -11,6 +11,7 @@ import {
   Rect,
   TickLabels,
   Ticks,
+  useChart,
 } from '@carbonplan/charts'
 import { Badge } from '@carbonplan/components'
 
@@ -52,44 +53,181 @@ const renderDataBadge = (point) => {
   )
 }
 
-const ColormapGradient = ({ colormap, opacity = 1 }) => {
+// room for strokes that sit on the edge of the plot area
+const CANVAS_BLEED = 4
+const HIT_RADIUS = 3
+
+const distanceToSegment = (px, py, x1, y1, x2, y2) => {
+  const dx = x2 - x1
+  const dy = y2 - y1
+  const lengthSquared = dx * dx + dy * dy
+  const t =
+    lengthSquared === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lengthSquared)
+        )
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy))
+}
+
+const distanceToLine = (points, px, py) => {
+  let distance = Infinity
+  for (let i = 0; i < points.length - 1; i++) {
+    const [x1, y1] = points[i]
+    const [x2, y2] = points[i + 1]
+    if (x2 < px - HIT_RADIUS || x1 > px + HIT_RADIUS) continue
+    distance = Math.min(distance, distanceToSegment(px, py, x1, y1, x2, y2))
+  }
+  return distance
+}
+
+// Draws every line to a single canvas, which stays cheap to composite while
+// the SVG plot stacked above it updates.
+const GradientLines = ({
+  linesObject = {},
+  colormap,
+  opacity = 1,
+  handleClick,
+  handleHover,
+}) => {
+  const { x, y, logy, pl, pr, pt, pb, apl, apr, apt, apb } = useChart()
   const storageLoss = useStore((s) => s.storageLoss)
   const showStorageLoss = useStore((s) => s.showStorageLoss)
-
   const negativeColormap = useThemedColormap('reds', {
     format: 'hex',
     count: colormap.length,
   })
-  const adjustedColormap = createCombinedColormap(
+  const container = useRef(null)
+  const canvas = useRef(null)
+  const drawnLines = useRef([])
+  const hoveredLine = useRef(null)
+  const [isLineHovered, setIsLineHovered] = useState(false)
+  const [pixelRatio, setPixelRatio] = useState(1)
+
+  const colors = createCombinedColormap(
     colormap,
     negativeColormap,
     showStorageLoss ? storageLoss : 0
   )
+  const drawKey = [x.domain(), y.domain(), logy, colors, opacity].join()
+
+  useEffect(() => {
+    // the query stops matching when the window moves to a display with a
+    // different pixel density
+    const update = () => setPixelRatio(window.devicePixelRatio)
+    const media = window.matchMedia(`(resolution: ${pixelRatio}dppx)`)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [pixelRatio])
+
+  useEffect(() => {
+    const draw = ([{ contentRect }]) => {
+      const { width, height } = contentRect
+      canvas.current.width = Math.round((width + 2 * CANVAS_BLEED) * pixelRatio)
+      canvas.current.height = Math.round(
+        (height + 2 * CANVAS_BLEED) * pixelRatio
+      )
+
+      const ctx = canvas.current.getContext('2d')
+      ctx.scale(pixelRatio, pixelRatio)
+      // half pixel offset matches <Plot>
+      ctx.translate(CANVAS_BLEED + 0.5, CANVAS_BLEED + 0.5)
+
+      const gradient = ctx.createLinearGradient(0, height, 0, 0)
+      colors.forEach((hex, index) => {
+        gradient.addColorStop(
+          Number((index / (colors.length - 1)).toFixed(2)),
+          hex
+        )
+      })
+      ctx.strokeStyle = gradient
+      ctx.globalAlpha = opacity
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+
+      drawnLines.current = Object.values(linesObject).map(
+        ({ id, data, strokeWidth }) => {
+          const points = data.map((d) => [
+            (x(d[0]) * width) / 100,
+            (y(d[1]) * height) / 100,
+          ])
+          ctx.lineWidth = strokeWidth
+          ctx.beginPath()
+          points.forEach((point) => ctx.lineTo(...point))
+          ctx.stroke()
+          return { id, points }
+        }
+      )
+    }
+
+    // fires on observe, so this also handles the first draw
+    const observer = new ResizeObserver(draw)
+    observer.observe(container.current)
+    return () => observer.disconnect()
+  }, [linesObject, drawKey, pixelRatio])
+
+  const lineAt = (e) => {
+    const { left, top } = container.current.getBoundingClientRect()
+    const px = e.clientX - left - 0.5
+    const py = e.clientY - top - 0.5
+    let closest = null
+    let closestDistance = HIT_RADIUS
+    drawnLines.current.forEach(({ id, points }) => {
+      const distance = distanceToLine(points, px, py)
+      if (distance <= closestDistance) {
+        closest = id
+        closestDistance = distance
+      }
+    })
+    return closest
+  }
+
+  const setHovered = (id) => {
+    if (id === hoveredLine.current) return
+    hoveredLine.current = id
+    setIsLineHovered(id !== null)
+    handleHover?.(id)
+  }
+
+  const onClick = (e) => {
+    const id = lineAt(e)
+    if (id === null) return
+    hoveredLine.current = null
+    setIsLineHovered(false)
+    handleClick?.(e, id)
+  }
+
+  const interactive = handleClick || handleHover
   return (
-    <defs>
-      <linearGradient
-        id='colormapGradient'
-        x1='0%'
-        y1='100%'
-        x2='0%'
-        y2='0%'
-        gradientUnits='userSpaceOnUse'
-      >
-        {adjustedColormap.map((hex, index) => {
-          const offset = Number(
-            (index / (adjustedColormap.length - 1)).toFixed(2)
-          )
-          return (
-            <stop
-              key={index}
-              offset={`${offset * 100}%`}
-              stopColor={hex}
-              stopOpacity={opacity}
-            />
-          )
-        })}
-      </linearGradient>
-    </defs>
+    <div
+      ref={container}
+      style={{
+        position: 'absolute',
+        left: apl + pl,
+        top: apt + pt,
+        width: `calc(100% - ${apl + pl + pr + apr + 1}px)`,
+        height: `calc(100% - ${apt + pt + pb + apb}px)`,
+        pointerEvents: interactive ? 'auto' : 'none',
+        cursor: isLineHovered ? 'pointer' : 'auto',
+      }}
+      onMouseMove={(e) => setHovered(lineAt(e))}
+      onMouseLeave={() => setHovered(null)}
+      onClick={onClick}
+    >
+      <canvas
+        ref={canvas}
+        style={{
+          position: 'absolute',
+          left: -CANVAS_BLEED,
+          top: -CANVAS_BLEED,
+          width: `calc(100% + ${2 * CANVAS_BLEED}px)`,
+          height: `calc(100% + ${2 * CANVAS_BLEED}px)`,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   )
 }
 
@@ -98,7 +236,6 @@ const RenderLines = ({
   additionalStyles = {},
   handleClick,
   handleHover,
-  gradient = false,
 }) => {
   const lineCount = Object.keys(linesObject).length
   const interactive = handleClick || handleHover
@@ -108,7 +245,7 @@ const RenderLines = ({
       data={data}
       id={id}
       width={strokeWidth}
-      color={gradient ? 'url(#colormapGradient)' : color}
+      color={color}
       sx={{
         pointerEvents: 'visiblePainted',
         '&:hover': {
@@ -117,7 +254,7 @@ const RenderLines = ({
         shapeRendering: lineCount > 100 ? 'optimizeSpeed' : 'auto',
         ...additionalStyles,
       }}
-      onClick={handleClick}
+      onClick={handleClick ? (e) => handleClick(e, id) : undefined}
       onMouseOver={handleHover ? () => handleHover(id) : undefined}
       onMouseLeave={handleHover ? () => handleHover(null) : undefined}
     />
@@ -306,6 +443,10 @@ const Timeseries = ({
   const currentVariable = useStore((s) => s.currentVariable)
   const variableFamily = useStore((s) => s.variableFamily)
   const isOverview = variables[variableFamily].overview
+  // A colormap is only passed for the overview chart, whose hundreds of
+  // gradient lines are drawn on a canvas that handles its own pointer events.
+  // Without one, the few lines are drawn as SVG paths inside the plot.
+  const canvasLines = Boolean(colormap)
 
   const xYearsMonth = (x) => {
     const years = Math.floor(x)
@@ -433,9 +574,18 @@ const Timeseries = ({
         <AxisLabel units='years' bottom>
           Time
         </AxisLabel>
+        {canvasLines && (
+          <GradientLines
+            linesObject={selectedLines}
+            colormap={colormap}
+            opacity={opacity}
+            handleHover={handleHover}
+            handleClick={handleClick}
+          />
+        )}
         <Plot
           sx={{
-            pointerEvents: 'auto',
+            pointerEvents: canvasLines ? 'none' : 'auto',
             cursor:
               (handleClick || handleHover) && xSelector && mousePosition
                 ? 'pointer'
@@ -443,15 +593,13 @@ const Timeseries = ({
           }}
           {...xSelectorHandlers}
         >
-          {colormap && (
-            <ColormapGradient colormap={colormap} opacity={opacity} />
+          {!canvasLines && (
+            <RenderLines
+              linesObject={selectedLines}
+              handleHover={handleHover}
+              handleClick={handleClick}
+            />
           )}
-          <RenderLines
-            linesObject={selectedLines}
-            handleHover={handleHover}
-            handleClick={handleClick}
-            gradient={colormap ? true : false}
-          />
           {isOverview && <ZeroLine xLimits={xLimits} />}
           {Object.keys(selectedLines).length && (
             <>
